@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contrat — Production vidéo — Média Mauricie</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -105,20 +106,20 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;min-he
 .surplus-row input[type=number]{text-align:right;}
 
 /* CALCUL */
-.calc-block{background:#2d2d2d;border-radius:12px;padding:20px 24px;margin-top:16px;}
-.calc-title{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:16px;}
-.calc-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);}
+.calc-block{background:#f5f5f5;border:2px solid #e0e0e0;border-radius:12px;padding:20px 24px;margin-top:16px;}
+.calc-title{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:16px;}
+.calc-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #e8e8e8;}
 .calc-row:last-child{border-bottom:none;}
-.calc-label{font-size:12px;font-weight:600;color:rgba(255,255,255,0.6);}
-.calc-val{font-size:14px;font-weight:800;color:#fff;}
-.calc-total{display:flex;justify-content:space-between;align-items:center;padding:14px 0 8px;border-top:2px solid rgba(255,255,255,0.2);margin-top:8px;}
-.calc-total-label{font-size:14px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:1px;}
-.calc-total-val{font-size:24px;font-weight:900;color:#fff;}
-.calc-versement{display:flex;justify-content:space-between;align-items:center;padding:8px 0;}
-.calc-versement-label{font-size:12px;font-weight:700;color:rgba(255,255,255,0.5);}
-.calc-versement-val{font-size:16px;font-weight:800;color:#c0392b;}
+.calc-label{font-size:13px;font-weight:600;color:#555;}
+.calc-val{font-size:14px;font-weight:800;color:#2d2d2d;}
+.calc-total{display:flex;justify-content:space-between;align-items:center;padding:14px 0 8px;border-top:2px solid #2d2d2d;margin-top:8px;}
+.calc-total-label{font-size:14px;font-weight:800;color:#2d2d2d;text-transform:uppercase;letter-spacing:1px;}
+.calc-total-val{font-size:26px;font-weight:900;color:#2d2d2d;}
+.calc-versement{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #e8e8e8;}
+.calc-versement-label{font-size:13px;font-weight:600;color:#555;}
+.calc-versement-val{font-size:16px;font-weight:800;color:#2d2d2d;}
 .tax-toggle{display:flex;gap:16px;margin-bottom:12px;}
-.tax-toggle label{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);cursor:pointer;}
+.tax-toggle label{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#2d2d2d;cursor:pointer;}
 .tax-toggle input{width:16px;height:16px;accent-color:#c0392b;}
 
 /* FORFAIT SELECTOR */
@@ -128,7 +129,7 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;min-he
 .forfait-card input[type=radio]{position:absolute;opacity:0;}
 .forfait-card.selected{border-color:#c0392b;background:#fdf9f9;}
 .forfait-card-name{font-size:14px;font-weight:800;color:#2d2d2d;margin-bottom:4px;}
-.forfait-card-price{font-size:18px;font-weight:900;color:#c0392b;}
+.forfait-card-price{font-size:18px;font-weight:900;color:#2d2d2d;}
 .forfait-card-unit{font-size:10px;font-weight:600;color:#aaa;}
 .forfait-card-check{width:18px;height:18px;border:2px solid #ddd;border-radius:50%;display:inline-block;margin-bottom:10px;transition:all 0.2s;}
 .forfait-card.selected .forfait-card-check{background:#c0392b;border-color:#c0392b;}
@@ -192,6 +193,21 @@ a.doc-link:hover{text-decoration:underline;}
 .note-field:focus{border-color:#2d2d2d;}
 
 /* PRINT */
+
+.submit-field{margin-bottom:14px;}
+.submit-field label{display:block;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:6px;}
+.submit-field input{width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:10px 14px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:#2d2d2d;outline:none;transition:border-color 0.2s;}
+.submit-field input:focus{border-color:#2d2d2d;}
+.btn-submit{background:#2d2d2d;color:#fff;border:none;border-radius:10px;padding:16px 32px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;width:100%;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;}
+.btn-submit:hover{background:#1a1a1a;}
+.btn-submit:disabled{background:#ccc;cursor:not-allowed;}
+.btn-submit-secondary{background:#fff;color:#2d2d2d;border:2px solid #2d2d2d;border-radius:10px;padding:14px 32px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;width:100%;transition:all 0.2s;}
+.btn-submit-secondary:hover{background:#f5f5f5;}
+.submit-confirm{display:none;background:#f0faf4;border:2px solid #b7e4c7;border-radius:10px;padding:20px 22px;margin-top:16px;text-align:center;}
+.submit-confirm-title{font-size:16px;font-weight:800;color:#27ae60;margin-bottom:6px;}
+.submit-confirm-text{font-size:13px;font-weight:500;color:#2d4a35;line-height:1.75;}
+.submit-error{display:none;background:#fdf4f4;border:2px solid #f0d0d0;border-radius:10px;padding:16px 20px;margin-top:14px;}
+.submit-error-text{font-size:13px;font-weight:600;color:#c0392b;line-height:1.6;}
 @media print{
   body{background:#fff;}
   .wrap{padding:20px;}
@@ -208,7 +224,7 @@ a.doc-link:hover{text-decoration:underline;}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" id="contrat-wrap">
 
 <!-- HEADER -->
 <div class="header">
@@ -216,7 +232,7 @@ a.doc-link:hover{text-decoration:underline;}
   <div class="header-right">
     <div class="doc-type">Contrat de services</div>
     <div class="doc-title">Production vidéo</div>
-    <div class="doc-ref">No. contrat : <span>MM-VID-<input type="text" style="border:none;border-bottom:2px solid #ccc;width:80px;font-size:13px;font-weight:700;color:#2d2d2d;padding:0 4px;outline:none;font-family:'Montserrat',sans-serif;" placeholder="____"></span></div>
+    <div class="doc-ref">Code de projet : <span><input type="text" id="code-projet" style="border:none;border-bottom:2px solid #ccc;width:140px;font-size:13px;font-weight:700;color:#2d2d2d;padding:0 4px;outline:none;font-family:Montserrat,sans-serif;" placeholder="ex: MM-2026-042"></span></div>
   </div>
 </div>
 
@@ -236,7 +252,7 @@ a.doc-link:hover{text-decoration:underline;}
         <div class="fr"><span class="fk">Représentante</span><span class="fv">Victoria J. Polsoni, Présidente</span></div>
         <div class="fr"><span class="fk">Adresse</span><span class="fv">2750 Rang des Chutes, Sainte-Ursule, QC G0X 3B0</span></div>
         <div class="fr"><span class="fk">Téléphone</span><span class="fv">(819) 852-0851</span></div>
-        <div class="fr"><span class="fk">Courriel</span><span class="fv">info@mediamauricie.com</span></div>
+        <div class="fr"><span class="fk">Courriel</span><span class="fv"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="452c2b232a052820212c24282430372c262c206b262a28">[email&#160;protected]</a></span></div>
         <div class="fr"><span class="fk">TPS</span><span class="fv">71110 6229 RT 0001</span></div>
         <div class="fr"><span class="fk">TVQ</span><span class="fv">12 3255 2049 TQ 0001</span></div>
         <div class="fr"><span class="fk">NEQ</span><span class="fv">1180690985</span></div>
@@ -247,7 +263,7 @@ a.doc-link:hover{text-decoration:underline;}
             <div><div class="bank-item-label">Institution</div><div class="bank-item-val">004</div></div>
             <div><div class="bank-item-label">Compte</div><div class="bank-item-val">5213392</div></div>
           </div>
-          <div style="font-size:11px;color:#aaa;font-weight:500;margin-top:8px;">Interac : info@mediamauricie.com <em>(mot de passe transmis séparément)</em> · Chèque à l'ordre de Média Mauricie Inc.</div>
+          <div style="font-size:11px;color:#aaa;font-weight:500;margin-top:8px;">Interac : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="650c0b030a250800010c04080410170c060c004b060a08">[email&#160;protected]</a> <em>(mot de passe transmis séparément)</em> · Chèque à l'ordre de Média Mauricie Inc.</div>
         </div>
       </div>
       <div class="partie">
@@ -549,7 +565,7 @@ a.doc-link:hover{text-decoration:underline;}
   <div class="sec-body">
     <div class="clause">
       <div class="ctitle">1. Premier versement et paiement</div>
-      <div class="ctext">Un premier versement de <strong>50% du montant total TTC</strong> est requis à la signature pour confirmer la réservation et démarrer la planification. Le solde est dû dans les <strong>30 jours suivant la livraison finale</strong>. Modes de paiement : virement Interac (info@mediamauricie.com), virement bancaire TD (voir section 01), ou chèque à l'ordre de Média Mauricie Inc.</div>
+      <div class="ctext">Un premier versement de <strong>50% du montant total TTC</strong> est requis à la signature pour confirmer la réservation et démarrer la planification. Le solde est dû dans les <strong>30 jours suivant la livraison finale</strong>. Modes de paiement : virement Interac (<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="274e494148674a42434e464a4652554e444e420944484a">[email&#160;protected]</a>), virement bancaire TD (voir section 01), ou chèque à l'ordre de Média Mauricie Inc.</div>
     </div>
     <div class="clause">
       <div class="ctitle">2. Intérêts sur retard</div>
@@ -613,7 +629,7 @@ a.doc-link:hover{text-decoration:underline;}
         <div class="sig-name">Média Mauricie Inc.</div>
         <div class="sig-role">Victoria J. Polsoni, Présidente-fondatrice</div>
         <div class="sig-line"></div>
-        <div class="sig-lbl">Signature autorisée</div>
+        <div class="sig-lbl">Signature — via Zoho Sign</div>
         <div class="sig-dates">
           <div><div class="sig-field"></div><div class="sig-lbl">Date</div></div>
           <div><div class="sig-field"></div><div class="sig-lbl">Lieu</div></div>
@@ -624,7 +640,7 @@ a.doc-link:hover{text-decoration:underline;}
         <div class="field" style="margin-bottom:10px;"><label>Nom complet</label><input type="text" placeholder="Prénom Nom"></div>
         <div class="field" style="margin-bottom:16px;"><label>Titre</label><input type="text" placeholder="Titre / Fonction"></div>
         <div class="sig-line"></div>
-        <div class="sig-lbl">Signature autorisée</div>
+        <div class="sig-lbl">Signature — via Zoho Sign</div>
         <div class="sig-dates">
           <div><div class="sig-field"></div><div class="sig-lbl">Date</div></div>
           <div><div class="sig-field"></div><div class="sig-lbl">Lieu</div></div>
@@ -643,13 +659,55 @@ a.doc-link:hover{text-decoration:underline;}
   <img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_coul.png" alt="Média Mauricie" style="height:36px;width:auto;">
   <div class="footer-legal">
     <strong>Média Mauricie Inc.</strong> · 2750 Rang des Chutes, Sainte-Ursule, QC G0X 3B0<br>
-    (819) 852-0851 · info@mediamauricie.com · www.mediamauricie.com · NEQ 1180690985
+    (819) 852-0851 · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="254c4b434a654840414c44484450574c464c400b464a48">[email&#160;protected]</a> · www.mediamauricie.com · NEQ 1180690985
   </div>
 </div>
 
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js">
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNEsJISqbsHr3rASQEQDB9Ve2Snw241LaopIXV5GliCIPlWY30_CyrOuzWjyWwfw/exec';
+async function soumettreContrat(){
+  var email=document.getElementById('submit-email').value.trim();
+  var cli=document.getElementById('submit-cli').value.trim();
+  document.getElementById('submit-error').style.display='none';
+  document.getElementById('submit-confirm').style.display='none';
+  if(!email){afficherErreur('Veuillez entrer le courriel du client.');return;}
+  if(!cli){afficherErreur('Veuillez entrer le code client (CLI-XXX).');return;}
+  var btn=document.getElementById('btn-soumettre'),txt=document.getElementById('btn-text');
+  btn.disabled=true;txt.textContent='⏳ Génération du PDF...';
+  try{
+    var donneesContrat={action:'soumettreContrat',
+      noContrat:document.getElementById('code-projet')?.value||Date.now().toString(),
+      client:{courriel:email},codeClient:cli,
+      total:document.getElementById('calc-total')?.textContent||'',
+      versement:document.getElementById('calc-versement')?.textContent||'',
+      notes:document.getElementById('submit-notes').value,
+      dateSoumission:new Date().toLocaleDateString('fr-CA')};
+    var element=document.getElementById('contrat-wrap');
+    var nomFichier=(donneesContrat.noContrat||'contrat').replace(/\s+/g,'_')+'_'+new Date().toISOString().slice(0,10)+'.pdf';
+    var opt={margin:[10,10,10,10],filename:nomFichier,image:{type:'jpeg',quality:0.95},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'letter',orientation:'portrait'}};
+    var pdfBlob=await html2pdf().set(opt).from(element).outputPdf('blob');
+    txt.textContent='⏳ Envoi...';
+    var reader=new FileReader();reader.readAsDataURL(pdfBlob);
+    reader.onloadend=async function(){
+      donneesContrat.pdfBase64=reader.result.split(',')[1];donneesContrat.nomFichier=nomFichier;
+      try{
+        await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(donneesContrat)});
+        btn.disabled=false;txt.textContent='⚡ Soumettre le contrat';
+        document.getElementById('confirm-details').textContent=nomFichier;
+        document.getElementById('submit-confirm').style.display='block';
+        html2pdf().set(opt).from(element).save();
+      }catch(e){
+        btn.disabled=false;txt.textContent='⚡ Soumettre le contrat';
+        afficherErreur('Erreur réseau — PDF téléchargé. ('+e.message+')');
+        html2pdf().set(opt).from(element).save();
+      }
+    };
+  }catch(e){btn.disabled=false;txt.textContent='⚡ Soumettre le contrat';afficherErreur('Erreur PDF: '+e.message);}
+}
+function afficherErreur(msg){document.getElementById('submit-error-text').textContent='⚠ '+msg;document.getElementById('submit-error').style.display='block';}
+</script><script>
 // ── CALCUL AUTOMATIQUE ──
 function fmt(n){
   return n.toLocaleString('fr-CA',{minimumFractionDigits:2,maximumFractionDigits:2})+' $';
@@ -752,24 +810,4 @@ function ajouterSurplus(){
   var d = document.createElement('div');
   d.className = 'surplus-row';
   d.innerHTML = '<input type="text" placeholder="Description...">'+
-    '<input type="number" min="0" placeholder="0" oninput="calcTotal()">'+
-    '<button class="btn-remove" onclick="retirerSurplus(this)">×</button>';
-  c.appendChild(d);
-}
-function retirerSurplus(btn){
-  var rows = document.querySelectorAll('#surplus-container .surplus-row');
-  if(rows.length > 1){btn.parentElement.remove();calcTotal();}
-}
-
-// ── FORFAIT BH ──
-function selectForfaitBH(card,id){
-  document.querySelectorAll('.forfait-card').forEach(function(c){c.classList.remove('selected');});
-  card.classList.add('selected');
-  document.getElementById(id).checked = true;
-}
-
-// Init
-calcTotal();
-</script>
-</body>
-</html>
+    '<input type="number" min
