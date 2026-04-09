@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contrat — Forfait de contenu mensuel — Média Mauricie</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -56,7 +57,7 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;min-he
 .forfait-card:hover{border-color:#2d2d2d;}
 .forfait-card.selected{border-color:#c0392b;background:#fdf9f9;}
 .forfait-card-name{font-size:14px;font-weight:800;color:#2d2d2d;margin-bottom:4px;}
-.forfait-card-price{font-size:18px;font-weight:900;color:#c0392b;}
+.forfait-card-price{font-size:18px;font-weight:900;color:#2d2d2d;}
 .forfait-card-unit{font-size:10px;font-weight:600;color:#aaa;}
 .forfait-card-check{width:18px;height:18px;border:2px solid #ddd;border-radius:50%;display:inline-block;margin-bottom:10px;transition:all 0.2s;}
 .forfait-card.selected .forfait-card-check{background:#c0392b;border-color:#c0392b;}
@@ -64,20 +65,20 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;min-he
 .surplus-row input{border:2px solid #e0e0e0;border-radius:8px;padding:9px 12px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:#2d2d2d;width:100%;outline:none;}
 .surplus-row input:focus{border-color:#2d2d2d;}
 .surplus-row input[type=number]{text-align:right;}
-.calc-block{background:#2d2d2d;border-radius:12px;padding:20px 24px;margin-top:16px;}
-.calc-title{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:16px;}
-.calc-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);}
+.calc-block{background:#f5f5f5;border:2px solid #e0e0e0;border-radius:12px;padding:20px 24px;margin-top:16px;}
+.calc-title{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:16px;}
+.calc-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #e8e8e8;}
 .calc-row:last-child{border-bottom:none;}
-.calc-label{font-size:12px;font-weight:600;color:rgba(255,255,255,0.6);}
-.calc-val{font-size:14px;font-weight:800;color:#fff;}
-.calc-total{display:flex;justify-content:space-between;align-items:center;padding:14px 0 8px;border-top:2px solid rgba(255,255,255,0.2);margin-top:8px;}
-.calc-total-label{font-size:14px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:1px;}
-.calc-total-val{font-size:24px;font-weight:900;color:#fff;}
-.calc-versement{display:flex;justify-content:space-between;align-items:center;padding:8px 0;}
-.calc-versement-label{font-size:12px;font-weight:700;color:rgba(255,255,255,0.5);}
-.calc-versement-val{font-size:16px;font-weight:800;color:#c0392b;}
+.calc-label{font-size:13px;font-weight:600;color:#555;}
+.calc-val{font-size:14px;font-weight:800;color:#2d2d2d;}
+.calc-total{display:flex;justify-content:space-between;align-items:center;padding:14px 0 8px;border-top:2px solid #2d2d2d;margin-top:8px;}
+.calc-total-label{font-size:14px;font-weight:800;color:#2d2d2d;text-transform:uppercase;letter-spacing:1px;}
+.calc-total-val{font-size:26px;font-weight:900;color:#2d2d2d;}
+.calc-versement{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #e8e8e8;}
+.calc-versement-label{font-size:13px;font-weight:600;color:#555;}
+.calc-versement-val{font-size:16px;font-weight:800;color:#2d2d2d;}
 .tax-toggle{display:flex;gap:16px;margin-bottom:12px;}
-.tax-toggle label{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);cursor:pointer;}
+.tax-toggle label{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#2d2d2d;cursor:pointer;}
 .tax-toggle input{width:16px;height:16px;accent-color:#c0392b;}
 .map-block{border-radius:12px;overflow:hidden;border:2px solid #e0e0e0;}
 .map-img{width:100%;height:auto;display:block;}
@@ -120,23 +121,38 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;min-he
 .footer-legal strong{color:#888;}
 a.doc-link{color:#c0392b;font-weight:700;font-size:12px;text-decoration:none;}
 a.doc-link:hover{text-decoration:underline;}
-@media print{body{background:#fff;}.wrap{padding:20px;}.notice{display:none;}.btn-add,.btn-remove{display:none;}input,select,textarea{border:none;border-bottom:1px solid #ccc;border-radius:0;padding:2px 4px;}}
+
+.submit-field{margin-bottom:14px;}
+.submit-field label{display:block;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:6px;}
+.submit-field input{width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:10px 14px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:#2d2d2d;outline:none;transition:border-color 0.2s;}
+.submit-field input:focus{border-color:#2d2d2d;}
+.btn-submit{background:#2d2d2d;color:#fff;border:none;border-radius:10px;padding:16px 32px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;width:100%;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;}
+.btn-submit:hover{background:#1a1a1a;}
+.btn-submit:disabled{background:#ccc;cursor:not-allowed;}
+.btn-submit-secondary{background:#fff;color:#2d2d2d;border:2px solid #2d2d2d;border-radius:10px;padding:14px 32px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;width:100%;transition:all 0.2s;}
+.btn-submit-secondary:hover{background:#f5f5f5;}
+.submit-confirm{display:none;background:#f0faf4;border:2px solid #b7e4c7;border-radius:10px;padding:20px 22px;margin-top:16px;text-align:center;}
+.submit-confirm-title{font-size:16px;font-weight:800;color:#27ae60;margin-bottom:6px;}
+.submit-confirm-text{font-size:13px;font-weight:500;color:#2d4a35;line-height:1.75;}
+.submit-error{display:none;background:#fdf4f4;border:2px solid #f0d0d0;border-radius:10px;padding:16px 20px;margin-top:14px;}
+.submit-error-text{font-size:13px;font-weight:600;color:#c0392b;line-height:1.6;}
+@media print{body{background:#fff;}.wrap{padding:20px;}.notice,.no-print{display:none !important;}.btn-add,.btn-remove{display:none;}input,select,textarea{border:none;border-bottom:1px solid #ccc;border-radius:0;padding:2px 4px;}}
 @media(max-width:640px){.parties,.sigs,.forfait-grid{grid-template-columns:1fr;}.field-row,.field-row-3{grid-template-columns:1fr;}.header{flex-direction:column;gap:12px;}}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" id="contrat-wrap">
 
 <div class="header">
   <img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_M-coul.png" alt="Média Mauricie" style="height:52px;width:auto;">
   <div class="header-right">
     <div class="doc-type">Contrat de services</div>
     <div class="doc-title">Forfait de contenu mensuel</div>
-    <div class="doc-ref">No. contrat : <span>MM-FCM-<input type="text" style="border:none;border-bottom:2px solid #ccc;width:80px;font-size:13px;font-weight:700;color:#2d2d2d;padding:0 4px;outline:none;font-family:Montserrat,sans-serif;" placeholder="____"></span></div>
+    <div class="doc-ref">Code de projet : <span><input type="text" id="code-projet" style="border:none;border-bottom:2px solid #ccc;width:140px;font-size:13px;font-weight:700;color:#2d2d2d;padding:0 4px;outline:none;font-family:Montserrat,sans-serif;" placeholder="ex: MM-2026-042"></span></div>
   </div>
 </div>
 
-<div class="notice"><span style="font-size:18px;flex-shrink:0;">⚡</span>
+<div class="notice no-print"><span style="font-size:18px;flex-shrink:0;">⚡</span>
   <div class="notice-text"><strong>Signature électronique via Zoho Sign</strong> — Ce contrat entre en vigueur à la date de la dernière signature et à la réception du premier versement.</div>
 </div>
 
@@ -149,7 +165,7 @@ a.doc-link:hover{text-decoration:underline;}
         <div class="fr"><span class="fk">Représentante</span><span class="fv">Victoria J. Polsoni, Présidente</span></div>
         <div class="fr"><span class="fk">Adresse</span><span class="fv">2750 Rang des Chutes, Sainte-Ursule, QC G0X 3B0</span></div>
         <div class="fr"><span class="fk">Téléphone</span><span class="fv">(819) 852-0851</span></div>
-        <div class="fr"><span class="fk">Courriel</span><span class="fv">info@mediamauricie.com</span></div>
+        <div class="fr"><span class="fk">Courriel</span><span class="fv"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f891969e97b8959d9c919995998d8a919b919dd69b9795">[email&#160;protected]</a></span></div>
         <div class="fr"><span class="fk">TPS</span><span class="fv">71110 6229 RT 0001</span></div>
         <div class="fr"><span class="fk">TVQ</span><span class="fv">12 3255 2049 TQ 0001</span></div>
         <div class="fr"><span class="fk">NEQ</span><span class="fv">1180690985</span></div>
@@ -160,7 +176,7 @@ a.doc-link:hover{text-decoration:underline;}
             <div><div class="bank-item-label">Institution</div><div class="bank-item-val">004</div></div>
             <div><div class="bank-item-label">Compte</div><div class="bank-item-val">5213392</div></div>
           </div>
-          <div style="font-size:11px;color:#aaa;font-weight:500;margin-top:8px;">Interac : info@mediamauricie.com <em>(mot de passe transmis séparément)</em> · Chèque à l'ordre de Média Mauricie Inc.</div>
+          <div style="font-size:11px;color:#aaa;font-weight:500;margin-top:8px;">Interac : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="80e9eee6efc0ede5e4e9e1ede1f5f2e9e3e9e5aee3efed">[email&#160;protected]</a> <em>(mot de passe transmis séparément)</em> · Chèque à l'ordre de Média Mauricie Inc.</div>
         </div>
       </div>
       <div class="partie">
@@ -193,19 +209,19 @@ a.doc-link:hover{text-decoration:underline;}
         <div class="forfait-card-check"></div>
         <div class="forfait-card-name">Essentiel</div>
         <div style="font-size:11px;color:#888;margin-bottom:8px;">2h terrain · photos · reels · drone</div>
-        <div class="forfait-card-price"><input type="number" min="0" placeholder="0" onclick="event.stopPropagation()" oninput="syncTarifFCM(this)" style="border:none;border-bottom:2px solid #e0e0e0;width:80px;font-size:16px;font-weight:800;color:#c0392b;font-family:Montserrat,sans-serif;outline:none;background:transparent;"> $/mois</div>
+        <div class="forfait-card-price"><input type="number" min="0" placeholder="0" onclick="event.stopPropagation()" oninput="syncTarifFCM(this)" style="border:none;border-bottom:2px solid #e0e0e0;width:80px;font-size:16px;font-weight:800;color:#2d2d2d;font-family:Montserrat,sans-serif;outline:none;background:transparent;"> $/mois</div>
       </div>
       <div class="forfait-card" data-group="fcm" onclick="selectForfait(this,'fcm')">
         <div class="forfait-card-check"></div>
         <div class="forfait-card-name">Pro</div>
         <div style="font-size:11px;color:#888;margin-bottom:8px;">4h terrain · photos · reels · drone</div>
-        <div class="forfait-card-price"><input type="number" min="0" placeholder="0" onclick="event.stopPropagation()" oninput="syncTarifFCM(this)" style="border:none;border-bottom:2px solid #e0e0e0;width:80px;font-size:16px;font-weight:800;color:#c0392b;font-family:Montserrat,sans-serif;outline:none;background:transparent;"> $/mois</div>
+        <div class="forfait-card-price"><input type="number" min="0" placeholder="0" onclick="event.stopPropagation()" oninput="syncTarifFCM(this)" style="border:none;border-bottom:2px solid #e0e0e0;width:80px;font-size:16px;font-weight:800;color:#2d2d2d;font-family:Montserrat,sans-serif;outline:none;background:transparent;"> $/mois</div>
       </div>
       <div class="forfait-card" data-group="fcm" onclick="selectForfait(this,'fcm')">
         <div class="forfait-card-check"></div>
         <div class="forfait-card-name">Sur mesure</div>
         <div style="font-size:11px;color:#888;margin-bottom:8px;"><input type="text" onclick="event.stopPropagation()" style="border:none;border-bottom:1px solid #e0e0e0;width:100%;font-size:11px;font-family:Montserrat,sans-serif;outline:none;" placeholder="Décrire..."></div>
-        <div class="forfait-card-price"><input type="number" min="0" placeholder="0" onclick="event.stopPropagation()" oninput="syncTarifFCM(this)" style="border:none;border-bottom:2px solid #e0e0e0;width:80px;font-size:16px;font-weight:800;color:#c0392b;font-family:Montserrat,sans-serif;outline:none;background:transparent;"> $/mois</div>
+        <div class="forfait-card-price"><input type="number" min="0" placeholder="0" onclick="event.stopPropagation()" oninput="syncTarifFCM(this)" style="border:none;border-bottom:2px solid #e0e0e0;width:80px;font-size:16px;font-weight:800;color:#2d2d2d;font-family:Montserrat,sans-serif;outline:none;background:transparent;"> $/mois</div>
       </div>
     </div>
 
@@ -262,18 +278,22 @@ a.doc-link:hover{text-decoration:underline;}
   <div class="sec-head"><span class="sec-num">04</span><span class="sec-title">Tarification mensuelle</span></div>
   <div class="sec-body">
     
-    <div class="mel-block">
+        <div class="mel-block">
       <div class="mel-title">Participation à Mauricie en lumière — optionnel</div>
-      <div class="mel-check">
+      <div class="mel-check" style="margin-bottom:12px;">
         <input type="checkbox" id="mel-check" onchange="calcTotal()">
-        <div class="mel-check-text">J'autorise Média Mauricie Inc. à partager une sélection de mes images sur la plateforme <a href="https://www.mediamauricie.com/mauricie-en-lumiere" target="_blank" class="mel-link">Mauricie en lumière →</a><br>
-        <span style="font-size:11px;color:#888;">Rabais de <strong style="color:#27ae60;">50$/mois</strong> appliqué dès le mois suivant la signature d'une décharge distincte · Révocable par préavis écrit de 30 jours</span></div>
+        <div class="mel-check-text">Le client autorise Média Mauricie Inc. à partager une sélection sur <a href="https://www.mediamauricie.com/mauricie-en-lumiere" target="_blank" class="mel-link">Mauricie en lumière →</a><br>
+        <span style="font-size:12px;color:#555;">Rabais de <strong style="color:#27ae60;">50$/mois</strong> appliqué à partir du 2e mois, suite à la signature de la décharge MEL.</span></div>
+      </div>
+      <div class="mel-check">
+        <input type="checkbox" id="mel-decharge" onchange="calcTotal()" style="accent-color:#27ae60;">
+        <div class="mel-check-text"><strong style="color:#27ae60;">✅ Décharge MEL signée</strong> — rabais actif dès le 2e mois &nbsp;<a href="https://sign.zoho.com/zsfl/y77deZQnQhgW1KbmdeH6?i=2660" target="_blank" class="mel-link">Ouvrir la décharge →</a></div>
       </div>
     </div>
     
     <div class="sec-div">Éléments additionnels</div>
     <div id="surplus-container">
-      <div class="surplus-row"><input type="text" placeholder="Description (ex: disque dur, permis, km supplémentaires...)"><input type="number" min="0" placeholder="0" oninput="calcTotal()"><button class="btn-remove" onclick="retirerSurplus(this)">×</button></div>
+      <div class="surplus-row"><input type="text" placeholder="Description (ex: rabais, commandite, km, matériel...)"><input type="number" min="0" placeholder="0" oninput="calcTotal()"><button class="btn-remove" onclick="retirerSurplus(this)">×</button></div>
       <div class="surplus-row"><input type="text" placeholder="Description..."><input type="number" min="0" placeholder="0" oninput="calcTotal()"><button class="btn-remove" onclick="retirerSurplus(this)">×</button></div>
       <div class="surplus-row"><input type="text" placeholder="Description..."><input type="number" min="0" placeholder="0" oninput="calcTotal()"><button class="btn-remove" onclick="retirerSurplus(this)">×</button></div>
     </div>
@@ -332,7 +352,7 @@ a.doc-link:hover{text-decoration:underline;}
     </div>
     <div class="clause">
       <div class="ctitle">Annulation et report</div>
-      <div class="ctext">Toute annulation doit être transmise par écrit à info@mediamauricie.com.</div>
+      <div class="ctext">Toute annulation doit être transmise par écrit à <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7f161119103f121a1b161e121e0a0d161c161a511c1012">[email&#160;protected]</a>.</div>
       <div class="hl">
         <div class="hl-row"><strong>Plus de 7 jours avant :</strong> premier versement remboursable à 50% — temps bloqué, communications et planification engagés. Report sans frais selon disponibilités.</div>
         <div class="hl-row"><strong>3 à 7 jours avant :</strong> premier versement non remboursable — préparation avancée et date perdue. Report possible selon disponibilités.</div>
@@ -360,7 +380,7 @@ a.doc-link:hover{text-decoration:underline;}
     
     <div class="clause">
       <div class="ctitle">Participation à Mauricie en lumière (optionnel)</div>
-      <div class="ctext">Si le client consent à partager une sélection sur la plateforme Mauricie en lumière, un rabais de <strong>50$/mois</strong> est appliqué dès le mois suivant la signature d'une décharge distincte. Cette participation est optionnelle et révocable par préavis écrit de 30 jours.</div>
+      <div class="ctext">Si le client consent à partager une sélection sur Mauricie en lumière, un rabais de <strong>50$/mois</strong> est appliqué à partir du 2e mois, suite à la signature de la décharge MEL. Toute modification doit être communiquée par écrit et prend effet au prochain renouvellement du contrat.</div>
     </div>
     <div class="clause">
       <div class="ctitle">Assurances</div>
@@ -391,7 +411,7 @@ a.doc-link:hover{text-decoration:underline;}
         <div class="sig-name">Média Mauricie Inc.</div>
         <div class="sig-role">Victoria J. Polsoni, Présidente-fondatrice</div>
         <div class="sig-line"></div>
-        <div class="sig-lbl">Signature autorisée</div>
+        <div class="sig-lbl">Signature — via Zoho Sign</div>
         <div class="sig-dates">
           <div><div class="sig-field"></div><div class="sig-lbl">Date</div></div>
           <div><div class="sig-field"></div><div class="sig-lbl">Lieu</div></div>
@@ -402,7 +422,7 @@ a.doc-link:hover{text-decoration:underline;}
         <div class="field" style="margin-bottom:10px;"><label>Nom complet</label><input type="text" placeholder="Prénom Nom"></div>
         <div class="field" style="margin-bottom:16px;"><label>Titre</label><input type="text" placeholder="Titre / Fonction"></div>
         <div class="sig-line"></div>
-        <div class="sig-lbl">Signature autorisée</div>
+        <div class="sig-lbl">Signature — via Zoho Sign</div>
         <div class="sig-dates">
           <div><div class="sig-field"></div><div class="sig-lbl">Date</div></div>
           <div><div class="sig-field"></div><div class="sig-lbl">Lieu</div></div>
@@ -411,20 +431,37 @@ a.doc-link:hover{text-decoration:underline;}
     </div>
     <div style="margin-top:16px;background:#f8f8f8;border:2px solid #e8e8e8;border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:12px;">
       <span style="font-size:18px;flex-shrink:0;">⚡</span>
-      <div style="font-size:12px;font-weight:600;color:#555;line-height:1.7;">Signature électronique via <strong style="color:#2d2d2d;">Zoho Sign</strong> — Le contrat complété est sauvegardé en PDF et transmis par courriel aux deux parties. La version signée constitue l'original légal.</div>
-    </div></div>
+      <div style="font-size:14px;font-weight:600;color:#555;line-height:1.7;">Signature via <strong style="color:#2d2d2d;">Zoho Sign</strong> — La version signée constitue l'original légal.</div>
+    </div>
+    <div class="no-print" style="margin-top:28px;background:#f8f8f8;border:2px solid #e0e0e0;border-radius:12px;padding:24px 26px;">
+      <div style="margin-bottom:24px;padding-bottom:22px;border-bottom:2px solid #e8e8e8;">
+        <div style="font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#c0392b;margin-bottom:10px;">Merci!</div>
+        <div style="font-size:15px;font-weight:700;color:#2d2d2d;line-height:1.75;margin-bottom:8px;">Merci d'avoir complété ce contrat. Nous allons le réviser et vous faire parvenir une copie PDF à signer via <strong>Zoho Sign</strong>. La réservation de votre projet sera confirmée à la réception du premier versement.</div>
+        <div style="font-size:14px;font-weight:600;color:#555;">Questions? <a href="mailto:info@mediamauricie.com" style="color:#c0392b;font-weight:800;text-decoration:none;">info@mediamauricie.com</a> — Au plaisir!</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+        <div class="submit-field"><label>Courriel du client</label><input type="email" id="submit-email" placeholder="client@entreprise.com"></div>
+        <div class="submit-field"><label>Code client (CLI-XXX)</label><input type="text" id="submit-cli" placeholder="CLI-001"></div>
+      </div>
+      <div class="submit-field" style="margin-bottom:20px;"><label>Notes internes</label><input type="text" id="submit-notes" placeholder="Notes pour le dossier..."></div>
+      <button class="btn-submit" id="btn-soumettre" onclick="soumettreContrat()"><span id="btn-text">⚡ Soumettre le contrat</span></button>
+      <button class="btn-submit-secondary" onclick="window.print()">🖨️ Sauvegarder en PDF manuellement</button>
+      <div class="submit-confirm" id="submit-confirm"><div class="submit-confirm-title">✅ Contrat soumis — merci!</div><div class="submit-confirm-text">Le PDF a été généré. Notre équipe le révisera et vous enverra le lien Zoho Sign pour signature.<br><br><span id="confirm-details" style="color:#27ae60;font-weight:700;"></span></div></div>
+      <div class="submit-error" id="submit-error"><div class="submit-error-text" id="submit-error-text"></div></div>
+    </div>
+  </div>
 </div>
 
 <div class="footer">
   <img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_coul.png" alt="Média Mauricie" style="height:36px;width:auto;">
   <div class="footer-legal">
     <strong>Média Mauricie Inc.</strong> · 2750 Rang des Chutes, Sainte-Ursule, QC G0X 3B0<br>
-    (819) 852-0851 · info@mediamauricie.com · www.mediamauricie.com · NEQ 1180690985
+    (819) 852-0851 · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9bf2f5fdf4dbf6fefff2faf6faeee9f2f8f2feb5f8f4f6">[email&#160;protected]</a> · www.mediamauricie.com · NEQ 1180690985
   </div>
 </div>
 
 </div>
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 
 function fmt(n){return n.toLocaleString('fr-CA',{minimumFractionDigits:2,maximumFractionDigits:2})+' $';}
 function getSurplus(){
@@ -450,7 +487,7 @@ function selectForfait(card,name){
 
 function calcTotal(){
   var tarif=parseFloat(document.getElementById('tarif-mensuel').value)||0;
-  var mel=document.getElementById('mel-check')&&document.getElementById('mel-check').checked?50:0;
+  var melActif=document.getElementById('mel-check')?.checked&&document.getElementById('mel-decharge')?.checked;var mel=melActif?50:0;
   var surplus=getSurplus();
   var htAjuste=tarif-mel+surplus;
   var tps=document.getElementById('tps-check').checked?htAjuste*0.05:0;
@@ -461,21 +498,4 @@ function calcTotal(){
   document.getElementById('calc-tps').textContent=fmt(tps);
   document.getElementById('calc-tvq').textContent=fmt(tvq);
   document.getElementById('calc-total').textContent=fmt(mensuelTTC);
-  document.getElementById('calc-versement').textContent=fmt(versement);
-  document.getElementById('calc-solde').textContent=fmt(mensuelTTC);
-  document.getElementById('row-tps').style.opacity=document.getElementById('tps-check').checked?'1':'0.3';
-  document.getElementById('row-tvq').style.opacity=document.getElementById('tvq-check').checked?'1':'0.3';
-  if(document.getElementById('row-mel')){
-    document.getElementById('row-mel').style.display=mel>0?'flex':'none';
-  }
-}
-calcTotal();
-
-function syncTarifFCM(input){
-  document.getElementById('tarif-mensuel').value=input.value;
-  calcTotal();
-}
-
-</script>
-</body>
-</html>
+  document.getElem
