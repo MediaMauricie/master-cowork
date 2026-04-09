@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qualification · Média Mauricie</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#c0392b;--dark:#2d2d2d;--bg:#f0f0f0;--white:#fff;
+  --border:#e0e0e0;--muted:#888;--light:#f8f8f8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{background:var(--bg);}
+body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;}
+
+.progress-bar{position:fixed;top:0;left:0;right:0;height:3px;background:rgba(0,0,0,0.08);z-index:100;}
+.progress-fill{height:100%;background:var(--red);transition:width 0.4s ease;width:0%;}
+
+.wrap{max-width:640px;margin:0 auto;padding:48px 24px 80px;}
+
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:48px;}
+.step-indicator{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.step-indicator span{color:var(--dark);}
+
+.step{display:none;animation:fadeUp 0.35s ease both;}
+.step.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+
+.step-eyebrow{font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+.step-title{font-size:32px;font-weight:900;color:var(--dark);letter-spacing:-1.5px;line-height:1.1;margin-bottom:8px;}
+.step-sub{font-size:13px;font-weight:500;color:var(--muted);line-height:1.7;margin-bottom:32px;}
+
+.services{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:32px;}
+.svc-card{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:18px 16px;cursor:pointer;transition:all 0.2s;position:relative;}
+.svc-card:hover{border-color:var(--dark);transform:translateY(-1px);}
+.svc-card.selected{border-color:var(--red);border-width:2px;background:#fdf9f9;}
+.svc-card.selected::after{content:'✓';position:absolute;top:10px;right:12px;font-size:11px;font-weight:800;color:var(--red);}
+.svc-icon{font-size:22px;margin-bottom:8px;}
+.svc-name{font-size:12px;font-weight:800;color:var(--dark);line-height:1.3;margin-bottom:4px;}
+.svc-desc{font-size:10px;font-weight:500;color:var(--muted);line-height:1.5;}
+
+.field{margin-bottom:20px;}
+.field label{display:block;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--dark);margin-bottom:8px;}
+.field input,.field textarea,.field select{width:100%;background:var(--white);border:1.5px solid var(--border);border-radius:8px;padding:12px 14px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:500;color:var(--dark);outline:none;transition:border-color 0.2s;appearance:none;}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--dark);}
+.field textarea{min-height:90px;resize:vertical;line-height:1.6;}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.field-hint{font-size:10px;font-weight:500;color:var(--muted);margin-top:5px;line-height:1.5;}
+
+.pills{display:flex;flex-wrap:wrap;gap:8px;}
+.pill{background:var(--white);border:1.5px solid var(--border);border-radius:20px;padding:8px 14px;font-size:11px;font-weight:600;color:var(--dark);cursor:pointer;transition:all 0.15s;}
+.pill:hover{border-color:var(--dark);}
+.pill.selected{background:var(--dark);color:var(--white);border-color:var(--dark);}
+
+.packages{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;}
+.pkg-card{background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:14px 14px;cursor:pointer;transition:all 0.2s;}
+.pkg-card:hover{border-color:var(--dark);}
+.pkg-card.selected{border-color:var(--red);border-width:2px;}
+.pkg-name{font-size:12px;font-weight:800;color:var(--dark);margin-bottom:4px;}
+.pkg-detail{font-size:10px;font-weight:500;color:var(--muted);line-height:1.4;}
+.pkg-check{display:inline-block;width:11px;height:11px;border:1.5px solid var(--border);border-radius:2px;vertical-align:middle;margin-right:5px;transition:all 0.15s;}
+.pkg-card.selected .pkg-check{background:var(--red);border-color:var(--red);}
+
+.nav{display:flex;gap:10px;margin-top:32px;align-items:center;}
+.btn-next{background:var(--dark);color:var(--white);border:none;border-radius:8px;padding:14px 28px;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background 0.2s;}
+.btn-next:hover{background:#1a1a1a;}
+.btn-next.red{background:var(--red);}
+.btn-next.red:hover{background:#a93226;}
+.btn-back{background:transparent;color:var(--muted);border:none;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;cursor:pointer;padding:14px 0;letter-spacing:1px;text-transform:uppercase;transition:color 0.2s;}
+.btn-back:hover{color:var(--dark);}
+
+.success{text-align:center;padding:40px 0;}
+.success-icon{font-size:48px;margin-bottom:20px;}
+.success-title{font-size:28px;font-weight:900;letter-spacing:-1px;color:var(--dark);margin-bottom:12px;}
+.success-sub{font-size:14px;font-weight:500;color:var(--muted);line-height:1.7;}
+
+.req{color:var(--red);}
+[data-show]{display:none;}
+[data-show].visible{display:block;}
+
+/* Budget pills communs */
+.budget-pills{display:flex;flex-wrap:wrap;gap:8px;}
+
+@media(max-width:520px){
+  .services{grid-template-columns:1fr;}
+  .packages{grid-template-columns:1fr;}
+  .field-row{grid-template-columns:1fr;}
+  .step-title{font-size:26px;}
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<div class="wrap">
+
+  <div class="header">
+    <img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_M-coul.png" alt="Média Mauricie" style="height:36px;">
+    <div class="step-indicator">Étape <span id="step-label">1</span> / <span id="step-total">4</span></div>
+  </div>
+
+  <form id="form" novalidate>
+
+  <!-- STEP 1 — SERVICE -->
+  <div class="step active" id="step-1">
+    <div class="step-eyebrow">Démarrer une demande</div>
+    <div class="step-title">Quel service vous intéresse?</div>
+    <div class="step-sub">Sélectionnez un service — les questions s'adaptent automatiquement à votre projet.</div>
+    <div class="services">
+      <div class="svc-card" data-service="MM-BIMG" onclick="selectService(this)">
+        <div class="svc-icon">📸</div>
+        <div class="svc-name">Banque d'images mensuelle</div>
+        <div class="svc-desc">Photos HD/mois · abonnement 3, 6 ou 12 mois · drone inclus</div>
+      </div>
+      <div class="svc-card" data-service="MM-FCM" onclick="selectService(this)">
+        <div class="svc-icon">🎥</div>
+        <div class="svc-name">Forfait contenu mensuel</div>
+        <div class="svc-desc">Photos + reels + montage · terrain mensuel · drone inclus</div>
+      </div>
+      <div class="svc-card" data-service="MM-EVT" onclick="selectService(this)">
+        <div class="svc-icon">🎬</div>
+        <div class="svc-name">Couverture événementielle</div>
+        <div class="svc-desc">Photo · vidéo · drone · montages · packages 2h à 12h</div>
+      </div>
+      <div class="svc-card" data-service="MM-VID" onclick="selectService(this)">
+        <div class="svc-icon">🎞️</div>
+        <div class="svc-name">Production vidéo</div>
+        <div class="svc-desc">Corporatif · témoignage · documentaire · reel · sur soumission</div>
+      </div>
+      <div class="svc-card" data-service="MM-BH" onclick="selectService(this)">
+        <div class="svc-icon">💻</div>
+        <div class="svc-name">Heures de montage</div>
+        <div class="svc-desc">Banques flexibles · tous types de montages · valides 12 mois</div>
+      </div>
+      <div class="svc-card" data-service="MM-PHO" onclick="selectService(this)">
+        <div class="svc-icon">📷</div>
+        <div class="svc-name">Séance &amp; événement photo</div>
+        <div class="svc-desc">Portraits · équipe · événement · 1h à 12h · drone inclus</div>
+      </div>
+      <div class="svc-card" data-service="MM-DOC" onclick="selectService(this)">
+        <div class="svc-icon">🎦</div>
+        <div class="svc-name">Documentaire</div>
+        <div class="svc-desc">Court ou long format · portrait · institutionnel · sur soumission</div>
+      </div>
+    </div>
+    <div id="svc-error" style="font-size:11px;color:var(--red);font-weight:600;display:none;margin-bottom:12px;">Veuillez sélectionner un service.</div>
+    <div class="nav">
+      <button type="button" class="btn-next" onclick="nextStep()">Continuer →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 — INFOS CLIENT -->
+  <div class="step" id="step-2">
+    <div class="step-eyebrow">Vos coordonnées</div>
+    <div class="step-title">Parlez-nous de vous.</div>
+    <div class="step-sub">Ces informations restent confidentielles et ne seront jamais partagées.</div>
+    <div class="field-row">
+      <div class="field">
+        <label>Prénom <span class="req">*</span></label>
+        <input type="text" id="prenom" placeholder="Marie" required>
+      </div>
+      <div class="field">
+        <label>Nom <span class="req">*</span></label>
+        <input type="text" id="nom" placeholder="Tremblay" required>
+      </div>
+    </div>
+    <div class="field">
+      <label>Organisation / Entreprise</label>
+      <input type="text" id="org" placeholder="Nom de votre organisation (si applicable)">
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Courriel <span class="req">*</span></label>
+        <input type="email" id="email" placeholder="vous@exemple.com" required>
+      </div>
+      <div class="field">
+        <label>Téléphone</label>
+        <input type="tel" id="tel" placeholder="(819) 000-0000">
+      </div>
+    </div>
+    <div class="field">
+      <label>Type d'organisation</label>
+      <select id="org_type">
+        <option value="">Sélectionner...</option>
+        <option>Corporatif</option>
+        <option>OBNL</option>
+        <option>Municipal / Gouvernemental</option>
+        <option>Festival / Événement</option>
+        <option>Agrotourisme</option>
+        <option>Commerce local</option>
+        <option>Individuel / Freelance</option>
+        <option>Autre</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Comment avez-vous entendu parler de nous?</label>
+      <select id="source">
+        <option value="">Sélectionner...</option>
+        <option>Instagram</option>
+        <option>Facebook</option>
+        <option>Référence d'un ami / collègue</option>
+        <option>Google</option>
+        <option>Événement / rencontre</option>
+        <option>Vous m'avez contacté directement</option>
+        <option>Autre</option>
+      </select>
+    </div>
+    <div class="nav">
+      <button type="button" class="btn-next" onclick="nextStep()">Continuer →</button>
+      <button type="button" class="btn-back" onclick="prevStep()">← Retour</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 — QUESTIONS SELON SERVICE -->
+  <div class="step" id="step-3">
+    <div class="step-eyebrow" id="s3-eyebrow">Votre projet</div>
+    <div class="step-title" id="s3-title">Dites-nous en plus.</div>
+    <div class="step-sub" id="s3-sub">Quelques questions pour mieux comprendre votre projet.</div>
+
+    <!-- MM-BIMG -->
+    <div data-show="MM-BIMG" id="q-BIMG">
+      <div class="field">
+        <label>Engagement souhaité</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'engagement')">3 mois</div>
+          <div class="pill" onclick="togglePill(this,'engagement')">6 mois</div>
+          <div class="pill" onclick="togglePill(this,'engagement')">12 mois</div>
+          <div class="pill" onclick="togglePill(this,'engagement')">Je ne sais pas encore</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Forfait qui vous intéresse</label>
+        <div class="packages">
+          <div class="pkg-card" onclick="selectPkg(this,'pkg_bimg')">
+            <div><span class="pkg-check"></span><span class="pkg-name">Essentiel</span></div>
+            <div class="pkg-detail">1h terrain · drone inclus · livraison mensuelle</div>
+          </div>
+          <div class="pkg-card" onclick="selectPkg(this,'pkg_bimg')">
+            <div><span class="pkg-check"></span><span class="pkg-name">Pro</span></div>
+            <div class="pkg-detail">2h terrain · drone inclus · livraison mensuelle</div>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Plateformes principales</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'plateformes_b')">Instagram</div>
+          <div class="pill" onclick="togglePill(this,'plateformes_b')">Facebook</div>
+          <div class="pill" onclick="togglePill(this,'plateformes_b')">LinkedIn</div>
+          <div class="pill" onclick="togglePill(this,'plateformes_b')">Site web</div>
+          <div class="pill" onclick="togglePill(this,'plateformes_b')">Affichage / imprimé</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Avez-vous déjà travaillé avec un photographe professionnel?</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'exp_b',true)">Oui</div>
+          <div class="pill" onclick="togglePill(this,'exp_b',true)">Non — c'est une première</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Date souhaitée pour le premier shooting</label>
+        <input type="text" id="date_bimg" placeholder="ex: mi-mai 2026 ou le plus tôt possible">
+      </div>
+      <div class="field">
+        <label>Budget approximatif</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'budget_bimg',true)">Moins de 2 000$</div>
+          <div class="pill" onclick="togglePill(this,'budget_bimg',true)">2 000$ – 5 000$</div>
+          <div class="pill" onclick="togglePill(this,'budget_bimg',true)">5 000$ – 15 000$</div>
+          <div class="pill" onclick="togglePill(this,'budget_bimg',true)">15 000$+</div>
+          <div class="pill" onclick="togglePill(this,'budget_bimg',true)">Je préfère recevoir une soumission d'abord</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Décrivez vos activités ou ce que vous aimeriez mettre en valeur</label>
+        <textarea id="desc_bimg" placeholder="Votre entreprise, vos événements récurrents, ce que vous voulez montrer..."></textarea>
+      </div>
+    </div>
+
+    <!-- MM-FCM -->
+    <div data-show="MM-FCM" id="q-FCM">
+      <div class="field">
+        <label>Forfait qui vous intéresse</label>
+        <div class="packages">
+          <div class="pkg-card" onclick="selectPkg(this,'pkg_fcm')">
+            <div><span class="pkg-check"></span><span class="pkg-name">Essentiel</span></div>
+            <div class="pkg-detail">2h terrain · photos + reels · drone inclus</div>
+          </div>
+          <div class="pkg-card" onclick="selectPkg(this,'pkg_fcm')">
+            <div><span class="pkg-check"></span><span class="pkg-name">Pro</span></div>
+            <div class="pkg-detail">4h terrain · photos + reels · drone inclus</div>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Engagement souhaité</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'eng_fcm')">3 mois</div>
+          <div class="pill" onclick="togglePill(this,'eng_fcm')">6 mois</div>
+          <div class="pill" onclick="togglePill(this,'eng_fcm')">12 mois</div>
+          <div class="pill" onclick="togglePill(this,'eng_fcm')">Je ne sais pas encore</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Plateformes cibles</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'plat_fcm')">Instagram</div>
+          <div class="pill" onclick="togglePill(this,'plat_fcm')">Facebook</div>
+          <div class="pill" onclick="togglePill(this,'plat_fcm')">TikTok</div>
+          <div class="pill" onclick="togglePill(this,'plat_fcm')">LinkedIn</div>
+          <div class="pill" onclick="togglePill(this,'plat_fcm')">YouTube</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Votre présence sur les réseaux en ce moment</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'presence',true)">Active — on publie régulièrement</div>
+          <div class="pill" onclick="togglePill(this,'presence',true)">Irrégulière — on manque de contenu</div>
+          <div class="pill" onclick="togglePill(this,'presence',true)">Quasi inexistante — on repart à zéro</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Style de contenu souhaité</label>
+        <input type="text" id="style_fcm" placeholder="ex: dynamique, authentique, cinématique, corporatif...">
+      </div>
+      <div class="field">
+        <label>Budget approximatif</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'budget_fcm',true)">Moins de 2 000$</div>
+          <div class="pill" onclick="togglePill(this,'budget_fcm',true)">2 000$ – 5 000$</div>
+          <div class="pill" onclick="togglePill(this,'budget_fcm',true)">5 000$ – 15 000$</div>
+          <div class="pill" onclick="togglePill(this,'budget_fcm',true)">15 000$+</div>
+          <div class="pill" onclick="togglePill(this,'budget_fcm',true)">Je préfère recevoir une soumission d'abord</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Décrivez ce que vous voulez mettre en valeur chaque mois</label>
+        <textarea id="desc_fcm" placeholder="Vos activités, votre équipe, vos produits, vos événements..."></textarea>
+      </div>
+    </div>
+
+    <!-- MM-EVT -->
+    <div data-show="MM-EVT" id="q-EVT">
+      <div class="field">
+        <label>Nom de l'événement</label>
+        <input type="text" id="evt_nom" placeholder="ex: Gala annuel, Festival, Conférence...">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Date(s)</label>
+          <input type="text" id="evt_date" placeholder="ex: 14 juin 2026">
+        </div>
+        <div class="field">
+          <label>Lieu</label>
+          <input type="text" id="evt_lieu" placeholder="Ville ou adresse">
+        </div>
+      </div>
+      <div class="field">
+        <label>Durée de couverture souhaitée</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'duree_evt',true)">2h</div>
+          <div class="pill" onclick="togglePill(this,'duree_evt',true)">4h</div>
+          <div class="pill" onclick="togglePill(this,'duree_evt',true)">8h — journée</div>
+          <div class="pill" onclick="togglePill(this,'duree_evt',true)">12h — journée longue</div>
+          <div class="pill" onclick="togglePill(this,'duree_evt',true)">2 jours</div>
+          <div class="pill" onclick="togglePill(this,'duree_evt',true)">À définir</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Services souhaités</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'svc_evt')">Photographie</div>
+          <div class="pill" onclick="togglePill(this,'svc_evt')">Vidéo terrain</div>
+          <div class="pill" onclick="togglePill(this,'svc_evt')">Drone</div>
+          <div class="pill" onclick="togglePill(this,'svc_evt')">Montages (reels, voxpop, récap)</div>
+          <div class="pill" onclick="togglePill(this,'svc_evt')">Package clé en main</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Format vidéo souhaité</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'format_evt')">9:16 vertical (réseaux)</div>
+          <div class="pill" onclick="togglePill(this,'format_evt')">16:9 horizontal (site, archives)</div>
+          <div class="pill" onclick="togglePill(this,'format_evt')">Hybride — les deux formats</div>
+          <div class="pill" onclick="togglePill(this,'format_evt')">À définir</div>
+        </div>
+        <div class="field-hint">💡 Hybride = 2 opérateurs terrain possiblement — nous le confirmons à la soumission.</div>
+      </div>
+      <div class="field">
+        <label>Fichiers bruts souhaités?</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'bruts_evt',true)">Non — livrables montés seulement</div>
+          <div class="pill" onclick="togglePill(this,'bruts_evt',true)">Oui — je veux les fichiers originaux</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Nombre de participants estimé</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'part',true)">Moins de 50</div>
+          <div class="pill" onclick="togglePill(this,'part',true)">50–200</div>
+          <div class="pill" onclick="togglePill(this,'part',true)">200–500</div>
+          <div class="pill" onclick="togglePill(this,'part',true)">500+</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Budget approximatif</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'budget_evt',true)">Moins de 2 000$</div>
+          <div class="pill" onclick="togglePill(this,'budget_evt',true)">2 000$ – 5 000$</div>
+          <div class="pill" onclick="togglePill(this,'budget_evt',true)">5 000$ – 15 000$</div>
+          <div class="pill" onclick="togglePill(this,'budget_evt',true)">15 000$+</div>
+          <div class="pill" onclick="togglePill(this,'budget_evt',true)">Je préfère recevoir une soumission d'abord</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Contexte ou informations supplémentaires</label>
+        <textarea id="desc_evt" placeholder="Type d'événement, ambiance souhaitée, livrables prioritaires..."></textarea>
+      </div>
+    </div>
+
+    <!-- MM-VID -->
+    <div data-show="MM-VID" id="q-VID">
+      <div class="field">
+        <label>Type de production</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'type_vid')">Vidéo corporative</div>
+          <div class="pill" onclick="togglePill(this,'type_vid')">Témoignages / voxpop</div>
+          <div class="pill" onclick="togglePill(this,'type_vid')">Reels / contenu réseaux</div>
+          <div class="pill" onclick="togglePill(this,'type_vid')">Capsule éducative / formation</div>
+          <div class="pill" onclick="togglePill(this,'type_vid')">Teaser / publicité</div>
+          <div class="pill" onclick="togglePill(this,'type_vid')">Mini-documentaire</div>
+          <div class="pill" onclick="togglePill(this,'type_vid')">Autre</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Approche souhaitée</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'approche_vid',true)">Production complète prise en charge</div>
+          <div class="pill" onclick="togglePill(this,'approche_vid',true)">Vidéaste intégré à mon équipe</div>
+          <div class="pill" onclick="togglePill(this,'approche_vid',true)">Je ne sais pas encore</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Format de livraison souhaité</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'format_vid')">9:16 vertical (réseaux sociaux)</div>
+          <div class="pill" onclick="togglePill(this,'format_vid')">16:9 horizontal (site web, TV)</div>
+          <div class="pill" onclick="togglePill(this,'format_vid')">Hybride — les deux formats</div>
+        </div>
+        <div class="field-hint">💡 Le format hybride peut nécessiter 2 vidéastes — nous vous le confirmons à la soumission.</div>
+      </div>
+      <div class="field">
+        <label>Fichiers bruts (RAW/LOG)</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'bruts_vid',true)">Non — livrables montés seulement</div>
+          <div class="pill" onclick="togglePill(this,'bruts_vid',true)">Oui — je veux mes fichiers originaux</div>
+          <div class="pill" onclick="togglePill(this,'bruts_vid',true)">Peut-être — j'aimerais en savoir plus</div>
+        </div>
+        <div class="field-hint">Les fichiers bruts LOG sont disponibles en supplément. Colorisation de base disponible en option.</div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Date de tournage souhaitée</label>
+          <input type="text" id="date_vid" placeholder="ex: juillet 2026 ou flexible">
+        </div>
+        <div class="field">
+          <label>Durée de tournage estimée</label>
+          <input type="text" id="duree_vid" placeholder="ex: demi-journée, 1 journée...">
+        </div>
+      </div>
+      <div class="field">
+        <label>Style et ton souhaités</label>
+        <input type="text" id="style_vid" placeholder="ex: cinématique, dynamique, authentique, institutionnel...">
+      </div>
+      <div class="field">
+        <label>Mission de la vidéo — à quoi va-t-elle servir?</label>
+        <input type="text" id="mission_vid" placeholder="ex: recrutement, notoriété de marque, formation, vente...">
+      </div>
+      <div class="field">
+        <label>Budget approximatif</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'budget_vid',true)">Moins de 2 000$</div>
+          <div class="pill" onclick="togglePill(this,'budget_vid',true)">2 000$ – 5 000$</div>
+          <div class="pill" onclick="togglePill(this,'budget_vid',true)">5 000$ – 15 000$</div>
+          <div class="pill" onclick="togglePill(this,'budget_vid',true)">15 000$+</div>
+          <div class="pill" onclick="togglePill(this,'budget_vid',true)">Je préfère recevoir une soumission d'abord</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Décrivez votre projet en quelques lignes</label>
+        <textarea id="desc_vid" placeholder="Contexte, objectifs, public cible, idées visuelles..."></textarea>
+      </div>
+    </div>
+
+    <!-- MM-BH -->
+    <div data-show="MM-BH" id="q-BH">
+      <div class="field">
+        <label>Banque d'heures souhaitée</label>
+        <div class="packages">
+          <div class="pkg-card" onclick="selectPkg(this,'pkg_bh')">
+            <div><span class="pkg-check"></span><span class="pkg-name">Essentiel — 15h</span></div>
+            <div class="pkg-detail">Reels, capsules courtes · valide 12 mois</div>
+          </div>
+          <div class="pkg-card" onclick="selectPkg(this,'pkg_bh')">
+            <div><span class="pkg-check"></span><span class="pkg-name">Pro — 25h ★</span></div>
+            <div class="pkg-detail">Priorité de traitement · économie sur taux horaire</div>
+          </div>
+          <div class="pkg-card" onclick="selectPkg(this,'pkg_bh')">
+            <div><span class="pkg-check"></span><span class="pkg-name">Premium — 50h</span></div>
+            <div class="pkg-detail">Volume mensuel · meilleur taux horaire</div>
+          </div>
+          <div class="pkg-card" onclick="selectPkg(this,'pkg_bh')">
+            <div><span class="pkg-check"></span><span class="pkg-name">À la carte</span></div>
+            <div class="pkg-detail">Sans engagement · facturation au temps réel</div>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Types de montages prévus</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'mont_bh')">Reels</div>
+          <div class="pill" onclick="togglePill(this,'mont_bh')">Voxpops</div>
+          <div class="pill" onclick="togglePill(this,'mont_bh')">Capsule corporative</div>
+          <div class="pill" onclick="togglePill(this,'mont_bh')">Récap événement</div>
+          <div class="pill" onclick="togglePill(this,'mont_bh')">Teaser / pub</div>
+          <div class="pill" onclick="togglePill(this,'mont_bh')">Long format</div>
+          <div class="pill" onclick="togglePill(this,'mont_bh')">Reformatage</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Avez-vous déjà des fichiers tournés à monter?</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'fichiers_bh',true)">Oui — fichiers prêts</div>
+          <div class="pill" onclick="togglePill(this,'fichiers_bh',true)">Tournage à prévoir avec Média Mauricie</div>
+          <div class="pill" onclick="togglePill(this,'fichiers_bh',true)">Les deux</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Budget approximatif</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'budget_bh',true)">Moins de 2 000$</div>
+          <div class="pill" onclick="togglePill(this,'budget_bh',true)">2 000$ – 5 000$</div>
+          <div class="pill" onclick="togglePill(this,'budget_bh',true)">5 000$ – 15 000$</div>
+          <div class="pill" onclick="togglePill(this,'budget_bh',true)">15 000$+</div>
+          <div class="pill" onclick="togglePill(this,'budget_bh',true)">Je préfère recevoir une soumission d'abord</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Délai souhaité pour les premiers livrables</label>
+        <input type="text" id="delai_bh" placeholder="ex: dans 2 semaines, pas de rush...">
+      </div>
+      <div class="field">
+        <label>Contexte ou précisions</label>
+        <textarea id="desc_bh" placeholder="Types de projets, fréquence d'utilisation prévue, autres détails..."></textarea>
+      </div>
+    </div>
+
+    <!-- MM-PHO -->
+    <div data-show="MM-PHO" id="q-PHO">
+      <div class="field">
+        <label>Type de séance</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'type_pho')">Portraits corporatifs</div>
+          <div class="pill" onclick="togglePill(this,'type_pho')">Photos d'équipe</div>
+          <div class="pill" onclick="togglePill(this,'type_pho')">Événement (gala, conférence)</div>
+          <div class="pill" onclick="togglePill(this,'type_pho')">Extérieur / terrain</div>
+          <div class="pill" onclick="togglePill(this,'type_pho')">Drone seulement</div>
+          <div class="pill" onclick="togglePill(this,'type_pho')">Lancement / inauguration</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Durée souhaitée</label>
+        <div class="packages">
+          <div class="pkg-card" onclick="selectPkg(this,'pkg_pho')">
+            <div><span class="pkg-check"></span><span class="pkg-name">1h</span></div>
+            <div class="pkg-detail">Portraits rapides · équipe · drone inclus</div>
+          </div>
+          <div class="pkg-card" onclick="selectPkg(this,'pkg_pho')">
+            <div><span class="pkg-check"></span><span class="pkg-name">2h</span></div>
+            <div class="pkg-detail">Portraits + extérieur · drone inclus</div>
+          </div>
+          <div class="pkg-card" onclick="selectPkg(this,'pkg_pho')">
+            <div><span class="pkg-check"></span><span class="pkg-name">4h</span></div>
+            <div class="pkg-detail">Demi-journée · équipe + terrain · drone inclus</div>
+          </div>
+          <div class="pkg-card" onclick="selectPkg(this,'pkg_pho')">
+            <div><span class="pkg-check"></span><span class="pkg-name">8h — journée</span></div>
+            <div class="pkg-detail">Journée complète · drone inclus</div>
+          </div>
+          <div class="pkg-card" onclick="selectPkg(this,'pkg_pho')">
+            <div><span class="pkg-check"></span><span class="pkg-name">12h — journée longue</span></div>
+            <div class="pkg-detail">Journée longue · événement · drone inclus</div>
+          </div>
+          <div class="pkg-card" onclick="selectPkg(this,'pkg_pho')">
+            <div><span class="pkg-check"></span><span class="pkg-name">Sur mesure</span></div>
+            <div class="pkg-detail">Besoin spécifique · on s'adapte</div>
+          </div>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Date souhaitée</label>
+          <input type="text" id="date_pho" placeholder="ex: 20 mai 2026">
+        </div>
+        <div class="field">
+          <label>Lieu</label>
+          <input type="text" id="lieu_pho" placeholder="Ville ou adresse">
+        </div>
+      </div>
+      <div class="field">
+        <label>Nombre de personnes à photographier</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'nbpers',true)">1–5</div>
+          <div class="pill" onclick="togglePill(this,'nbpers',true)">6–20</div>
+          <div class="pill" onclick="togglePill(this,'nbpers',true)">20–50</div>
+          <div class="pill" onclick="togglePill(this,'nbpers',true)">50+</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Style souhaité</label>
+        <input type="text" id="style_pho" placeholder="ex: naturel, studio, dynamique, lifestyle...">
+      </div>
+      <div class="field">
+        <label>Budget approximatif</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'budget_pho',true)">Moins de 2 000$</div>
+          <div class="pill" onclick="togglePill(this,'budget_pho',true)">2 000$ – 5 000$</div>
+          <div class="pill" onclick="togglePill(this,'budget_pho',true)">5 000$ – 15 000$</div>
+          <div class="pill" onclick="togglePill(this,'budget_pho',true)">15 000$+</div>
+          <div class="pill" onclick="togglePill(this,'budget_pho',true)">Je préfère recevoir une soumission d'abord</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Informations supplémentaires</label>
+        <textarea id="desc_pho" placeholder="Contexte, utilisation prévue des photos, détails importants..."></textarea>
+      </div>
+    </div>
+
+    <!-- MM-DOC -->
+    <div data-show="MM-DOC" id="q-DOC">
+      <div class="field">
+        <label>Type de documentaire</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'type_doc')">Portrait de personne</div>
+          <div class="pill" onclick="togglePill(this,'type_doc')">Portrait d'entreprise</div>
+          <div class="pill" onclick="togglePill(this,'type_doc')">Documentaire institutionnel</div>
+          <div class="pill" onclick="togglePill(this,'type_doc')">Documentaire social / communautaire</div>
+          <div class="pill" onclick="togglePill(this,'type_doc')">Mini-documentaire (5–15 min)</div>
+          <div class="pill" onclick="togglePill(this,'type_doc')">Long format (30 min+)</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Durée visée du documentaire final</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'duree_doc',true)">3–5 minutes</div>
+          <div class="pill" onclick="togglePill(this,'duree_doc',true)">5–15 minutes</div>
+          <div class="pill" onclick="togglePill(this,'duree_doc',true)">15–30 minutes</div>
+          <div class="pill" onclick="togglePill(this,'duree_doc',true)">30 minutes+</div>
+          <div class="pill" onclick="togglePill(this,'duree_doc',true)">À définir</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Diffusion prévue</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'diff_doc')">Réseaux sociaux</div>
+          <div class="pill" onclick="togglePill(this,'diff_doc')">Site web</div>
+          <div class="pill" onclick="togglePill(this,'diff_doc')">Événement / projection</div>
+          <div class="pill" onclick="togglePill(this,'diff_doc')">Télévision / diffuseur</div>
+          <div class="pill" onclick="togglePill(this,'diff_doc')">Festival de films</div>
+          <div class="pill" onclick="togglePill(this,'diff_doc')">Usage interne</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Avez-vous un échéancier?</label>
+        <input type="text" id="date_doc" placeholder="ex: prêt pour l'automne 2026, pas de rush...">
+      </div>
+      <div class="field">
+        <label>Budget approximatif</label>
+        <div class="pills">
+          <div class="pill" onclick="togglePill(this,'budget_doc',true)">Moins de 5 000$</div>
+          <div class="pill" onclick="togglePill(this,'budget_doc',true)">5 000$ – 15 000$</div>
+          <div class="pill" onclick="togglePill(this,'budget_doc',true)">15 000$+</div>
+          <div class="pill" onclick="togglePill(this,'budget_doc',true)">Je préfère recevoir une soumission d'abord</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Décrivez votre projet — sujet, personnes impliquées, contexte</label>
+        <textarea id="desc_doc" placeholder="Qui ou quoi voulez-vous documenter? Quel est le message ou l'histoire centrale?"></textarea>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button type="button" class="btn-next" onclick="nextStep()">Continuer →</button>
+      <button type="button" class="btn-back" onclick="prevStep()">← Retour</button>
+    </div>
+  </div>
+
+  <!-- STEP 4 — RÉSUMÉ + ENVOI -->
+  <div class="step" id="step-4">
+    <div class="step-eyebrow">Presque terminé</div>
+    <div class="step-title">Vérifiez et envoyez.</div>
+    <div class="step-sub">Votre demande sera transmise directement à Victoria — vous recevrez une réponse sous 24h ouvrables.</div>
+    <div style="background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:20px;" id="summary"></div>
+    <div class="field">
+      <label>Message ou précision finale (optionnel)</label>
+      <textarea id="message_final" placeholder="Quelque chose d'important à ajouter?"></textarea>
+    </div>
+    <div class="field">
+      <label>Comment préférez-vous être contacté?</label>
+      <div class="pills">
+        <div class="pill" onclick="togglePill(this,'contact_pref',true)">Courriel</div>
+        <div class="pill" onclick="togglePill(this,'contact_pref',true)">Appel téléphonique</div>
+        <div class="pill" onclick="togglePill(this,'contact_pref',true)">Texto</div>
+        <div class="pill" onclick="togglePill(this,'contact_pref',true)">Peu importe</div>
+      </div>
+    </div>
+    <div style="background:#fdf4f4;border:1.5px solid #f0d0d0;border-radius:8px;padding:12px 14px;margin-bottom:20px;font-size:10px;font-weight:500;color:#666;line-height:1.6;">
+      En soumettant ce formulaire, vous consentez à être contacté par Média Mauricie Inc. concernant votre demande. Vos informations ne seront jamais vendues ou partagées.
+    </div>
+    <div class="nav">
+      <button type="button" class="btn-next red" onclick="submitForm()">Envoyer ma demande →</button>
+      <button type="button" class="btn-back" onclick="prevStep()">← Retour</button>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="step" id="step-success">
+    <div class="success">
+      <div class="success-icon">✅</div>
+      <div class="success-title">Demande reçue!</div>
+      <div class="success-sub">Merci <strong id="success-name"></strong> — votre demande a été transmise à Victoria.<br><br>Vous recevrez une réponse à <strong id="success-email"></strong> dans les <strong>24 heures ouvrables</strong>.<br><br>En attendant, consultez nos offres sur <a href="https://www.mediamauricie.com" style="color:var(--red);font-weight:700;">mediamauricie.com</a></div>
+    </div>
+  </div>
+
+  </form>
+</div>
+
+<script>
+// ── CONFIG ──
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwr9JYa1qRgUzto67ar24GqXTF3aZhXR1S4-VpMKxFhH3SnjkUymZ-8fJIxNelLQg/exec';
+
+const TOTAL_STEPS = 4;
+let currentStep = 1;
+let selectedService = null;
+const pillValues = {};
+const pkgValues = {};
+
+const serviceNames = {
+  'MM-BIMG': "Banque d'images mensuelle",
+  'MM-FCM': 'Forfait contenu mensuel',
+  'MM-EVT': 'Couverture événementielle',
+  'MM-VID': 'Production vidéo',
+  'MM-BH': 'Heures de montage',
+  'MM-PHO': 'Séance & événement photo',
+  'MM-DOC': 'Documentaire'
+};
+
+// Lire leadId depuis URL si présent
+const urlParams = new URLSearchParams(window.location.search);
+const leadId = urlParams.get('lead') || '';
+const servicePreselect = urlParams.get('service') || '';
+
+// Pré-sélectionner service si dans l'URL
+if(servicePreselect){
+  window.addEventListener('DOMContentLoaded', function(){
+    const card = document.querySelector('[data-service="'+servicePreselect+'"]');
+    if(card) selectService(card);
+  });
+}
+
+function goToStep(n){
+  document.getElementById('step-'+currentStep).classList.remove('active');
+  currentStep = n;
+  const el = document.getElementById('step-'+currentStep) || document.getElementById('step-success');
+  el.classList.add('active');
+  document.getElementById('step-label').textContent = Math.min(currentStep, TOTAL_STEPS);
+  document.getElementById('progress').style.width = (currentStep / TOTAL_STEPS * 100) + '%';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function nextStep(){
+  if(currentStep === 1){
+    if(!selectedService){ document.getElementById('svc-error').style.display='block'; return; }
+    document.getElementById('svc-error').style.display='none';
+    showServiceQuestions(selectedService);
+  }
+  if(currentStep === 2){
+    const prenom = document.getElementById('prenom').value.trim();
+    const nom    = document.getElementById('nom').value.trim();
+    const email  = document.getElementById('email').value.trim();
+    if(!prenom||!nom||!email){ alert('Veuillez remplir prénom, nom et courriel.'); return; }
+  }
+  if(currentStep === 3){ buildSummary(); }
+  goToStep(currentStep + 1);
+}
+
+function prevStep(){
+  if(currentStep > 1) goToStep(currentStep - 1);
+}
+
+function selectService(el){
+  document.querySelectorAll('.svc-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedService = el.dataset.service;
+  document.getElementById('svc-error').style.display='none';
+  const titles = {
+    'MM-BIMG': {eye:"Banque d'images", title:'Parlez-nous de vos besoins.', sub:'Ces questions nous permettent de vous préparer une offre adaptée.'},
+    'MM-FCM':  {eye:'Forfait mensuel', title:'Votre stratégie de contenu.', sub:"On veut comprendre votre univers avant de proposer quoi que ce soit."},
+    'MM-EVT':  {eye:'Couverture événementielle', title:'Votre événement en détail.', sub:'Plus on en sait, mieux on prépare.'},
+    'MM-VID':  {eye:'Production vidéo', title:'Votre vision. Notre expertise.', sub:"Décrivez votre projet — on s'adapte à votre réalité."},
+    'MM-BH':   {eye:'Heures de montage', title:'Vos besoins en montage.', sub:'Estimez le volume et on vous propose le meilleur palier.'},
+    'MM-PHO':  {eye:'Séance photo', title:'Votre séance, vos besoins.', sub:'Date, durée, style — on confirme les disponibilités et on réserve.'},
+    'MM-DOC':  {eye:'Documentaire', title:'Votre histoire. Notre regard.', sub:'Parlez-nous de votre sujet — on discutera de l\'approche ensemble.'}
+  };
+  const t = titles[selectedService];
+  if(t){
+    document.getElementById('s3-eyebrow').textContent = t.eye;
+    document.getElementById('s3-title').textContent   = t.title;
+    document.getElementById('s3-sub').textContent     = t.sub;
+  }
+}
+
+function showServiceQuestions(svc){
+  document.querySelectorAll('[data-show]').forEach(el => el.classList.remove('visible'));
+  const target = document.getElementById('q-'+svc.replace('MM-',''));
+  if(target) target.classList.add('visible');
+}
+
+function togglePill(el, group, single){
+  if(single){
+    document.querySelectorAll('[onclick*="\''+group+'\'"]').forEach(p => p.classList.remove('selected'));
+    el.classList.add('selected');
+  } else {
+    el.classList.toggle('selected');
+  }
+  const selected = [];
+  document.querySelectorAll('[onclick*="\''+group+'\'"]').forEach(p => {
+    if(p.classList.contains('selected')) selected.push(p.textContent.trim());
+  });
+  pillValues[group] = selected;
+}
+
+function selectPkg(el, group){
+  document.querySelectorAll('[onclick*="\''+group+'\'"]').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  pkgValues[group] = el.querySelector('.pkg-name').textContent.trim();
+}
+
+function buildSummary(){
+  const svc    = serviceNames[selectedService] || selectedService;
+  const prenom = document.getElementById('prenom').value;
+  const nom    = document.getElementById('nom').value;
+  const org    = document.getElementById('org').value;
+  const email  = document.getElementById('email').value;
+  const pkgKey = 'pkg_'+selectedService.replace('MM-','').toLowerCase();
+  const budget = (pillValues['budget_evt']||pillValues['budget_vid']||pillValues['budget_bimg']||
+                  pillValues['budget_fcm']||pillValues['budget_bh']||pillValues['budget_pho']||[]).join(', ');
+
+  let html = '<div style="display:flex;flex-direction:column;gap:10px;">';
+  html += row('Service', svc);
+  html += row('Contact', prenom+' '+nom+(org?' · '+org:''));
+  html += row('Courriel', email, true);
+  if(pkgValues[pkgKey]) html += row('Forfait / Durée', pkgValues[pkgKey], true);
+  if(budget) html += row('Budget', budget);
+  const fmt = (pillValues['format_vid']||pillValues['format_evt']||[]).join(', ');
+  if(fmt) html += row('Format', fmt);
+  html += '</div>';
+  document.getElementById('summary').innerHTML = html;
+}
+
+function row(label, val, red){
+  return '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);">'+
+    '<span style="font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">'+label+'</span>'+
+    '<span style="font-size:12px;font-weight:700;color:'+(red?'var(--red)':'var(--dark)')+';">'+val+'</span></div>';
+}
+
+async function submitForm(){
+  const prenom = document.getElementById('prenom').value.trim();
+  const email  = document.getElementById('email').value.trim();
+
+  const data = {
+    leadId:        leadId,
+    service:       selectedService,
+    service_nom:   serviceNames[selectedService],
+    prenom,
+    nom:           document.getElementById('nom').value.trim(),
+    org:           document.getElementById('org').value.trim(),
+    email,
+    tel:           document.getElementById('tel').value.trim(),
+    org_type:      document.getElementById('org_type').value,
+    source:        document.getElementById('source').value,
+    contact_pref:  (pillValues['contact_pref']||[]).join(', '),
+    message_final: document.getElementById('message_final').value.trim(),
+    pills:         JSON.stringify(pillValues),
+    packages:      JSON.stringify(pkgValues),
+    description:   getServiceDesc(),
+    date:          getServiceDate(),
+    lieu:          getServiceLieu(),
+    style:         getServiceStyle(),
+    budget:        (pillValues['budget_evt']||pillValues['budget_vid']||pillValues['budget_bimg']||
+                   pillValues['budget_fcm']||pillValues['budget_bh']||pillValues['budget_pho']||[]).join(', '),
+    format_video:  (pillValues['format_vid']||pillValues['format_evt']||[]).join(', '),
+    fichiers_bruts:(pillValues['bruts_vid']||pillValues['bruts_evt']||[]).join(', ')
+  };
+
+  const btn = document.querySelector('.btn-next.red');
+  btn.textContent = 'Envoi en cours...';
+  btn.disabled = true;
+
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {'Content-Type':'application/json'}
+    });
+  } catch(e){}
+
+  document.getElementById('step-4').classList.remove('active');
+  document.getElementById('step-success').classList.add('active');
+  document.getElementById('success-name').textContent  = prenom;
+  document.getElementById('success-email').textContent = email;
+  document.getElementById('progress').style.width = '100%';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function getServiceDesc(){
+  const map = {'MM-BIMG':'desc_bimg','MM-FCM':'desc_fcm','MM-EVT':'desc_evt','MM-VID':'desc_vid','MM-BH':'desc_bh','MM-PHO':'desc_pho','MM-DOC':'desc_doc'};
+  const el = document.getElementById(map[selectedService]);
+  return el ? el.value.trim() : '';
+}
+function getServiceDate(){
+  const map = {'MM-BIMG':'date_bimg','MM-EVT':'evt_date','MM-VID':'date_vid','MM-PHO':'date_pho','MM-DOC':'date_doc'};
+  const el = document.getElementById(map[selectedService]);
+  return el ? el.value.trim() : '';
+}
+function getServiceLieu(){
+  const map = {'MM-EVT':'evt_lieu','MM-PHO':'lieu_pho'};
+  const el = document.getElementById(map[selectedService]);
+  return el ? el.value.trim() : '';
+}
+function getServiceStyle(){
+  const map = {'MM-FCM':'style_fcm','MM-VID':'style_vid','MM-PHO':'style_pho'};
+  const el = document.getElementById(map[selectedService]);
+  return el ? el.value.trim() : '';
+}
+</script>
+</body>
+</html>
