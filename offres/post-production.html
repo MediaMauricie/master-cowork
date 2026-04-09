@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Post-production — Banques d'heures &amp; Fichiers bruts — Média Mauricie</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;min-height:100vh;}
+.wrap{max-width:900px;margin:0 auto;padding:48px 24px 80px;}
+
+/* HEADER */
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:52px;}
+.header-badge{background:#2d2d2d;color:#fff;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:20px;}
+
+/* HERO */
+.hero{margin-bottom:48px;}
+.hero-eyebrow{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#c0392b;margin-bottom:14px;}
+.hero-title{font-size:56px;font-weight:900;color:#2d2d2d;line-height:1;letter-spacing:-2px;margin-bottom:16px;}
+.hero-sub{font-size:14px;font-weight:500;color:#666;line-height:1.8;max-width:560px;}
+.hero-sub strong{color:#2d2d2d;font-weight:700;}
+
+/* NAV ANCHRES */
+.nav-anchres{display:flex;gap:10px;margin-bottom:48px;flex-wrap:wrap;}
+.nav-a{background:#fff;border:2px solid #e0e0e0;border-radius:8px;padding:10px 18px;font-size:12px;font-weight:800;color:#2d2d2d;text-decoration:none;transition:all 0.2s;letter-spacing:0.5px;}
+.nav-a:hover,.nav-a.active{background:#2d2d2d;color:#fff;border-color:#2d2d2d;}
+
+/* SECTION TITLE */
+.sec-title-block{margin-bottom:28px;}
+.sec-eyebrow{font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#c0392b;margin-bottom:10px;}
+.sec-title{font-size:36px;font-weight:900;color:#2d2d2d;letter-spacing:-1.5px;line-height:1;margin-bottom:12px;}
+.sec-sub{font-size:13px;font-weight:500;color:#666;line-height:1.8;max-width:580px;}
+.sec-sub strong{color:#2d2d2d;font-weight:700;}
+
+/* DIVIDER */
+.divider{margin:60px 0 48px;display:flex;align-items:center;gap:16px;}
+.divider-line{flex:1;height:2px;background:#e0e0e0;}
+.divider-label{font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#bbb;white-space:nowrap;}
+
+/* CARDS BH */
+.cards-bh{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;}
+.card-bh{background:#fff;border:2px solid #e0e0e0;border-radius:14px;padding:24px 22px;display:flex;flex-direction:column;transition:all 0.2s;}
+.card-bh:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.08);}
+.card-bh.pro{border-top:4px solid #c0392b;}
+.card-bh.dark{background:#2d2d2d;border-color:#2d2d2d;}
+.card-tier{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;display:inline-block;margin-bottom:18px;align-self:flex-start;}
+.card-bh:not(.dark) .card-tier{background:#2d2d2d;color:#fff;}
+.card-bh.pro .card-tier{background:#c0392b;}
+.card-bh.dark .card-tier{background:#fff;color:#2d2d2d;}
+.card-h{font-size:54px;font-weight:900;letter-spacing:-2px;line-height:1;margin-bottom:4px;}
+.card-bh:not(.dark) .card-h{color:#2d2d2d;}
+.card-bh.dark .card-h{color:#fff;}
+.card-unit{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
+.card-bh:not(.dark) .card-unit{color:#888;}
+.card-bh.dark .card-unit{color:rgba(255,255,255,0.45);}
+.card-rate{font-size:12px;font-weight:700;padding:5px 13px;border-radius:20px;display:inline-block;margin-bottom:16px;}
+.card-bh:not(.dark) .card-rate{background:#f0f0f0;color:#555;border:1.5px solid #ddd;}
+.card-bh.dark .card-rate{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);border:1.5px solid rgba(255,255,255,0.15);}
+.card-div{height:1px;margin-bottom:14px;}
+.card-bh:not(.dark) .card-div{background:#ebebeb;}
+.card-bh.dark .card-div{background:rgba(255,255,255,0.1);}
+.card-total-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+.card-bh:not(.dark) .card-total-label{color:#aaa;}
+.card-bh.dark .card-total-label{color:rgba(255,255,255,0.3);}
+.card-price{font-size:28px;font-weight:800;letter-spacing:-1px;line-height:1;}
+.card-bh:not(.dark) .card-price{color:#2d2d2d;}
+.card-bh.dark .card-price{color:#fff;}
+.card-save{font-size:11px;font-weight:700;color:#27ae60;margin-top:6px;}
+.card-note{font-size:10px;font-weight:500;margin-top:4px;}
+.card-bh:not(.dark) .card-note{color:#aaa;}
+.card-bh.dark .card-note{color:rgba(255,255,255,0.25);}
+.btn-buy{display:block;background:#c0392b;color:#fff;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:12px 18px;border-radius:8px;text-decoration:none;text-align:center;margin-top:18px;transition:background 0.2s;}
+.btn-buy:hover{background:#a93226;}
+.btn-buy.dark-btn{background:#fff;color:#2d2d2d;}
+.btn-buy.dark-btn:hover{background:#f0f0f0;}
+.btn-buy.placeholder{background:#e0e0e0;color:#888;cursor:default;pointer-events:none;}
+
+/* INCLUS STRIP */
+.inclus-strip{background:#fff;border:2px solid #e0e0e0;border-radius:10px;padding:14px 20px;margin-bottom:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.inclus-label{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#bbb;white-space:nowrap;flex-shrink:0;}
+.inclus-items{display:flex;gap:7px;flex-wrap:wrap;}
+.inclus-item{background:#f5f5f5;border:1.5px solid #e8e8e8;border-radius:20px;padding:5px 13px;font-size:11px;font-weight:600;color:#555;}
+
+/* DETAILS */
+.details{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.detail-card{background:#fff;border:2px solid #e0e0e0;border-radius:10px;padding:20px 22px;}
+.detail-title{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#999;margin-bottom:14px;}
+.detail-items{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.detail-items li{font-size:13px;font-weight:500;color:#555;display:flex;align-items:flex-start;gap:10px;line-height:1.6;}
+.detail-items li::before{content:'✓';color:#c0392b;font-weight:800;font-size:11px;flex-shrink:0;margin-top:2px;}
+.detail-items li strong{color:#2d2d2d;font-weight:700;}
+.detail-items li.no-check::before{content:none;}
+.di-label{flex:1;}
+.di-price{font-size:13px;font-weight:700;color:#2d2d2d;white-space:nowrap;}
+
+/* NOTE */
+.note-dark{background:#2d2d2d;border-radius:10px;padding:20px 26px;margin-bottom:14px;}
+.note-dark-eyebrow{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:12px;}
+.note-dark-text{font-size:13px;font-weight:500;color:rgba(255,255,255,0.65);line-height:1.85;}
+.note-dark-text strong{color:#fff;}
+
+.note-red{background:#fdf4f4;border:2px solid #f0d0d0;border-left:4px solid #c0392b;border-radius:8px;padding:14px 18px;margin-bottom:14px;font-size:13px;font-weight:500;color:#666;line-height:1.75;}
+.note-red strong{color:#c0392b;font-weight:700;}
+
+.note-white{background:#fff;border:2px solid #e0e0e0;border-radius:10px;padding:20px 22px;margin-bottom:14px;}
+.note-white-title{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:10px;}
+.note-white-body{font-size:13px;font-weight:500;color:#444;line-height:1.85;}
+.note-white-body strong{color:#2d2d2d;font-weight:700;}
+
+/* ACARTE */
+.acarte{background:#fff;border:2px solid #e0e0e0;border-radius:10px;padding:20px 26px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.acarte-left{}
+.acarte-tag{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#bbb;margin-bottom:6px;}
+.acarte-title{font-size:16px;font-weight:800;color:#2d2d2d;}
+.acarte-sub{font-size:12px;font-weight:500;color:#999;margin-top:4px;}
+.acarte-price{font-size:30px;font-weight:900;color:#2d2d2d;white-space:nowrap;letter-spacing:-1px;}
+.acarte-price span{font-size:14px;font-weight:500;color:#aaa;}
+
+/* MONTAGE GRID */
+.montage-grid{border:2px solid #e0e0e0;border-radius:12px;overflow:hidden;margin-bottom:14px;}
+.montage-head{display:grid;grid-template-columns:2.2fr 0.9fr 1.2fr 1fr;background:#2d2d2d;padding:12px 20px;gap:8px;}
+.montage-head span{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);}
+.montage-cat{background:#f5f5f5;border-bottom:2px solid #e8e8e8;border-top:2px solid #e8e8e8;padding:9px 20px;}
+.montage-cat span{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#999;}
+.montage-row{display:grid;grid-template-columns:2.2fr 0.9fr 1.2fr 1fr;align-items:center;padding:15px 20px;border-bottom:1px solid #f0f0f0;background:#fff;gap:8px;}
+.montage-row:last-child{border-bottom:none;}
+.montage-row:nth-child(even){background:#fcfcfc;}
+.montage-row.highlight{background:#fdf4f4;}
+.montage-name{font-size:13px;font-weight:700;color:#2d2d2d;line-height:1.35;margin-bottom:3px;}
+.montage-name.rouge{color:#c0392b;}
+.montage-desc{font-size:11px;font-weight:500;color:#888;line-height:1.5;}
+.badge{font-size:9px;font-weight:700;padding:3px 9px;border-radius:20px;display:inline-block;white-space:nowrap;margin-bottom:3px;}
+.badge.v{background:#fdf4f4;color:#c0392b;border:1px solid #f0c0c0;}
+.badge.h{background:#f0f0f0;color:#666;border:1px solid #ddd;}
+.badge.hv{background:#eef4fb;color:#2980b9;border:1px solid #c0d8f0;}
+.montage-hours-cell{display:flex;flex-direction:column;gap:3px;}
+.montage-hours-val{font-size:14px;font-weight:800;color:#2d2d2d;line-height:1.2;}
+.montage-hours-val.rouge{color:#c0392b;}
+.montage-hours-sub{font-size:10px;font-weight:400;color:#bbb;}
+.montage-bh-bar{height:6px;border-radius:3px;background:#e8e8e8;overflow:hidden;width:80px;margin-top:4px;}
+.montage-bh-fill{height:100%;border-radius:3px;background:#c0392b;}
+.rush-val{font-size:12px;font-weight:700;color:#c0392b;}
+.rush-na{font-size:10px;font-weight:500;color:#ccc;}
+
+/* EXAMPLES BAR */
+.examples-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+.ex-card{background:#fff;border:2px solid #e0e0e0;border-radius:10px;padding:16px 14px;position:relative;overflow:hidden;}
+.ex-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.ex-card.c1::before{background:#2d2d2d;}
+.ex-card.c2::before{background:#c0392b;}
+.ex-card.c3::before{background:#2980b9;}
+.ex-card.c4::before{background:#27ae60;}
+.ex-label{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#bbb;margin-bottom:6px;}
+.ex-title{font-size:12px;font-weight:800;color:#2d2d2d;margin-bottom:10px;line-height:1.3;}
+.ex-hours{font-size:28px;font-weight:900;letter-spacing:-1px;color:#2d2d2d;line-height:1;}
+.ex-hours-unit{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#bbb;margin-bottom:10px;}
+.ex-bar-track{height:5px;background:#f0f0f0;border-radius:3px;overflow:hidden;margin-bottom:8px;}
+.ex-bar-fill{height:100%;border-radius:3px;}
+.c1 .ex-bar-fill{background:#2d2d2d;}
+.c2 .ex-bar-fill{background:#c0392b;}
+.c3 .ex-bar-fill{background:#2980b9;}
+.c4 .ex-bar-fill{background:#27ae60;}
+.ex-cost{font-size:11px;font-weight:700;color:#555;}
+.ex-cost span{font-size:10px;font-weight:500;color:#aaa;}
+
+/* FICHIERS BRUTS CARDS */
+.cards-bruts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;}
+.card-brut{background:#fff;border:2px solid #e0e0e0;border-radius:14px;padding:24px 22px;display:flex;flex-direction:column;}
+.card-brut-tier{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;display:inline-block;margin-bottom:18px;align-self:flex-start;background:#2d2d2d;color:#fff;}
+.card-brut-price{font-size:52px;font-weight:900;letter-spacing:-2px;line-height:1;color:#2d2d2d;margin-bottom:4px;}
+.card-brut-suffix{font-size:20px;font-weight:700;color:#2d2d2d;display:inline;}
+.card-brut-unit{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:14px;}
+.card-brut-div{height:1px;background:#ebebeb;margin-bottom:14px;}
+.card-brut-colo-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#aaa;margin-bottom:6px;}
+.card-brut-colo-price{font-size:20px;font-weight:800;color:#555;margin-bottom:4px;}
+.card-brut-colo-desc{font-size:11px;font-weight:500;color:#bbb;line-height:1.5;}
+
+/* LICENCE */
+.licence{background:#fff;border:2px solid #e0e0e0;border-radius:10px;overflow:hidden;margin-bottom:14px;}
+.licence-head{background:#2d2d2d;padding:14px 22px;display:flex;align-items:center;gap:10px;}
+.licence-head-text{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.55);}
+.licence-cols{display:grid;grid-template-columns:1fr 1fr;}
+.licence-col{padding:20px 22px;}
+.licence-col.incl{border-right:1px solid #f0f0f0;}
+.licence-col.excl{background:#fdf8f8;}
+.col-badge{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:5px 14px;border-radius:20px;display:inline-block;margin-bottom:14px;}
+.badge-yes{background:#eafaf2;color:#27ae60;}
+.badge-no{background:#fdecea;color:#c0392b;}
+.col-items{list-style:none;display:flex;flex-direction:column;gap:0;}
+.col-items li{font-size:13px;font-weight:500;color:#3a3a3a;padding:8px 0;border-bottom:1px solid #f3f3f3;display:flex;align-items:flex-start;gap:10px;line-height:1.5;}
+.licence-col.excl .col-items li{border-bottom-color:#f5ecec;}
+.col-items li:last-child{border-bottom:none;}
+.ci{flex-shrink:0;font-weight:800;font-size:12px;margin-top:1px;}
+.ci.g{color:#27ae60;}
+.ci.r{color:#c0392b;}
+.licence-foot{background:#f7f7f7;border-top:1px solid #e8e8e8;padding:16px 22px;font-size:13px;font-weight:600;color:#666;line-height:1.6;}
+.licence-foot strong{color:#2d2d2d;}
+
+/* CTA */
+.cta-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;}
+.btn-primary{display:inline-block;background:#c0392b;color:#fff;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:14px 28px;border-radius:8px;text-decoration:none;transition:background 0.2s;}
+.btn-primary:hover{background:#a93226;}
+.btn-secondary{display:inline-block;background:transparent;color:#2d2d2d;border:2px solid #2d2d2d;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:12px 28px;border-radius:8px;text-decoration:none;transition:all 0.2s;}
+.btn-secondary:hover{background:#2d2d2d;color:#fff;}
+
+/* TAXES */
+.taxes{background:#2d2d2d;color:rgba(255,255,255,0.4);font-size:11px;font-weight:600;text-align:center;padding:12px 20px;border-radius:8px;margin-bottom:48px;}
+.taxes strong{color:rgba(255,255,255,0.75);}
+
+/* FOOTER */
+.footer{padding-top:24px;border-top:2px solid #ddd;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-info{font-size:11px;font-weight:500;color:#aaa;text-align:right;line-height:1.8;}
+.footer-info a{color:#555;text-decoration:none;font-weight:700;}
+
+@media(max-width:660px){
+  .cards-bh,.cards-bruts{grid-template-columns:1fr;}
+  .hero-title{font-size:38px;}
+  .details{grid-template-columns:1fr;}
+  .licence-cols{grid-template-columns:1fr;}
+  .header{flex-direction:column;align-items:flex-start;gap:12px;}
+  .acarte{flex-direction:column;align-items:flex-start;}
+  .footer{flex-direction:column;align-items:flex-start;}
+  .footer-info{text-align:left;}
+  .montage-head,.montage-row{grid-template-columns:2fr 1fr 1fr;gap:4px;padding:10px 12px;}
+  .montage-head span:nth-child(2),.montage-row>*:nth-child(2){display:none;}
+  .examples-bar{grid-template-columns:1fr 1fr;}
+  .nav-anchres{gap:8px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HEADER -->
+<div class="header">
+  <img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_M-coul.png" alt="Média Mauricie" style="height:48px;">
+  <div class="header-badge">🎬 Post-production · 2026</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Services de post-production — Média Mauricie</div>
+  <div class="hero-title">Post-<br>production.</div>
+  <div class="hero-sub">Banques d'heures de montage professionnel et remise de fichiers bruts — deux façons de travailler avec notre équipe après le tournage, selon vos besoins et votre budget.</div>
+</div>
+
+<!-- NAV ANCRES -->
+<div class="nav-anchres">
+  <a href="#banques-heures" class="nav-a active">⏱ Banques d'heures</a>
+  <a href="#fichiers-bruts" class="nav-a">🎞️ Fichiers bruts</a>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<!-- SECTION 1 — BANQUES D'HEURES           -->
+<!-- ════════════════════════════════════════ -->
+<div id="banques-heures">
+  <div class="sec-title-block">
+    <div class="sec-eyebrow">Option 1 — Montage inclus</div>
+    <div class="sec-title">Banques d'heures<br>de montage.</div>
+    <div class="sec-sub">Des heures de montage professionnel prépayées, valides <strong>12 mois</strong>. Reels, capsules, corporatif, événementiel — à votre rythme. Plus vous prenez d'heures, plus vous économisez.</div>
+  </div>
+
+  <!-- CARDS BH -->
+  <div class="cards-bh">
+    <div class="card-bh">
+      <div class="card-tier">Essentiel</div>
+      <div class="card-h">15</div>
+      <div class="card-unit">Heures</div>
+      <div class="card-rate">100$ / heure</div>
+      <div class="card-div"></div>
+      <div class="card-total-label">Total</div>
+      <div class="card-price">1 500$</div>
+      <div class="card-note">+ tx · valide 12 mois</div>
+      <a href="#" class="btn-buy placeholder">Bientôt disponible</a>
+    </div>
+    <div class="card-bh pro">
+      <div class="card-tier">Pro ★</div>
+      <div class="card-h">25</div>
+      <div class="card-unit">Heures</div>
+      <div class="card-rate">95$ / heure</div>
+      <div class="card-div"></div>
+      <div class="card-total-label">Total</div>
+      <div class="card-price">2 375$</div>
+      <div class="card-save">✓ Économie de 125$</div>
+      <div class="card-note">+ tx · valide 12 mois</div>
+      <a href="#" class="btn-buy placeholder">Bientôt disponible</a>
+    </div>
+    <div class="card-bh dark">
+      <div class="card-tier">Premium</div>
+      <div class="card-h">50</div>
+      <div class="card-unit">Heures</div>
+      <div class="card-rate">90$ / heure</div>
+      <div class="card-div"></div>
+      <div class="card-total-label">Total</div>
+      <div class="card-price">4 500$</div>
+      <div class="card-save">✓ Économie de 500$</div>
+      <div class="card-note">+ tx · valide 12 mois</div>
+      <a href="#" class="btn-buy dark-btn placeholder">Bientôt disponible</a>
+    </div>
+  </div>
+
+  <!-- INCLUS STRIP -->
+  <div class="inclus-strip">
+    <div class="inclus-label">Inclus dans chaque banque</div>
+    <div class="inclus-items">
+      <span class="inclus-item">Reels &amp; capsules</span>
+      <span class="inclus-item">Sous-titres</span>
+      <span class="inclus-item">Colorimétrie</span>
+      <span class="inclus-item">Transitions &amp; effets</span>
+      <span class="inclus-item">Logo animé</span>
+      <span class="inclus-item">Musique sous licence</span>
+      <span class="inclus-item">1 révision mineure / livrable</span>
+    </div>
+  </div>
+
+  <!-- DETAILS -->
+  <div class="details">
+    <div class="detail-card">
+      <div class="detail-title">📋 Utilisation des heures</div>
+      <ul class="detail-items">
+        <li>Montages additionnels hors forfait mensuel</li>
+        <li>Reels supplémentaires — 15s, 30s, 60s</li>
+        <li>Vidéos corporatives, témoignages, capsules</li>
+        <li>Révisions majeures sur livrables existants</li>
+        <li>Colorisation de fichiers bruts</li>
+        <li>Reformatage 16:9 → 9:16</li>
+      </ul>
+    </div>
+    <div class="detail-card">
+      <div class="detail-title">⚙️ Modalités</div>
+      <ul class="detail-items">
+        <li>Heures valides <strong>12 mois</strong> à partir de l'achat</li>
+        <li>Non remboursables · non transférables</li>
+        <li>Utilisables en plusieurs sessions</li>
+        <li>Cumulables avec tous les forfaits mensuels</li>
+        <li>Estimation fournie avant chaque projet</li>
+        <li>Plafond par tâche disponible sur demande</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- NOTE DARK -->
+  <div class="note-dark">
+    <div class="note-dark-eyebrow">⏱ À noter</div>
+    <div class="note-dark-text">Les heures sont décomptées au réel selon la complexité du projet. Une estimation des heures peut être fournie à l'avance. Si un plafond d'heures est souhaité par tâche, il suffit de nous l'indiquer — nous travaillons dans la limite convenue et demandons votre autorisation avant de dépasser le budget alloué.</div>
+  </div>
+
+  <!-- ACARTE -->
+  <div class="acarte">
+    <div class="acarte-left">
+      <div class="acarte-tag">Sans banque d'heures</div>
+      <div class="acarte-title">Montage à la carte</div>
+      <div class="acarte-sub">Facturation au temps réel · sans engagement</div>
+    </div>
+    <div class="acarte-price">100$<span> /h + tx</span></div>
+  </div>
+
+  <!-- EXAMPLES -->
+  <div style="margin:32px 0 20px;">
+    <div style="font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#c0392b;margin-bottom:10px;">Guide de référence</div>
+    <div style="font-size:28px;font-weight:900;color:#2d2d2d;letter-spacing:-1px;line-height:1;margin-bottom:10px;">Combien d'heures<br>pour votre projet?</div>
+    <div style="font-size:13px;font-weight:500;color:#666;line-height:1.8;max-width:580px;margin-bottom:20px;">Estimés indicatifs couvrant sélection des clips, découpage, colorisation, sous-titres, logo animé, musique et <strong style="color:#2d2d2d;">1 révision mineure incluse</strong>.</div>
+  </div>
+
+  <div class="examples-bar">
+    <div class="ex-card c1">
+      <div class="ex-label">Reel simple</div>
+      <div class="ex-title">Reel 15s — simple</div>
+      <div class="ex-hours">2–3</div>
+      <div class="ex-hours-unit">Heures</div>
+      <div class="ex-bar-track"><div class="ex-bar-fill" style="width:6%;"></div></div>
+      <div class="ex-cost">200–300$ <span>banque essentiel</span></div>
+    </div>
+    <div class="ex-card c2">
+      <div class="ex-label">Reel voxpop</div>
+      <div class="ex-title">Voxpop monté 60s–2min</div>
+      <div class="ex-hours">5–10</div>
+      <div class="ex-hours-unit">Heures</div>
+      <div class="ex-bar-track"><div class="ex-bar-fill" style="width:20%;"></div></div>
+      <div class="ex-cost">450–1 000$ <span>banque essentiel</span></div>
+    </div>
+    <div class="ex-card c3">
+      <div class="ex-label">Reel cinématique</div>
+      <div class="ex-title">Reel corpo 30s cinéma</div>
+      <div class="ex-hours">3–6</div>
+      <div class="ex-hours-unit">Heures</div>
+      <div class="ex-bar-track"><div class="ex-bar-fill" style="width:20%;"></div></div>
+      <div class="ex-cost">270–600$ <span>banque essentiel/pro</span></div>
+    </div>
+    <div class="ex-card c4">
+      <div class="ex-label">Récap événement</div>
+      <div class="ex-title">Teaser / récap 60s</div>
+      <div class="ex-hours">10–20</div>
+      <div class="ex-hours-unit">Heures</div>
+      <div class="ex-bar-track"><div class="ex-bar-fill" style="width:40%;"></div></div>
+      <div class="ex-cost">1 000–2 000$ <span>banque pro</span></div>
+    </div>
+  </div>
+
+  <!-- GRILLE COMPLÈTE -->
+  <div class="montage-grid">
+    <div class="montage-head">
+      <span>Livrable</span>
+      <span>Format</span>
+      <span>Post-prod estimée</span>
+      <span>Rush disponible</span>
+    </div>
+
+    <div class="montage-cat"><span>Reels &amp; contenus courts — social media</span></div>
+    <div class="montage-row">
+      <div><div class="montage-name">Reel simple 15s</div><div class="montage-desc">1 sujet · sélection clips · découpage rythmé · colorisation · sous-titres · logo · musique · délai 3–5 jours ouvrables</div></div>
+      <div><span class="badge v">9:16</span></div>
+      <div class="montage-hours-cell"><div class="montage-hours-val">2–3h</div><div class="montage-hours-sub">post-prod</div><div class="montage-bh-bar"><div class="montage-bh-fill" style="width:6%;"></div></div></div>
+      <div><span class="rush-val">+200$</span></div>
+    </div>
+    <div class="montage-row">
+      <div><div class="montage-name">Reel voxpop 30s</div><div class="montage-desc">Témoignages terrain · sélection meilleures réponses · storytelling court · colorisation · sous-titres · logo · musique · délai 3–5 jours ouvrables</div></div>
+      <div><span class="badge v">9:16</span></div>
+      <div class="montage-hours-cell"><div class="montage-hours-val">3–5h</div><div class="montage-hours-sub">post-prod</div><div class="montage-bh-bar"><div class="montage-bh-fill" style="width:10%;"></div></div></div>
+      <div><span class="rush-val">+250$</span></div>
+    </div>
+    <div class="montage-row">
+      <div><div class="montage-name">Reel voxpop 60s–1min30s</div><div class="montage-desc">Multi-sujets · arc narratif · storytelling authentique · colorisation · sous-titres · logo · musique layering · délai 3–5 jours ouvrables</div></div>
+      <div><span class="badge v">9:16</span></div>
+      <div class="montage-hours-cell"><div class="montage-hours-val">5–10h</div><div class="montage-hours-sub">post-prod</div><div class="montage-bh-bar"><div class="montage-bh-fill" style="width:20%;"></div></div></div>
+      <div><span class="rush-val">+300$</span></div>
+    </div>
+    <div class="montage-row">
+      <div><div class="montage-name">Reel corpo / témoignage 30–45s</div><div class="montage-desc">Marque, produit, service · découpage énergique · colorisation pro · sous-titres · logo animé · musique layering · Instagram, LinkedIn, TikTok · délai 3–5 jours ouvrables</div></div>
+      <div><span class="badge v">9:16</span><br><span class="badge h">16:9</span></div>
+      <div class="montage-hours-cell"><div class="montage-hours-val">5–8h</div><div class="montage-hours-sub">post-prod</div><div class="montage-bh-bar"><div class="montage-bh-fill" style="width:16%;"></div></div></div>
+      <div><span class="rush-val">+350$</span></div>
+    </div>
+    <div class="montage-row">
+      <div><div class="montage-name">Reel cinématique 30s</div><div class="montage-desc">Style cinéma · B-roll soigné · étalonnage approfondi · LUT personnalisée · transitions fluides · textes animés · musique layering · logo animé · délai 3–5 jours ouvrables</div></div>
+      <div><span class="badge v">9:16</span><br><span class="badge hv">hybride</span></div>
+      <div class="montage-hours-cell"><div class="montage-hours-val">3–6h</div><div class="montage-hours-sub">post-prod</div><div class="montage-bh-bar"><div class="montage-bh-fill" style="width:20%;"></div></div></div>
+      <div><span class="rush-val">+250$</span></div>
+    </div>
+
+    <div class="montage-cat"><span>Teasers &amp; vidéos publicitaires</span></div>
+    <div class="montage-row">
+      <div><div class="montage-name">Teaser / pub 30s</div><div class="montage-desc">Percutant · hook visuel fort · colorisation cinématique · sous-titres · logo animé · musique layering · délai 7–20 jours ouvrables</div></div>
+      <div><span class="badge hv">hybride</span></div>
+      <div class="montage-hours-cell"><div class="montage-hours-val">10–12h</div><div class="montage-hours-sub">post-prod</div><div class="montage-bh-bar"><div class="montage-bh-fill" style="width:24%;"></div></div></div>
+      <div><span class="rush-val">+450$</span></div>
+    </div>
+    <div class="montage-row">
+      <div><div class="montage-name">Récap / pub 60s</div><div class="montage-desc">Narration courte · hook fort · storytelling structuré · colorisation · sous-titres · logo animé · musique layering · délai 7–20 jours ouvrables</div></div>
+      <div><span class="badge hv">hybride</span></div>
+      <div class="montage-hours-cell"><div class="montage-hours-val">15–20h</div><div class="montage-hours-sub">post-prod</div><div class="montage-bh-bar"><div class="montage-bh-fill" style="width:40%;"></div></div></div>
+      <div><span class="rush-na">—</span></div>
+    </div>
+
+    <div class="montage-cat"><span>Capsules corporatives &amp; éducatives</span></div>
+    <div class="montage-row">
+      <div><div class="montage-name">Capsule éducative 1–2 min</div><div class="montage-desc">Entrevue montée, témoignage, présentation de service · colorisation · sous-titres · logo · musique</div></div>
+      <div><span class="badge v">9:16</span><br><span class="badge h">16:9</span></div>
+      <div class="montage-hours-cell"><div class="montage-hours-val">10–20h</div><div class="montage-hours-sub">post-prod</div><div class="montage-bh-bar"><div class="montage-bh-fill" style="width:40%;"></div></div></div>
+      <div><span class="rush-na">—</span></div>
+    </div>
+    <div class="montage-row">
+      <div><div class="montage-name">Capsule corpo / formation 5–10 min</div><div class="montage-desc">Film d'entreprise, capsule formation · entrevues · B-roll · colorisation · sous-titres · animations au besoin · logo · musique</div></div>
+      <div><span class="badge h">16:9</span></div>
+      <div class="montage-hours-cell"><div class="montage-hours-val">25–30h</div><div class="montage-hours-sub">post-prod</div><div class="montage-bh-bar"><div class="montage-bh-fill" style="width:60%;"></div></div></div>
+      <div><span class="rush-na">—</span></div>
+    </div>
+
+    <div class="montage-cat"><span>Longs formats &amp; documentaires</span></div>
+    <div class="montage-row">
+      <div><div class="montage-name">Vidéo longue 10–20 min</div><div class="montage-desc">Formation, procédure, rapport annuel · structure narrative · B-roll · entrevues multiples · colorisation · sous-titres · musique</div></div>
+      <div><span class="badge h">16:9</span></div>
+      <div class="montage-hours-cell"><div class="montage-hours-val">30–40h</div><div class="montage-hours-sub">post-prod</div><div class="montage-bh-bar"><div class="montage-bh-fill" style="width:80%;"></div></div></div>
+      <div><span class="rush-na">—</span></div>
+    </div>
+    <div class="montage-row highlight">
+      <div><div class="montage-name rouge">Mini-documentaire</div><div class="montage-desc">Structure documentaire · narration · interviews · B-roll · étalonnage · titres · logo · musique · motion design au besoin</div></div>
+      <div><span class="badge h">16:9</span></div>
+      <div class="montage-hours-cell"><div class="montage-hours-val rouge">Sur soumission</div></div>
+      <div><span class="rush-na">—</span></div>
+    </div>
+
+    <div class="montage-cat"><span>Reformatage &amp; adaptations</span></div>
+    <div class="montage-row">
+      <div><div class="montage-name">Reformatage — 16:9 vers 9:16</div><div class="montage-desc">Si le cadrage le permet · recadrage · adaptation sous-titres · optimisation plateforme · Instagram / LinkedIn / YouTube Shorts</div></div>
+      <div><span class="badge v">9:16</span></div>
+      <div class="montage-hours-cell"><div class="montage-hours-val">2–5h</div><div class="montage-hours-sub">post-prod</div><div class="montage-bh-bar"><div class="montage-bh-fill" style="width:10%;"></div></div></div>
+      <div><span class="rush-val">+250$</span></div>
+    </div>
+  </div>
+
+  <div class="note-red">
+    <strong>Les estimés sont des fourchettes indicatives.</strong> La durée réelle dépend du volume de clips, du nombre de sujets, de la complexité narrative et des révisions. Si vous avez des limites de budget ou de délai, on en tient compte avant d'avancer.<br><br>
+    <strong>Motion design complexe :</strong> peut ajouter des heures supplémentaires selon les besoins — estimé sur soumission.<br>
+    <strong>Délais orientatifs :</strong> Reels 10–15 jours ouvrables · Teasers &amp; récaps 7–25 jours · Longs formats &amp; capsules sur mesure selon le projet.
+  </div>
+
+  <div class="note-white">
+    <div class="note-white-title">✦ Inclus dans chaque montage</div>
+    <div class="note-white-body"><strong>Colorisation</strong> (étalonnage, ambiance visuelle) · <strong>Sous-titres</strong> synchronisés · <strong>Logo animé</strong> — fichier source requis · <strong>Musique</strong> sous licence banque MM (ou la vôtre — droits à votre charge) · <strong>1 révision mineure</strong> incluse par livrable · Révisions majeures imputées à la banque d'heures.</div>
+  </div>
+
+
+</div>
+
+<div class="taxes">Tous les prix <strong>+ taxes applicables</strong> &nbsp;·&nbsp; Valide jusqu'au 31 décembre 2026 &nbsp;·&nbsp; Prix sujets à changement</div>
+
+<!-- ════════════════════════════════════════ -->
+<!-- SECTION 2 — FICHIERS BRUTS             -->
+<!-- ════════════════════════════════════════ -->
+<div class="divider">
+  <div class="divider-line"></div>
+  <div class="divider-label">Option 2 — Fichiers bruts</div>
+  <div class="divider-line"></div>
+</div>
+
+<div id="fichiers-bruts">
+  <div class="sec-title-block">
+    <div class="sec-eyebrow">Option 2 — Sans montage</div>
+    <div class="sec-title">Remise des<br>fichiers bruts.</div>
+    <div class="sec-sub">Recevez l'intégralité de vos captations vidéo telles que tournées, en format <strong>natif</strong>. La colorisation n'est pas appliquée — option disponible en supplément.</div>
+  </div>
+
+  <div class="cards-bruts">
+    <div class="card-brut">
+      <div class="card-brut-tier">Tournage 2h</div>
+      <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:4px;">
+        <div class="card-brut-price">175</div>
+        <div class="card-brut-suffix">$</div>
+      </div>
+      <div class="card-brut-unit">Fichiers bruts · par vidéaste + tx</div>
+      <div class="card-brut-div"></div>
+      <div class="card-brut-colo-label">+ Colorisation de base</div>
+      <div class="card-brut-colo-price">+200$</div>
+      <div class="card-brut-colo-desc">Ajustements nécessaires pour utilisation directe · confirmé par écrit</div>
+    </div>
+    <div class="card-brut">
+      <div class="card-brut-tier">Tournage 4h</div>
+      <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:4px;">
+        <div class="card-brut-price">250</div>
+        <div class="card-brut-suffix">$</div>
+      </div>
+      <div class="card-brut-unit">Fichiers bruts · par vidéaste + tx</div>
+      <div class="card-brut-div"></div>
+      <div class="card-brut-colo-label">+ Colorisation de base</div>
+      <div class="card-brut-colo-price">+350$</div>
+      <div class="card-brut-colo-desc">Ajustements nécessaires pour utilisation directe · confirmé par écrit</div>
+    </div>
+    <div class="card-brut">
+      <div class="card-brut-tier">Tournage 10–12h</div>
+      <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:4px;">
+        <div class="card-brut-price">450</div>
+        <div class="card-brut-suffix">$</div>
+      </div>
+      <div class="card-brut-unit">Fichiers bruts · par vidéaste + tx</div>
+      <div class="card-brut-div"></div>
+      <div class="card-brut-colo-label">+ Colorisation de base</div>
+      <div class="card-brut-colo-price">+650$</div>
+      <div class="card-brut-colo-desc">Étalonnage avancé disponible · soumission séparée sur demande</div>
+    </div>
+  </div>
+
+  <div style="background:#f5f5f5;border:2px solid #e0e0e0;border-left:4px solid #2d2d2d;border-radius:8px;padding:14px 18px;margin-bottom:14px;font-size:13px;font-weight:600;color:#444;line-height:1.75;">
+    ⏱ <strong style="color:#2d2d2d;">Délai de remise : 15 à 30 jours</strong> après le tournage · Option rush disponible sur demande — <strong style="color:#c0392b;">soumission séparée requise</strong>
+  </div>
+
+  <div class="inclus-strip">
+    <div class="inclus-label">Inclus avec chaque remise</div>
+    <div class="inclus-items">
+      <span class="inclus-item">Organisation des fichiers</span>
+      <span class="inclus-item">Vérification de l'intégrité</span>
+      <span class="inclus-item">Livraison Dropbox 30 jours</span>
+      <span class="inclus-item">Licence d'utilisation commerciale</span>
+    </div>
+  </div>
+
+  <div class="details">
+    <div class="detail-card">
+      <div class="detail-title">📦 Ce que vous recevez</div>
+      <ul class="detail-items">
+        <li>Tous les fichiers captés lors du tournage, sans sélection</li>
+        <li>Organisés par séquence et renommés proprement</li>
+        <li>Livraison via lien Dropbox sécurisé — valide 30 jours</li>
+        <li>Formats natifs selon le matériel (4K, 6K, drone…)</li>
+        <li>Support physique disponible en supplément</li>
+      </ul>
+    </div>
+    <div class="detail-card">
+      <div class="detail-title">💿 Support physique — en supplément</div>
+      <ul class="detail-items">
+        <li class="no-check"><span class="di-label">Clé USB-C 512 Go</span><span class="di-price">+125$ + tx</span></li>
+        <li class="no-check"><span class="di-label">Disque dur 1 To</span><span class="di-price">+250$ + tx</span></li>
+        <li class="no-check"><span class="di-label">Disque dur 2 To</span><span class="di-price">+325$ + tx</span></li>
+        <li class="no-check"><span class="di-label">Disque dur 4 To</span><span class="di-price">+450$ + tx</span></li>
+        <li class="no-check"><span class="di-label">Votre propre support fourni</span><span class="di-price">0$ + frais expédition</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note-dark">
+    <div class="note-dark-eyebrow">🎨 Colorisation de base — pourquoi c'est nécessaire</div>
+    <div class="note-dark-text">Les fichiers sont remis en format <strong>brut natif</strong> — tel qu'enregistré par la caméra, sans traitement de couleur. Les images apparaissent délavées et plates jusqu'à colorisation. La colorisation de base couvre les <strong>ajustements nécessaires pour une utilisation directe</strong> : application d'un LUT, balance des blancs, cohérence visuelle et correction d'exposition. Pour les projets multicaméras ou l'étalonnage cinématographique, une soumission séparée est fournie.</div>
+  </div>
+
+  <!-- BANQUES HEURES COLORISATION -->
+  <div style="margin:32px 0 20px;">
+    <div style="font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#c0392b;margin-bottom:10px;">Option flexible</div>
+    <div style="font-size:28px;font-weight:900;color:#2d2d2d;letter-spacing:-1px;line-height:1;margin-bottom:10px;">Banques d'heures — colorisation</div>
+    <div style="font-size:13px;font-weight:500;color:#666;line-height:1.8;max-width:580px;">Utilisez une banque d'heures pour coloriser seulement les clips de votre choix — plus économique si vous ne travaillez qu'avec une sélection.</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;">
+    <div style="background:#fff;border:2px solid #e0e0e0;border-radius:12px;padding:22px 18px;display:flex;flex-direction:column;">
+      <div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:10px;">Banque</div>
+      <div style="font-size:40px;font-weight:900;letter-spacing:-2px;color:#2d2d2d;line-height:1;">15h</div>
+      <div style="font-size:11px;font-weight:600;color:#999;margin-bottom:14px;">de colorisation</div>
+      <div style="height:1px;background:#ebebeb;margin-bottom:14px;"></div>
+      <div style="font-size:22px;font-weight:800;color:#2d2d2d;">1 500$</div>
+      <div style="font-size:11px;font-weight:500;color:#aaa;margin-top:4px;">+ tx · taux standard</div>
+    </div>
+    <div style="background:#fff;border:2px solid #e0e0e0;border-top:4px solid #c0392b;border-radius:12px;padding:22px 18px;display:flex;flex-direction:column;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#888;">Banque</div>
+        <div style="background:#c0392b;color:#fff;font-size:8px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:20px;">Populaire</div>
+      </div>
+      <div style="font-size:40px;font-weight:900;letter-spacing:-2px;color:#2d2d2d;line-height:1;">25h</div>
+      <div style="font-size:11px;font-weight:600;color:#999;margin-bottom:14px;">de colorisation</div>
+      <div style="height:1px;background:#ebebeb;margin-bottom:14px;"></div>
+      <div style="font-size:22px;font-weight:800;color:#2d2d2d;">2 375$</div>
+      <div style="font-size:11px;font-weight:500;color:#27ae60;margin-top:4px;">+ tx · économie 125$</div>
+    </div>
+    <div style="background:#fff;border:2px solid #e0e0e0;border-radius:12px;padding:22px 18px;display:flex;flex-direction:column;">
+      <div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:10px;">Banque</div>
+      <div style="font-size:40px;font-weight:900;letter-spacing:-2px;color:#2d2d2d;line-height:1;">50h</div>
+      <div style="font-size:11px;font-weight:600;color:#999;margin-bottom:14px;">de colorisation</div>
+      <div style="height:1px;background:#ebebeb;margin-bottom:14px;"></div>
+      <div style="font-size:22px;font-weight:800;color:#2d2d2d;">4 500$</div>
+      <div style="font-size:11px;font-weight:500;color:#27ae60;margin-top:4px;">+ tx · économie 500$</div>
+    </div>
+  </div>
+
+  <div style="background:#f5f5f5;border:2px solid #e8e8e8;border-radius:8px;padding:14px 18px;margin-bottom:32px;font-size:13px;font-weight:500;color:#666;line-height:1.75;">
+    Validité <strong style="color:#2d2d2d;">12 mois</strong> · Utilisable sur plusieurs projets · Suivi des heures approuvé par le client
+  </div>
+
+  <!-- LICENCE -->
+  <div class="licence">
+    <div class="licence-head">
+      <span style="font-size:16px;">📋</span>
+      <span class="licence-head-text">Droits d'utilisation inclus avec vos fichiers</span>
+    </div>
+    <div class="licence-cols">
+      <div class="licence-col incl">
+        <div class="col-badge badge-yes">✓ Autorisé</div>
+        <ul class="col-items">
+          <li><span class="ci g">✓</span>Réseaux sociaux organiques et publicités payantes</li>
+          <li><span class="ci g">✓</span>Site web, blogue et portfolio en ligne</li>
+          <li><span class="ci g">✓</span>Présentations, pitchs et appels d'offres</li>
+          <li><span class="ci g">✓</span>Affichage publicitaire — local, régional, grand format</li>
+          <li><span class="ci g">✓</span>Promotion de <strong>vos propres</strong> produits et services</li>
+          <li><span class="ci g">✓</span>Usage illimité dans le temps</li>
+        </ul>
+      </div>
+      <div class="licence-col excl">
+        <div class="col-badge badge-no">✗ Autorisation requise</div>
+        <ul class="col-items">
+          <li><span class="ci r">✗</span>Diffusion broadcast — TV, streaming commercial</li>
+          <li><span class="ci r">✗</span>Cession ou transfert des droits à des tiers</li>
+          <li><span class="ci r">✗</span>Revente des fichiers ou usage pour une autre entreprise</li>
+          <li><span class="ci r">✗</span>Distribution sur plateformes de stock</li>
+          <li><span class="ci r">✗</span>Usage par des filiales ou organisations distinctes</li>
+        </ul>
+      </div>
+    </div>
+    <div class="licence-foot">Besoin d'un usage étendu? <strong>Licence commerciale broadcast disponible</strong> — contactez-nous pour une entente sur mesure.</div>
+  </div>
+
+  <div class="acarte" style="margin-bottom:32px;">
+    <div class="acarte-left">
+      <div class="acarte-tag">Support physique — expédition</div>
+      <div class="acarte-title">Livraison partout au Québec</div>
+      <div class="acarte-sub">En supplément sur tout support physique · frais d'expédition</div>
+    </div>
+    <div class="acarte-price">+55$<span> + tx</span></div>
+  </div>
+</div>
+
+<div class="taxes">Tous les prix <strong>+ taxes applicables</strong> &nbsp;·&nbsp; Valide jusqu'au 31 décembre 2026 &nbsp;·&nbsp; Prix sujets à changement</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_coul.png" alt="Média Mauricie" style="height:34px;">
+  <div class="footer-info">
+    <a href="https://www.mediamauricie.com">www.mediamauricie.com</a> · <a href="/cdn-cgi/l/email-protection#3950575f5679545c5d505854584c4b505a505c175a5654"><span class="__cf_email__" data-cfemail="620b0c040d220f07060b030f0317100b010b074c010d0f">[email&#160;prote
