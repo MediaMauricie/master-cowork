@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contrat — Banque d'heures de montage — Média Mauricie</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;min-height:100vh;font-size:14px;}
+.wrap{max-width:900px;margin:0 auto;padding:40px 24px 80px;}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:36px;padding-bottom:24px;border-bottom:3px solid #2d2d2d;}
+.header-right{text-align:right;}
+.doc-type{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#c0392b;margin-bottom:6px;}
+.doc-title{font-size:26px;font-weight:900;color:#2d2d2d;letter-spacing:-0.5px;line-height:1.1;}
+.doc-ref{font-size:12px;font-weight:600;color:#aaa;margin-top:8px;}
+.doc-ref span{color:#2d2d2d;font-weight:700;}
+.notice{background:#2d2d2d;border-radius:10px;padding:14px 20px;margin-bottom:24px;display:flex;align-items:center;gap:14px;}
+.notice-text{font-size:12px;font-weight:500;color:rgba(255,255,255,0.75);line-height:1.6;}
+.notice-text strong{color:#fff;}
+.sec{margin-bottom:20px;}
+.sec-head{background:#2d2d2d;border-radius:10px 10px 0 0;padding:12px 20px;display:flex;align-items:center;gap:12px;}
+.sec-num{font-size:11px;font-weight:800;letter-spacing:2px;color:rgba(255,255,255,0.35);}
+.sec-title{font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#fff;}
+.sec-body{background:#fff;border:2px solid #e0e0e0;border-top:none;border-radius:0 0 10px 10px;padding:20px 24px;}
+.parties{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.partie{border:2px solid #e0e0e0;border-radius:10px;padding:16px 18px;}
+.partie-label{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#c0392b;margin-bottom:12px;}
+.partie-name{font-size:16px;font-weight:800;color:#2d2d2d;margin-bottom:10px;}
+.fr{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;}
+.fk{font-size:11px;font-weight:700;color:#888;min-width:95px;flex-shrink:0;padding-top:3px;}
+.fv{font-size:13px;font-weight:600;color:#2d2d2d;flex:1;line-height:1.4;}
+.bank-strip{background:#f8f8f8;border:1.5px solid #e0e0e0;border-radius:8px;padding:12px 14px;margin-top:12px;}
+.bank-label{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#aaa;margin-bottom:8px;}
+.bank-row{display:flex;gap:20px;flex-wrap:wrap;}
+.bank-item-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#bbb;margin-bottom:3px;}
+.bank-item-val{font-size:13px;font-weight:800;color:#2d2d2d;letter-spacing:1px;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:6px;}
+.field input[type=text],.field input[type=number],.field input[type=date],.field input[type=time],.field select,.field textarea{width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:10px 14px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:#2d2d2d;background:#fff;outline:none;transition:border-color 0.2s;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#2d2d2d;}
+.field textarea{min-height:70px;resize:vertical;line-height:1.6;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.field-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.check-group{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;}
+.check-item{display:flex;align-items:center;gap:8px;cursor:pointer;}
+.check-item input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:#c0392b;}
+.check-item label{font-size:13px;font-weight:600;color:#2d2d2d;cursor:pointer;}
+.check-single{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;cursor:pointer;transition:border-color 0.2s;margin-bottom:8px;}
+.check-single:hover{border-color:#2d2d2d;}
+.check-single input{width:16px;height:16px;margin-top:2px;flex-shrink:0;accent-color:#c0392b;}
+.check-single-text{font-size:13px;font-weight:700;color:#2d2d2d;line-height:1.4;}
+.check-single-sub{font-size:11px;font-weight:500;color:#888;margin-top:2px;line-height:1.5;}
+.forfait-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;}
+.forfait-card{border:2px solid #e0e0e0;border-radius:10px;padding:14px 16px;cursor:pointer;transition:all 0.2s;position:relative;}
+.forfait-card:hover{border-color:#2d2d2d;}
+.forfait-card.selected{border-color:#c0392b;background:#fdf9f9;}
+.forfait-card-name{font-size:14px;font-weight:800;color:#2d2d2d;margin-bottom:4px;}
+.forfait-card-price{font-size:18px;font-weight:900;color:#c0392b;}
+.forfait-card-unit{font-size:10px;font-weight:600;color:#aaa;}
+.forfait-card-check{width:18px;height:18px;border:2px solid #ddd;border-radius:50%;display:inline-block;margin-bottom:10px;transition:all 0.2s;}
+.forfait-card.selected .forfait-card-check{background:#c0392b;border-color:#c0392b;}
+.surplus-row{display:grid;grid-template-columns:3fr 1fr auto;gap:10px;align-items:center;margin-bottom:10px;}
+.surplus-row input{border:2px solid #e0e0e0;border-radius:8px;padding:9px 12px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:#2d2d2d;width:100%;outline:none;}
+.surplus-row input:focus{border-color:#2d2d2d;}
+.surplus-row input[type=number]{text-align:right;}
+.calc-block{background:#2d2d2d;border-radius:12px;padding:20px 24px;margin-top:16px;}
+.calc-title{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:16px;}
+.calc-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);}
+.calc-row:last-child{border-bottom:none;}
+.calc-label{font-size:12px;font-weight:600;color:rgba(255,255,255,0.6);}
+.calc-val{font-size:14px;font-weight:800;color:#fff;}
+.calc-total{display:flex;justify-content:space-between;align-items:center;padding:14px 0 8px;border-top:2px solid rgba(255,255,255,0.2);margin-top:8px;}
+.calc-total-label{font-size:14px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:1px;}
+.calc-total-val{font-size:24px;font-weight:900;color:#fff;}
+.calc-versement{display:flex;justify-content:space-between;align-items:center;padding:8px 0;}
+.calc-versement-label{font-size:12px;font-weight:700;color:rgba(255,255,255,0.5);}
+.calc-versement-val{font-size:16px;font-weight:800;color:#c0392b;}
+.tax-toggle{display:flex;gap:16px;margin-bottom:12px;}
+.tax-toggle label{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);cursor:pointer;}
+.tax-toggle input{width:16px;height:16px;accent-color:#c0392b;}
+.map-block{border-radius:12px;overflow:hidden;border:2px solid #e0e0e0;}
+.map-img{width:100%;height:auto;display:block;}
+.map-footer{background:#2d2d2d;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;}
+.map-footer-text{font-size:12px;font-weight:600;color:rgba(255,255,255,0.6);}
+.map-footer-price{font-size:16px;font-weight:800;color:#fff;}
+.mel-block{background:#f0faf4;border:2px solid #b7e4c7;border-radius:10px;padding:16px 20px;margin-bottom:14px;}
+.mel-title{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#27ae60;margin-bottom:10px;}
+.mel-check{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;}
+.mel-check input{width:18px;height:18px;margin-top:2px;flex-shrink:0;accent-color:#27ae60;}
+.mel-check-text{font-size:13px;font-weight:600;color:#2d4a35;line-height:1.6;}
+.mel-link{font-size:12px;font-weight:700;color:#27ae60;text-decoration:none;}
+.mel-link:hover{text-decoration:underline;}
+.sec-div{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#aaa;margin:20px 0 12px;display:flex;align-items:center;gap:12px;}
+.sec-div::after{content:'';flex:1;height:1px;background:#e0e0e0;}
+.btn-add{background:#f8f8f8;border:2px dashed #e0e0e0;border-radius:8px;padding:12px 20px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:800;color:#888;cursor:pointer;width:100%;text-align:center;transition:all 0.2s;letter-spacing:1px;text-transform:uppercase;}
+.btn-add:hover{border-color:#2d2d2d;color:#2d2d2d;background:#fff;}
+.btn-remove{background:none;border:none;cursor:pointer;font-size:20px;color:#ccc;transition:color 0.2s;font-family:'Montserrat',sans-serif;padding:0 4px;}
+.btn-remove:hover{color:#c0392b;}
+.clause{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid #f0f0f0;}
+.clause:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.ctitle{font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#2d2d2d;margin-bottom:8px;}
+.ctext{font-size:13px;font-weight:500;color:#444;line-height:1.85;}
+.ctext strong{color:#2d2d2d;font-weight:700;}
+.hl{background:#f8f8f8;border-left:4px solid #e0e0e0;padding:10px 16px;border-radius:0 8px 8px 0;margin-top:10px;}
+.hl-row{font-size:12px;font-weight:500;color:#444;line-height:1.8;margin-bottom:6px;padding-left:4px;}
+.hl-row:last-child{margin-bottom:0;}
+.hl-row strong{color:#2d2d2d;font-weight:700;}
+.sigs{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.sig{border:2px solid #e0e0e0;border-radius:10px;padding:20px;}
+.sig-label{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#aaa;margin-bottom:10px;}
+.sig-name{font-size:15px;font-weight:800;color:#2d2d2d;margin-bottom:3px;}
+.sig-role{font-size:12px;font-weight:600;color:#888;margin-bottom:18px;}
+.sig-line{border-bottom:2px solid #2d2d2d;height:40px;margin-bottom:8px;}
+.sig-lbl{font-size:11px;font-weight:600;color:#bbb;}
+.sig-dates{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;}
+.sig-field{border-bottom:2px solid #e0e0e0;height:36px;margin-bottom:6px;}
+.footer{margin-top:24px;padding-top:18px;border-top:2px solid #ddd;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;}
+.footer-legal{font-size:11px;font-weight:500;color:#aaa;line-height:1.8;text-align:right;}
+.footer-legal strong{color:#888;}
+a.doc-link{color:#c0392b;font-weight:700;font-size:12px;text-decoration:none;}
+a.doc-link:hover{text-decoration:underline;}
+@media print{body{background:#fff;}.wrap{padding:20px;}.notice{display:none;}.btn-add,.btn-remove{display:none;}input,select,textarea{border:none;border-bottom:1px solid #ccc;border-radius:0;padding:2px 4px;}}
+@media(max-width:640px){.parties,.sigs,.forfait-grid{grid-template-columns:1fr;}.field-row,.field-row-3{grid-template-columns:1fr;}.header{flex-direction:column;gap:12px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="header">
+  <img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_M-coul.png" alt="Média Mauricie" style="height:52px;width:auto;">
+  <div class="header-right">
+    <div class="doc-type">Contrat de services</div>
+    <div class="doc-title">Banque d'heures de montage</div>
+    <div class="doc-ref">No. contrat : <span>MM-BH-<input type="text" style="border:none;border-bottom:2px solid #ccc;width:80px;font-size:13px;font-weight:700;color:#2d2d2d;padding:0 4px;outline:none;font-family:Montserrat,sans-serif;" placeholder="____"></span></div>
+  </div>
+</div>
+
+<div class="notice"><span style="font-size:18px;flex-shrink:0;">⚡</span>
+  <div class="notice-text"><strong>Signature électronique via Zoho Sign</strong> — Ce contrat entre en vigueur à la date de la dernière signature et au paiement complet de la banque. La banque est activée dès réception du paiement.</div>
+</div>
+
+<div class="sec">
+  <div class="sec-head"><span class="sec-num">01</span><span class="sec-title">Parties contractantes</span></div>
+  <div class="sec-body"><div class="parties">
+      <div class="partie">
+        <div class="partie-label">Prestataire</div>
+        <div class="partie-name">Média Mauricie Inc.</div>
+        <div class="fr"><span class="fk">Représentante</span><span class="fv">Victoria J. Polsoni, Présidente</span></div>
+        <div class="fr"><span class="fk">Adresse</span><span class="fv">2750 Rang des Chutes, Sainte-Ursule, QC G0X 3B0</span></div>
+        <div class="fr"><span class="fk">Téléphone</span><span class="fv">(819) 852-0851</span></div>
+        <div class="fr"><span class="fk">Courriel</span><span class="fv">info@mediamauricie.com</span></div>
+        <div class="fr"><span class="fk">TPS</span><span class="fv">71110 6229 RT 0001</span></div>
+        <div class="fr"><span class="fk">TVQ</span><span class="fv">12 3255 2049 TQ 0001</span></div>
+        <div class="fr"><span class="fk">NEQ</span><span class="fv">1180690985</span></div>
+        <div class="bank-strip">
+          <div class="bank-label">Virement bancaire — TD Canada Trust</div>
+          <div class="bank-row">
+            <div><div class="bank-item-label">Transit</div><div class="bank-item-val">49361</div></div>
+            <div><div class="bank-item-label">Institution</div><div class="bank-item-val">004</div></div>
+            <div><div class="bank-item-label">Compte</div><div class="bank-item-val">5213392</div></div>
+          </div>
+          <div style="font-size:11px;color:#aaa;font-weight:500;margin-top:8px;">Interac : info@mediamauricie.com <em>(mot de passe transmis séparément)</em> · Chèque à l'ordre de Média Mauricie Inc.</div>
+        </div>
+      </div>
+      <div class="partie">
+        <div class="partie-label">Client</div>
+        <div class="field"><label>Entreprise / Organisation</label><input type="text" placeholder="Nom de l'entreprise"></div>
+        <div class="field"><label>Représentant</label><input type="text" placeholder="Prénom Nom"></div>
+        <div class="field"><label>Titre</label><input type="text" placeholder="Directeur, coordonnateur, etc."></div>
+        <div class="field"><label>Adresse</label><input type="text" placeholder="Adresse complète"></div>
+        <div class="field"><label>Courriel</label><input type="text" placeholder="courriel@exemple.com"></div>
+        <div class="field"><label>Téléphone</label><input type="text" placeholder="(819) 000-0000"></div>
+        <div class="field"><label>Type d'organisation</label>
+          <div class="check-group">
+            <label class="check-item"><input type="checkbox"><label>Corporatif</label></label>
+            <label class="check-item"><input type="checkbox"><label>OBNL</label></label>
+            <label class="check-item"><input type="checkbox"><label>Municipal</label></label>
+            <label class="check-item"><input type="checkbox"><label>Festival</label></label>
+            
+            <label class="check-item"><input type="checkbox"><label>Autre</label></label>
+          </div>
+        </div>
+      </div></div></div>
+</div>
+
+<div class="sec">
+  <div class="sec-head"><span class="sec-num">02</span><span class="sec-title">Banque d'heures sélectionnée</span></div>
+  <div class="sec-body">
+    <div class="forfait-grid">
+      <div class="forfait-card" data-group="bh" onclick="selectForfaitBH(this,15,100,1500)">
+        <div class="forfait-card-check"></div>
+        <div class="forfait-card-name">Essentiel — 15h</div>
+        <div class="forfait-card-price">1 500$</div>
+        <div class="forfait-card-unit">100$/h + tx</div>
+      </div>
+      <div class="forfait-card" data-group="bh" onclick="selectForfaitBH(this,25,95,2375)" style="border-top:3px solid #c0392b;">
+        <div class="forfait-card-check"></div>
+        <div class="forfait-card-name">Pro ★ — 25h</div>
+        <div class="forfait-card-price">2 375$</div>
+        <div class="forfait-card-unit">95$/h + tx · économie 125$</div>
+      </div>
+      <div class="forfait-card" data-group="bh" onclick="selectForfaitBH(this,50,90,4500)">
+        <div class="forfait-card-check"></div>
+        <div class="forfait-card-name">Premium — 50h</div>
+        <div class="forfait-card-price">4 500$</div>
+        <div class="forfait-card-unit">90$/h + tx · économie 500$</div>
+      </div>
+    </div>
+
+    <div style="background:#f8f8f8;border:2px solid #e0e0e0;border-radius:10px;padding:16px 20px;margin-bottom:16px;">
+      <div style="font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#aaa;margin-bottom:12px;">Détails de la banque</div>
+      <div class="field-row">
+        <div class="field"><label>Heures totales</label><input type="number" min="0" id="bh-heures" placeholder="0" oninput="calcTotal()" readonly style="background:#f0f0f0;font-size:18px;font-weight:800;"></div>
+        <div class="field"><label>Taux horaire</label><input type="number" min="0" id="bh-taux" placeholder="0" oninput="calcTotal()" readonly style="background:#f0f0f0;font-size:18px;font-weight:800;"> <span style="font-size:12px;color:#aaa;"> $/h</span></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>No. banque</label><input type="text" placeholder="MM-BH-___"></div>
+        <div class="field"><label>Code de projet associé</label><input type="text" placeholder="ex: MM-2026-042"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Date d'achat</label><input type="date"></div>
+        <div class="field"><label>Date d'expiration</label><input type="date"> <span style="font-size:11px;color:#aaa;margin-top:4px;display:block;">12 mois à partir de la date d'achat</span></div>
+      </div>
+    </div>
+
+    <div style="background:#2d2d2d;border-radius:10px;padding:14px 18px;margin-bottom:16px;">
+      <div style="font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:10px;">Inclus dans chaque projet débité</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <span style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.85);">Colorisation</span>
+        <span style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.85);">Sous-titres synchronisés</span>
+        <span style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.85);">Logo animé</span>
+        <span style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.85);">Musique sous licence MM</span>
+        <span style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.85);">1 révision mineure / livrable</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-head"><span class="sec-num">03</span><span class="sec-title">Registre de suivi des heures</span></div>
+  <div class="sec-body">
+    <p style="font-size:13px;font-weight:500;color:#555;margin-bottom:16px;line-height:1.8;">Une estimation est soumise au client <strong>avant le démarrage de chaque projet</strong>. Si un plafond est souhaité, il est indiqué ci-dessous — Média Mauricie demande l'autorisation avant de le dépasser.</p>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;min-width:600px;">
+        <thead><tr style="background:#f8f8f8;border-bottom:2px solid #e0e0e0;">
+          <th style="padding:10px 10px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#aaa;text-align:left;">Date</th>
+          <th style="padding:10px 10px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#aaa;text-align:left;">Projet / Livrable</th>
+          <th style="padding:10px 10px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#aaa;text-align:center;">Estimé (h)</th>
+          <th style="padding:10px 10px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#aaa;text-align:center;">Réel (h)</th>
+          <th style="padding:10px 10px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#aaa;text-align:center;">Solde</th>
+          <th style="padding:10px 10px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#aaa;text-align:center;">Approuvé</th>
+        </tr></thead>
+        <tbody id="registre-body">
+          <tr style="border-bottom:1px solid #f0f0f0;background:#fafafa;">
+            <td style="padding:8px 10px;font-size:12px;color:#aaa;font-weight:700;">—</td>
+            <td style="padding:8px 10px;font-size:12px;color:#aaa;">Solde initial</td>
+            <td></td><td></td>
+            <td style="padding:8px 10px;text-align:center;"><strong id="solde-initial" style="font-size:14px;color:#2d2d2d;">0 h</strong></td>
+            <td></td>
+          </tr>
+          <tr style="border-bottom:1px solid #f0f0f0;">
+            <td style="padding:6px 8px;"><input type="date" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:130px;"></td>
+            <td style="padding:6px 8px;"><input type="text" placeholder="Livrable..." style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:100%;"></td>
+            <td style="padding:6px 8px;text-align:center;"><input type="number" min="0" step="0.5" placeholder="0" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>
+            <td style="padding:6px 8px;text-align:center;"><input type="number" min="0" step="0.5" placeholder="0" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>
+            <td style="padding:6px 8px;text-align:center;"><input type="text" placeholder="—" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>
+            <td style="padding:6px 8px;text-align:center;"><input type="checkbox" style="width:16px;height:16px;accent-color:#c0392b;"></td>
+          </tr>
+          <tr style="border-bottom:1px solid #f0f0f0;">
+            <td style="padding:6px 8px;"><input type="date" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:130px;"></td>
+            <td style="padding:6px 8px;"><input type="text" placeholder="Livrable..." style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:100%;"></td>
+            <td style="padding:6px 8px;text-align:center;"><input type="number" min="0" step="0.5" placeholder="0" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>
+            <td style="padding:6px 8px;text-align:center;"><input type="number" min="0" step="0.5" placeholder="0" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>
+            <td style="padding:6px 8px;text-align:center;"><input type="text" placeholder="—" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>
+            <td style="padding:6px 8px;text-align:center;"><input type="checkbox" style="width:16px;height:16px;accent-color:#c0392b;"></td>
+          </tr>
+          <tr style="border-bottom:1px solid #f0f0f0;">
+            <td style="padding:6px 8px;"><input type="date" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:130px;"></td>
+            <td style="padding:6px 8px;"><input type="text" placeholder="Livrable..." style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:100%;"></td>
+            <td style="padding:6px 8px;text-align:center;"><input type="number" min="0" step="0.5" placeholder="0" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>
+            <td style="padding:6px 8px;text-align:center;"><input type="number" min="0" step="0.5" placeholder="0" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>
+            <td style="padding:6px 8px;text-align:center;"><input type="text" placeholder="—" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>
+            <td style="padding:6px 8px;text-align:center;"><input type="checkbox" style="width:16px;height:16px;accent-color:#c0392b;"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <button class="btn-add" onclick="ajouterLigneRegistre()" style="margin-top:10px;">+ Ajouter une ligne</button>
+    <div style="font-size:11px;font-weight:500;color:#aaa;margin-top:10px;">Suivi également disponible dans l'espace client · Approuvé = validation du client avant démarrage</div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-head"><span class="sec-num">04</span><span class="sec-title">Tarification</span></div>
+  <div class="sec-body">
+    
+    <div class="sec-div">Éléments additionnels</div>
+    <div id="surplus-container">
+      <div class="surplus-row"><input type="text" placeholder="Description (ex: disque dur, permis, km supplémentaires...)"><input type="number" min="0" placeholder="0" oninput="calcTotal()"><button class="btn-remove" onclick="retirerSurplus(this)">×</button></div>
+      <div class="surplus-row"><input type="text" placeholder="Description..."><input type="number" min="0" placeholder="0" oninput="calcTotal()"><button class="btn-remove" onclick="retirerSurplus(this)">×</button></div>
+      <div class="surplus-row"><input type="text" placeholder="Description..."><input type="number" min="0" placeholder="0" oninput="calcTotal()"><button class="btn-remove" onclick="retirerSurplus(this)">×</button></div>
+    </div>
+    <button class="btn-add" onclick="ajouterSurplus()" style="margin-bottom:14px;">+ Ajouter un élément</button>
+    <div class="field"><label>Notes de facturation</label><textarea style="width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:10px 14px;font-family:'Montserrat',sans-serif;font-size:13px;min-height:60px;outline:none;resize:vertical;" placeholder="Notes, conditions particulières..."></textarea></div>
+    
+    <div class="calc-block">
+      <div class="calc-title">Calcul automatique</div>
+      <div class="tax-toggle">
+        <label><input type="checkbox" id="tps-check" checked onchange="calcTotal()"> TPS 5% applicable</label>
+        <label><input type="checkbox" id="tvq-check" checked onchange="calcTotal()"> TVQ 9,975% applicable</label>
+      </div>
+      <div class="calc-row"><span class="calc-label">Sous-total HT</span><span class="calc-val" id="calc-ht">0,00 $</span></div>
+      
+      <div class="calc-row" id="row-tps"><span class="calc-label">TPS 5%</span><span class="calc-val" id="calc-tps">0,00 $</span></div>
+      <div class="calc-row" id="row-tvq"><span class="calc-label">TVQ 9,975%</span><span class="calc-val" id="calc-tvq">0,00 $</span></div>
+      <div class="calc-total"><span class="calc-total-label">Total TTC</span><span class="calc-total-val" id="calc-total">0,00 $</span></div>
+      <div class="calc-versement"><span class="calc-versement-label">Total payable à la signature</span><span class="calc-versement-val" id="calc-versement">0,00 $</span></div>
+      <div class="calc-versement"><span class="calc-versement-label">Banque activée dès réception du paiement complet</span><span class="calc-versement-val" id="calc-solde">0,00 $</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-head"><span class="sec-num">05</span><span class="sec-title">Conditions générales</span></div>
+  <div class="sec-body">
+    <div class="clause">
+      <div class="ctitle">1. Paiement</div>
+      <div class="ctext">La banque d'heures est payée <strong>en totalité à la signature</strong>. La banque est activée dès réception du paiement complet. Modes de paiement : virement Interac (info@mediamauricie.com), virement bancaire TD (voir section 01), ou chèque à l'ordre de Média Mauricie Inc.</div>
+    </div>
+    <div class="clause">
+      <div class="ctitle">2. Intérêts sur retard</div>
+      <div class="ctext">Tout montant impayé après <strong>30 jours</strong> est sujet à des intérêts de <strong>1,5% par mois (18% annuellement)</strong>.</div>
+    </div>
+    <div class="clause">
+      <div class="ctitle">3. Validité et utilisation</div>
+      <div class="ctext">Valide <strong>12 mois</strong> à partir de la date d'achat. Utilisable sur plusieurs projets distincts. Les heures couvrent la <strong>post-production uniquement</strong> (montage, colorisation, sous-titres, logo animé, musique, révisions) — pas la captation terrain. Les heures non utilisées à l'expiration sont <strong>non remboursables</strong>. Prolongation de 3 mois possible sur demande écrite avant expiration.</div>
+    </div>
+    <div class="clause">
+      <div class="ctitle">4. Révisions</div>
+      <div class="ctext"><strong>1 round de révisions mineures</strong> inclus par livrable. Les révisions majeures sont décomptées des heures restantes. Si la banque est épuisée, les révisions supplémentaires sont facturées à 100$/h.</div>
+    </div>
+    <div class="clause">
+      <div class="ctitle">5. Suppléments rush</div>
+      <div class="ctext">Des suppléments rush s'appliquent en sus des heures décomptées : <strong>Reels / voxpops :</strong> +200$ à +450$ par livrable selon complexité. Ces frais sont facturés séparément.</div>
+    </div>
+    
+    <!--
+      <div class="ctext">--><!--
+      <div class="ctext">Tout montant impayé après <strong>30 jours</strong> de la date de facturation est sujet à des intérêts de <strong>1,5% par mois (18% annuellement)</strong>. Média Mauricie Inc. se réserve le droit de suspendre les services ou retenir les livrables en cas de solde impayé.</div>
+    </div>
+    <div class="clause">
+      <div class="ctitle">Annulation et report</div>
+      <div class="ctext">Toute annulation doit être transmise par écrit à info@mediamauricie.com.</div>
+      <div class="hl">
+        <div class="hl-row"><strong>Plus de 7 jours avant :</strong> premier versement remboursable à 50% — temps bloqué, communications et planification engagés. Report sans frais selon disponibilités.</div>
+        <div class="hl-row"><strong>3 à 7 jours avant :</strong> premier versement non remboursable — préparation avancée et date perdue. Report possible selon disponibilités.</div>
+        <div class="hl-row"><strong>Moins de 72h avant :</strong> premier versement non remboursable + frais de préparation terrain applicables.</div>
+        <div class="hl-row"><strong>Force majeure :</strong> report sans frais — date convenue mutuellement.</div>
+      </div>
+    </div>
+    <div class="clause">
+      <div class="ctitle">Révisions</div>
+      <div class="ctext"><strong>1 round de révisions mineures</strong> inclus par livrable. Délai de demande : <strong>7 jours ouvrables</strong> après réception. Révisions majeures facturées à 100$/h ou décomptées d'une banque d'heures.</div>
+    </div>
+    
+    <div class="clause">
+      <div class="ctitle">Droits à l'image — figurants</div>
+      <div class="ctext">Média Mauricie Inc. fournit une décharge d'utilisation d'image pour ses propres fins de portfolio et promotion. <strong>Le client est seul responsable</strong> d'obtenir les autorisations des personnes reconnaissables à l'image pour ses propres usages commerciaux.</div>
+    </div>
+    <div class="clause">
+      <div class="ctitle">Droits et propriété intellectuelle</div>
+      <div class="ctext">Le client reçoit une <strong>licence commerciale illimitée</strong> sur les contenus livrés pour ses propres usages. Média Mauricie Inc. conserve le droit d'auteur et se réserve le droit d'utiliser les contenus à des fins de portfolio et de promotion. La revente des contenus n'est pas permise.</div>
+    </div>
+    
+    <div class="clause">
+      <div class="ctitle">Assurances</div>
+      <div class="ctext">Média Mauricie Inc. détient une assurance responsabilité professionnelle et générale couvrant photographie, vidéo et drone (polices TIP660274 et TGL660274) — couverture de <strong>2 000 000$</strong>.</div>
+    </div>
+    <div class="clause">
+      <div class="ctitle">Loi applicable</div>
+      <div class="ctext">Contrat régi par les lois de la province de Québec. Résolution à l'amiable en priorité. Tribunal compétent : district judiciaire de <strong>Trois-Rivières</strong>.</div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-head"><span class="sec-num">06</span><span class="sec-title">Signatures</span></div>
+  <div class="sec-body">
+    <p style="font-size:13px;font-weight:500;color:#555;margin-bottom:20px;line-height:1.8;">Les soussignés confirment avoir <strong>lu, compris et accepté</strong> l'ensemble des termes du présent contrat. Ce contrat entre en vigueur à la date de la dernière signature et à la réception du premier versement.</p>
+    <div class="sigs">
+      <div class="sig">
+        <div class="sig-label">Prestataire</div>
+        <div class="sig-name">Média Mauricie Inc.</div>
+        <div class="sig-role">Victoria J. Polsoni, Présidente-fondatrice</div>
+        <div class="sig-line"></div>
+        <div class="sig-lbl">Signature autorisée</div>
+        <div class="sig-dates">
+          <div><div class="sig-field"></div><div class="sig-lbl">Date</div></div>
+          <div><div class="sig-field"></div><div class="sig-lbl">Lieu</div></div>
+        </div>
+      </div>
+      <div class="sig">
+        <div class="sig-label">Client</div>
+        <div class="field" style="margin-bottom:10px;"><label>Nom complet</label><input type="text" placeholder="Prénom Nom"></div>
+        <div class="field" style="margin-bottom:16px;"><label>Titre</label><input type="text" placeholder="Titre / Fonction"></div>
+        <div class="sig-line"></div>
+        <div class="sig-lbl">Signature autorisée</div>
+        <div class="sig-dates">
+          <div><div class="sig-field"></div><div class="sig-lbl">Date</div></div>
+          <div><div class="sig-field"></div><div class="sig-lbl">Lieu</div></div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:16px;background:#f8f8f8;border:2px solid #e8e8e8;border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:12px;">
+      <span style="font-size:18px;flex-shrink:0;">⚡</span>
+      <div style="font-size:12px;font-weight:600;color:#555;line-height:1.7;">Signature électronique via <strong style="color:#2d2d2d;">Zoho Sign</strong> — Le contrat complété est sauvegardé en PDF et transmis par courriel aux deux parties. La version signée constitue l'original légal.</div>
+    </div></div>
+</div>
+
+<div class="footer">
+  <img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_coul.png" alt="Média Mauricie" style="height:36px;width:auto;">
+  <div class="footer-legal">
+    <strong>Média Mauricie Inc.</strong> · 2750 Rang des Chutes, Sainte-Ursule, QC G0X 3B0<br>
+    (819) 852-0851 · info@mediamauricie.com · www.mediamauricie.com · NEQ 1180690985
+  </div>
+</div>
+
+</div>
+<script>
+
+function fmt(n){return n.toLocaleString('fr-CA',{minimumFractionDigits:2,maximumFractionDigits:2})+' $';}
+function getSurplus(){
+  var s=0;
+  document.querySelectorAll('.surplus-row input[type=number]').forEach(function(i){s+=parseFloat(i.value)||0;});
+  return s;
+}
+function ajouterSurplus(){
+  var c=document.getElementById('surplus-container');
+  var d=document.createElement('div');d.className='surplus-row';
+  d.innerHTML='<input type="text" placeholder="Description..."><input type="number" min="0" placeholder="0" oninput="calcTotal()"><button class="btn-remove" onclick="retirerSurplus(this)">×</button>';
+  c.appendChild(d);
+}
+function retirerSurplus(btn){
+  var rows=document.querySelectorAll('#surplus-container .surplus-row');
+  if(rows.length>1){btn.parentElement.remove();calcTotal();}
+}
+function selectForfait(card,name){
+  document.querySelectorAll('.forfait-card[data-group="'+name+'"]').forEach(function(c){c.classList.remove('selected');});
+  card.classList.add('selected');
+}
+
+
+function calcTotal(){
+  var heures=parseFloat(document.getElementById('bh-heures').value)||0;
+  var taux=parseFloat(document.getElementById('bh-taux').value)||0;
+  var surplus=getSurplus();
+  var ht=heures*taux+surplus;
+  var tps=document.getElementById('tps-check').checked?ht*0.05:0;
+  var tvq=document.getElementById('tvq-check').checked?ht*0.09975:0;
+  var total=ht+tps+tvq;
+  document.getElementById('calc-ht').textContent=fmt(ht);
+  document.getElementById('calc-tps').textContent=fmt(tps);
+  document.getElementById('calc-tvq').textContent=fmt(tvq);
+  document.getElementById('calc-total').textContent=fmt(total);
+  document.getElementById('calc-versement').textContent=fmt(total);
+  document.getElementById('calc-solde').textContent='Banque activée dès paiement reçu';
+  document.getElementById('row-tps').style.opacity=document.getElementById('tps-check').checked?'1':'0.3';
+  document.getElementById('row-tvq').style.opacity=document.getElementById('tvq-check').checked?'1':'0.3';
+}
+function selectForfaitBH(card,heures,taux,prix){
+  document.querySelectorAll('.forfait-card[data-group="bh"]').forEach(function(c){c.classList.remove('selected');});
+  card.classList.add('selected');
+  document.getElementById('bh-heures').value=heures;
+  document.getElementById('bh-taux').value=taux;
+  document.getElementById('solde-initial').textContent=heures+' h';
+  calcTotal();
+}
+function ajouterLigneRegistre(){
+  var tbody=document.getElementById('registre-body');
+  var tr=document.createElement('tr');
+  tr.style.borderBottom='1px solid #f0f0f0';
+  tr.innerHTML='<td style="padding:6px 8px;"><input type="date" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:130px;"></td>'+
+    '<td style="padding:6px 8px;"><input type="text" placeholder="Livrable..." style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:100%;"></td>'+
+    '<td style="padding:6px 8px;text-align:center;"><input type="number" min="0" step="0.5" placeholder="0" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>'+
+    '<td style="padding:6px 8px;text-align:center;"><input type="number" min="0" step="0.5" placeholder="0" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>'+
+    '<td style="padding:6px 8px;text-align:center;"><input type="text" placeholder="—" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>'+
+    '<td style="padding:6px 8px;text-align:center;"><input type="checkbox" style="width:16px;height:16px;accent-color:#c0392b;"></td>';
+  tbody.appendChild(tr);
+}
+calcTotal();
+
+</script>
+</body>
+</html>
