@@ -3,171 +3,838 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portail Média Mauricie</title>
+<title>Hub — Média Mauricie</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;min-height:100vh;}
-.wrap{max-width:960px;margin:0 auto;padding:48px 24px 80px;}
+:root{
+  --red:#c0392b;--dark:#2d2d2d;--mid:#555;--light:#888;
+  --border:#e4e4e4;--bg:#f2f2f0;--white:#fff;
+  --green:#2d7a57;--green-l:#edf7f2;
+  --gold:#c07840;--gold-l:#fef9ee;
+  --blue:#3d6e9e;--blue-l:#eef4fb;
+  --purple:#6b5ea8;--purple-l:#f0eefb;
+  --sidebar:220px;
+}
+body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;display:flex;}
 
-.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:52px;padding-bottom:24px;border-bottom:3px solid #2d2d2d;}
-.header-right{text-align:right;}
-.header-title{font-size:13px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#aaa;}
-.header-sub{font-size:11px;font-weight:600;color:#bbb;margin-top:4px;}
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);min-height:100vh;background:var(--dark);position:fixed;top:0;left:0;display:flex;flex-direction:column;z-index:100;}
+.sidebar-logo{padding:20px 18px;border-bottom:1px solid rgba(255,255,255,.08);}
+.sidebar-logo img{height:28px;}
+.sidebar-nav{flex:1;padding:12px 0;overflow-y:auto;}
+.nav-section{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.25);padding:14px 18px 6px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 18px;cursor:pointer;transition:all .15s;border-left:3px solid transparent;}
+.nav-item:hover{background:rgba(255,255,255,.06);}
+.nav-item.active{background:rgba(255,255,255,.08);border-left-color:var(--red);}
+.nav-item-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0;}
+.nav-item-label{font-size:12px;font-weight:600;color:rgba(255,255,255,.7);}
+.nav-item.active .nav-item-label{color:#fff;}
+.nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px;}
+.sidebar-footer{padding:14px 18px;border-top:1px solid rgba(255,255,255,.08);}
+.sidebar-footer-text{font-size:10px;color:rgba(255,255,255,.25);line-height:1.6;}
 
-.hero{margin-bottom:48px;}
-.hero-eyebrow{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#c0392b;margin-bottom:14px;}
-.hero-title{font-size:52px;font-weight:900;color:#2d2d2d;letter-spacing:-2px;line-height:1;margin-bottom:12px;}
-.hero-sub{font-size:14px;font-weight:500;color:#666;line-height:1.7;max-width:560px;}
+/* MAIN */
+.main{margin-left:var(--sidebar);flex:1;min-height:100vh;}
+.topbar{background:var(--white);border-bottom:2px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.topbar-title{font-size:15px;font-weight:800;color:var(--dark);}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.btn{border:none;border-radius:7px;padding:8px 16px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;letter-spacing:.5px;text-transform:uppercase;}
+.btn-red{background:var(--red);color:#fff;}
+.btn-dark{background:var(--dark);color:#fff;}
+.btn-ghost{background:transparent;color:var(--light);border:1.5px solid var(--border);}
+.btn:hover{opacity:.85;}
+.topbar-status{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;margin-right:6px;}
 
-.section-label{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#aaa;margin-bottom:16px;display:flex;align-items:center;gap:12px;}
-.section-label::after{content:'';flex:1;height:1px;background:#e0e0e0;}
+.content{padding:28px;}
 
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:40px;}
-.card{background:#fff;border:2px solid #e0e0e0;border-radius:14px;padding:22px 20px;text-decoration:none;color:inherit;transition:all 0.2s;display:flex;flex-direction:column;}
-.card:hover{border-color:#2d2d2d;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.08);}
-.card.featured{border-color:#c0392b;border-top:4px solid #c0392b;}
-.card-icon{font-size:28px;margin-bottom:12px;}
-.card-code{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#aaa;margin-bottom:6px;}
-.card-name{font-size:15px;font-weight:800;color:#2d2d2d;line-height:1.3;margin-bottom:6px;}
-.card-desc{font-size:11px;font-weight:500;color:#888;line-height:1.6;flex:1;}
-.card-arrow{font-size:12px;font-weight:800;color:#c0392b;margin-top:14px;letter-spacing:1px;}
+/* SECTIONS */
+.section{display:none;}
+.section.active{display:block;}
 
-.card-wide{grid-column:span 2;}
+/* ALERTES */
+.alertes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px;}
+.alerte-card{border-radius:10px;padding:14px 16px;}
+.alerte-card.red{background:#fdf0f0;border:1.5px solid #f0d0d0;}
+.alerte-card.gold{background:var(--gold-l);border:1.5px solid #f0e0c0;}
+.alerte-card.blue{background:var(--blue-l);border:1.5px solid #c0d8f0;}
+.alerte-card.green{background:var(--green-l);border:1.5px solid #b7e4c7;}
+.alerte-num{font-size:24px;font-weight:900;margin-bottom:2px;}
+.alerte-card.red .alerte-num{color:var(--red);}
+.alerte-card.gold .alerte-num{color:var(--gold);}
+.alerte-card.blue .alerte-num{color:var(--blue);}
+.alerte-card.green .alerte-num{color:var(--green);}
+.alerte-label{font-size:10px;font-weight:700;color:var(--mid);}
 
-.questionnaire-card{background:#2d2d2d;border:none;color:#fff;}
-.questionnaire-card:hover{background:#1a1a1a;border:none;}
-.questionnaire-card .card-code{color:rgba(255,255,255,0.35);}
-.questionnaire-card .card-name{color:#fff;}
-.questionnaire-card .card-desc{color:rgba(255,255,255,0.55);}
-.questionnaire-card .card-arrow{color:#c0392b;}
+/* TABLES */
+.table-wrap{background:var(--white);border-radius:12px;border:1.5px solid var(--border);overflow:hidden;margin-bottom:24px;}
+.table-head{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1.5px solid var(--border);}
+.table-title{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--light);}
+.table{width:100%;border-collapse:collapse;}
+.table th{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);padding:10px 16px;text-align:left;background:var(--bg);border-bottom:1.5px solid var(--border);}
+.table td{padding:11px 16px;border-bottom:1px solid var(--border);font-size:12px;vertical-align:middle;}
+.table tr:last-child td{border-bottom:none;}
+.table tr:hover td{background:#fafafa;}
+.table-empty{padding:32px;text-align:center;font-size:12px;color:var(--light);}
 
-.footer{padding-top:24px;border-top:2px solid #ddd;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;}
-.footer-legal{font-size:11px;font-weight:500;color:#aaa;line-height:1.8;}
-.footer-legal strong{color:#888;}
+/* BADGES STATUT */
+.badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:3px 9px;border-radius:20px;white-space:nowrap;}
+.badge-nouveau{background:#f0f0ee;color:#9e9e9e;}
+.badge-pris{background:var(--blue-l);color:var(--blue);}
+.badge-questionnaire{background:var(--gold-l);color:var(--gold);}
+.badge-soumission{background:var(--purple-l);color:var(--purple);}
+.badge-contrat{background:var(--green-l);color:var(--green);}
+.badge-production{background:var(--blue-l);color:var(--blue);}
+.badge-revision{background:var(--gold-l);color:var(--gold);}
+.badge-livre{background:var(--green-l);color:var(--green);}
+.badge-paye{background:var(--green-l);color:var(--green);}
+.badge-refuse{background:#fdf0f0;color:var(--red);}
+.badge-mtw{background:#fdf0f0;color:var(--red);border:1px solid #f0c0c0;}
 
-@media(max-width:640px){
-  .cards{grid-template-columns:1fr;}
-  .card-wide{grid-column:span 1;}
-  .hero-title{font-size:36px;}
-  .header{flex-direction:column;align-items:flex-start;gap:12px;}
+/* ACTIONS INLINE */
+.action-link{color:var(--red);font-size:11px;font-weight:700;text-decoration:none;cursor:pointer;white-space:nowrap;}
+.action-link:hover{text-decoration:underline;}
+.action-sep{color:var(--border);margin:0 4px;}
+
+/* FICHE CLIENT */
+.fiche-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.fiche-card{background:var(--white);border-radius:12px;border:1.5px solid var(--border);padding:18px 20px;}
+.fiche-card-title{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--light);margin-bottom:12px;}
+.fiche-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.fiche-row:last-child{border-bottom:none;}
+.fiche-key{color:var(--light);font-weight:500;}
+.fiche-val{font-weight:700;color:var(--dark);}
+.fiche-val.green{color:var(--green);}
+.fiche-val.red{color:var(--red);}
+.fiche-val.gold{color:var(--gold);}
+
+/* MONTANTS */
+.montant-positif{color:var(--green);font-weight:800;}
+.montant-negatif{color:var(--red);font-weight:800;}
+.montant-neutre{color:var(--dark);font-weight:700;}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--white);border-radius:14px;padding:26px 28px;width:460px;max-width:95vw;}
+.modal-title{font-size:15px;font-weight:900;margin-bottom:16px;}
+.modal-field{margin-bottom:14px;}
+.modal-field label{display:block;font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);margin-bottom:5px;}
+.modal-field select,.modal-field input,.modal-field textarea{width:100%;border:2px solid var(--border);border-radius:8px;padding:9px 12px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:var(--dark);outline:none;}
+.modal-field select:focus,.modal-field input:focus{border-color:var(--dark);}
+.modal-btns{display:flex;gap:10px;margin-top:16px;}
+
+/* LOADING */
+.loading{display:flex;align-items:center;gap:10px;padding:40px 20px;color:var(--light);font-size:12px;}
+.spinner{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* MTW */
+.mtw-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.mtw-stat{background:var(--white);border-radius:10px;border:1.5px solid var(--border);padding:16px 18px;}
+.mtw-stat-label{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--light);margin-bottom:6px;}
+.mtw-stat-val{font-size:22px;font-weight:900;color:var(--dark);}
+.mtw-stat-val.red{color:var(--red);}
+.mtw-stat-val.green{color:var(--green);}
+
+/* FINANCEMENT */
+.fin-stat{background:var(--white);border-radius:10px;border:1.5px solid var(--border);padding:16px 18px;}
+
+/* RESSOURCES */
+.ressources-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+.ressource-card{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:18px 16px;text-decoration:none;color:inherit;transition:all .2s;display:flex;flex-direction:column;}
+.ressource-card:hover{border-color:var(--dark);transform:translateY(-1px);}
+.ressource-card.featured{border-color:var(--red);border-top:3px solid var(--red);}
+.res-code{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--light);margin-bottom:6px;}
+.res-name{font-size:13px;font-weight:800;color:var(--dark);margin-bottom:4px;}
+.res-desc{font-size:10px;color:var(--light);line-height:1.5;flex:1;}
+.res-arrow{font-size:11px;font-weight:800;color:var(--red);margin-top:12px;}
+
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);transition:transform .3s;}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0;}
+  .alertes{grid-template-columns:1fr 1fr;}
+  .fiche-grid{grid-template-columns:1fr;}
+  .ressources-grid{grid-template-columns:1fr 1fr;}
 }
 </style>
 </head>
 <body>
-<div class="wrap">
 
-<div class="header">
-  <img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_M-coul.png" alt="Média Mauricie" style="height:48px;width:auto;">
-  <div class="header-right">
-    <div class="header-title">Portail interne</div>
-    <div class="header-sub">Média Mauricie Inc. · 2026</div>
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_M-coul.png" alt="MM">
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Principal</div>
+    <div class="nav-item active" onclick="showSection('dashboard')">
+      <span class="nav-item-icon">◻</span>
+      <span class="nav-item-label">Dashboard</span>
+      <span class="nav-badge" id="badge-alertes" style="display:none;">0</span>
+    </div>
+    <div class="nav-item" onclick="showSection('leads')">
+      <span class="nav-item-icon">◎</span>
+      <span class="nav-item-label">Leads</span>
+      <span class="nav-badge" id="badge-leads" style="display:none;">0</span>
+    </div>
+    <div class="nav-item" onclick="showSection('projets')">
+      <span class="nav-item-icon">▣</span>
+      <span class="nav-item-label">Projets</span>
+    </div>
+    <div class="nav-item" onclick="showSection('clients')">
+      <span class="nav-item-icon">◈</span>
+      <span class="nav-item-label">Clients</span>
+    </div>
+    <div class="nav-section">Projets spéciaux</div>
+    <div class="nav-item" onclick="showSection('mtw')">
+      <span class="nav-item-icon">▲</span>
+      <span class="nav-item-label">Mat the Warrior</span>
+    </div>
+    <div class="nav-item" onclick="showSection('financement')">
+      <span class="nav-item-icon">◆</span>
+      <span class="nav-item-label">Financement</span>
+    </div>
+    <div class="nav-section">Outils</div>
+    <div class="nav-item" onclick="showSection('ressources')">
+      <span class="nav-item-icon">◱</span>
+      <span class="nav-item-label">Ressources</span>
+    </div>
+    <div class="nav-item" onclick="showSection('archives')">
+      <span class="nav-item-icon">◫</span>
+      <span class="nav-item-label">Archives</span>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-text">Média Mauricie Inc.<br>Hub interne · v5.8</div>
   </div>
 </div>
 
-<div class="hero">
-  <div class="hero-eyebrow">Documents &amp; contrats</div>
-  <div class="hero-title">Ressources<br>de l'équipe.</div>
-  <div class="hero-sub">Accès rapide à tous les contrats, offres et outils de qualification client. Usage interne uniquement.</div>
-</div>
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-title">Dashboard</div>
+    <div class="topbar-right">
+      <span><span class="topbar-status" id="conn-status"></span><span id="conn-label" style="font-size:11px;color:var(--light);">Connexion...</span></span>
+      <button class="btn btn-ghost" onclick="chargerTout()">Actualiser</button>
+      <button class="btn btn-red" onclick="ouvrirModal('modal-nouveau-lead')">+ Nouveau lead</button>
+    </div>
+  </div>
 
-<div class="section-label">Contrats interactifs</div>
-<div class="cards">
-  <a href="contrats/MM-PHO.html" class="card">
-    <div class="card-icon">📷</div>
-    <div class="card-code">MM-PHO</div>
-    <div class="card-name">Séance photo unique</div>
-    <div class="card-desc">Portraits, équipe, événement, extérieur · 1h à 12h · drone inclus</div>
-    <div class="card-arrow">Ouvrir le contrat →</div>
-  </a>
-  <a href="contrats/MM-EVT.html" class="card featured">
-    <div class="card-icon">🎬</div>
-    <div class="card-code">MM-EVT</div>
-    <div class="card-name">Couverture événementielle</div>
-    <div class="card-desc">Photo + vidéo + montages · packages 2h à 12h · clé en main ou à la carte</div>
-    <div class="card-arrow">Ouvrir le contrat →</div>
-  </a>
-  <a href="contrats/MM-VID.html" class="card">
-    <div class="card-icon">🎞️</div>
-    <div class="card-code">MM-VID</div>
-    <div class="card-name">Production vidéo</div>
-    <div class="card-desc">Corporatif, voxpop, reel, documentaire · tournages multiples · post-production</div>
-    <div class="card-arrow">Ouvrir le contrat →</div>
-  </a>
-  <a href="contrats/MM-BIMG.html" class="card">
-    <div class="card-icon">📸</div>
-    <div class="card-code">MM-BIMG</div>
-    <div class="card-name">Banque d'images mensuelle</div>
-    <div class="card-desc">Shooting mensuel · photos HD · drone · Pixpa · abonnement 3–12 mois</div>
-    <div class="card-arrow">Ouvrir le contrat →</div>
-  </a>
-  <a href="contrats/MM-FCM.html" class="card">
-    <div class="card-icon">🎥</div>
-    <div class="card-code">MM-FCM</div>
-    <div class="card-name">Forfait contenu mensuel</div>
-    <div class="card-desc">Photos + reels + drone · 2h ou 4h terrain · abonnement 3–12 mois</div>
-    <div class="card-arrow">Ouvrir le contrat →</div>
-  </a>
-  <a href="contrats/MM-BH.html" class="card">
-    <div class="card-icon">💻</div>
-    <div class="card-code">MM-BH</div>
-    <div class="card-name">Banque d'heures montage</div>
-    <div class="card-desc">15h · 25h · 50h · valide 12 mois · tous types de montages · registre de suivi</div>
-    <div class="card-arrow">Ouvrir le contrat →</div>
-  </a>
-</div>
+  <div class="content">
 
-<div class="section-label">Qualification client</div>
-<div class="cards">
-  <a href="questionnaire.html" class="card questionnaire-card card-wide">
-    <div class="card-icon">📋</div>
-    <div class="card-code">Formulaire web</div>
-    <div class="card-name">Questionnaire de qualification</div>
-    <div class="card-desc">Envoyez ce lien au client après le premier contact · Les réponses arrivent directement dans le système · Personnalisable avec ?lead=LEAD-XXX</div>
-    <div class="card-arrow">Ouvrir le questionnaire →</div>
-  </a>
-  <a href="contrats/MM-VID-POST.html" class="card">
-    <div class="card-icon">🎨</div>
-    <div class="card-code">Offre supplémentaire</div>
-    <div class="card-name">Fichiers bruts &amp; colorisation</div>
-    <div class="card-desc">Tarifs remise de fichiers bruts selon durée de tournage · banques d'heures colorisation</div>
-    <div class="card-arrow">Voir l'offre →</div>
-  </a>
-</div>
+    <!-- DASHBOARD -->
+    <div class="section active" id="section-dashboard">
+      <div class="alertes" id="alertes-container">
+        <div class="alerte-card red"><div class="alerte-num" id="al-leads">—</div><div class="alerte-label">Leads actifs</div></div>
+        <div class="alerte-card gold"><div class="alerte-num" id="al-soumissions">—</div><div class="alerte-label">Soumissions en attente</div></div>
+        <div class="alerte-card blue"><div class="alerte-num" id="al-projets">—</div><div class="alerte-label">Projets en cours</div></div>
+        <div class="alerte-card green"><div class="alerte-num" id="al-solde">—</div><div class="alerte-label">Solde à percevoir</div></div>
+      </div>
 
-<div class="section-label">Propositions clients</div>
-<div class="cards">
-  <a href="https://mediamauricie.github.io/ville-de-louiseville/" target="_blank" class="card">
-    <div class="card-icon">🏙️</div>
-    <div class="card-code">Proposition active</div>
-    <div class="card-name">Ville de Louiseville</div>
-    <div class="card-desc">Couverture événements commandités · partenariat 2026</div>
-    <div class="card-arrow">Voir la proposition →</div>
-  </a>
-  <a href="https://mediamauricie.github.io/country-pop/" target="_blank" class="card">
-    <div class="card-icon">🎵</div>
-    <div class="card-code">Proposition active</div>
-    <div class="card-name">Country Pop 103.1</div>
-    <div class="card-desc">Offre de contenu · partenariat média régional</div>
-    <div class="card-arrow">Voir la proposition →</div>
-  </a>
-  <a href="https://mediamauricie.github.io/master-cowork/" class="card" style="border-style:dashed;background:#fafafa;">
-    <div class="card-icon">➕</div>
-    <div class="card-code">À venir</div>
-    <div class="card-name">Nouvelle proposition</div>
-    <div class="card-desc">Microbrasserie Broadway · QDCM Metal Fest · et autres mandats</div>
-    <div class="card-arrow" style="color:#aaa;">Bientôt disponible</div>
-  </a>
-</div>
+      <div class="table-wrap">
+        <div class="table-head">
+          <span class="table-title">Leads actifs</span>
+          <button class="btn btn-ghost" onclick="showSection('leads')">Voir tous →</button>
+        </div>
+        <div id="dash-leads-container"><div class="loading"><div class="spinner"></div>Chargement...</div></div>
+      </div>
 
-<div class="footer">
-  <img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_coul.png" alt="Média Mauricie" style="height:32px;width:auto;">
-  <div class="footer-legal">
-    <strong>Média Mauricie Inc.</strong> · Usage interne · 2026<br>
-    info@mediamauricie.com · (819) 852-0851
+      <div class="table-wrap">
+        <div class="table-head">
+          <span class="table-title">Projets en cours</span>
+          <button class="btn btn-ghost" onclick="showSection('projets')">Voir tous →</button>
+        </div>
+        <div id="dash-projets-container"><div class="loading"><div class="spinner"></div>Chargement...</div></div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-head"><span class="table-title">Mat the Warrior — Résumé</span></div>
+        <div id="dash-mtw-container"><div class="loading"><div class="spinner"></div>Chargement...</div></div>
+      </div>
+    </div>
+
+    <!-- LEADS -->
+    <div class="section" id="section-leads">
+      <div class="table-wrap">
+        <div class="table-head">
+          <span class="table-title">Tous les leads</span>
+          <button class="btn btn-red" onclick="ouvrirModal('modal-nouveau-lead')">+ Nouveau lead</button>
+        </div>
+        <div id="leads-container"><div class="loading"><div class="spinner"></div>Chargement...</div></div>
+      </div>
+    </div>
+
+    <!-- PROJETS -->
+    <div class="section" id="section-projets">
+      <div class="table-wrap">
+        <div class="table-head"><span class="table-title">Projets actifs</span></div>
+        <div id="projets-container"><div class="loading"><div class="spinner"></div>Chargement...</div></div>
+      </div>
+    </div>
+
+    <!-- CLIENTS -->
+    <div class="section" id="section-clients">
+      <div class="table-wrap">
+        <div class="table-head"><span class="table-title">Clients</span></div>
+        <div id="clients-container"><div class="loading"><div class="spinner"></div>Chargement...</div></div>
+      </div>
+    </div>
+
+    <!-- MTW -->
+    <div class="section" id="section-mtw">
+      <div class="mtw-stats">
+        <div class="mtw-stat"><div class="mtw-stat-label">Total investi</div><div class="mtw-stat-val red" id="mtw-investi">—</div></div>
+        <div class="mtw-stat"><div class="mtw-stat-label">Revenus générés</div><div class="mtw-stat-val green" id="mtw-revenus">—</div></div>
+        <div class="mtw-stat"><div class="mtw-stat-label">Split net MM (60%)</div><div class="mtw-stat-val" id="mtw-split">—</div></div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-head"><span class="table-title">Tournages MTW</span></div>
+        <div id="mtw-container"><div class="loading"><div class="spinner"></div>Chargement...</div></div>
+      </div>
+    </div>
+
+    <!-- FINANCEMENT -->
+    <div class="section" id="section-financement">
+      <div class="table-wrap">
+        <div class="table-head">
+          <span class="table-title">Financement en cours</span>
+          <button class="btn btn-dark" onclick="ouvrirModal('modal-financement')">+ Ajouter</button>
+        </div>
+        <div id="financement-container"><div class="loading"><div class="spinner"></div>Chargement...</div></div>
+      </div>
+    </div>
+
+    <!-- RESSOURCES -->
+    <div class="section" id="section-ressources">
+      <div class="table-title" style="margin-bottom:16px;">Contrats</div>
+      <div class="ressources-grid">
+        <a href="https://mediamauricie.github.io/master-cowork/contrats/MM-EVT.html" target="_blank" class="ressource-card featured">
+          <div class="res-code">MM-EVT</div>
+          <div class="res-name">Couverture événementielle</div>
+          <div class="res-desc">Photo + vidéo + montages · packages 2h à 12h</div>
+          <div class="res-arrow">Ouvrir →</div>
+        </a>
+        <a href="https://mediamauricie.github.io/master-cowork/contrats/MM-FCM.html" target="_blank" class="ressource-card">
+          <div class="res-code">MM-FCM</div>
+          <div class="res-name">Forfait contenu mensuel</div>
+          <div class="res-desc">Photos + reels + drone · abonnement 3–12 mois</div>
+          <div class="res-arrow">Ouvrir →</div>
+        </a>
+        <a href="https://mediamauricie.github.io/master-cowork/contrats/MM-VID.html" target="_blank" class="ressource-card">
+          <div class="res-code">MM-VID</div>
+          <div class="res-name">Production vidéo</div>
+          <div class="res-desc">Corporatif · voxpop · reel · documentaire</div>
+          <div class="res-arrow">Ouvrir →</div>
+        </a>
+        <a href="https://mediamauricie.github.io/master-cowork/contrats/MM-BIMG.html" target="_blank" class="ressource-card">
+          <div class="res-code">MM-BIMG</div>
+          <div class="res-name">Banque d'images mensuelle</div>
+          <div class="res-desc">Shooting mensuel · photos HD · drone</div>
+          <div class="res-arrow">Ouvrir →</div>
+        </a>
+        <a href="https://mediamauricie.github.io/master-cowork/contrats/MM-PHO.html" target="_blank" class="ressource-card">
+          <div class="res-code">MM-PHO</div>
+          <div class="res-name">Séance photo</div>
+          <div class="res-desc">Portraits · équipe · événement · 1h à 12h</div>
+          <div class="res-arrow">Ouvrir →</div>
+        </a>
+        <a href="https://mediamauricie.github.io/master-cowork/contrats/MM-BH.html" target="_blank" class="ressource-card">
+          <div class="res-code">MM-BH</div>
+          <div class="res-name">Banque d'heures montage</div>
+          <div class="res-desc">15h · 25h · 50h · valide 12 mois</div>
+          <div class="res-arrow">Ouvrir →</div>
+        </a>
+      </div>
+      <div class="table-title" style="margin-bottom:16px;">Outils</div>
+      <div class="ressources-grid">
+        <a href="https://mediamauricie.github.io/master-cowork/questionnaire.html" target="_blank" class="ressource-card">
+          <div class="res-code">Qualification</div>
+          <div class="res-name">Questionnaire client</div>
+          <div class="res-desc">Envoyer au client · pré-rempli avec ?lead=LEAD-XXX</div>
+          <div class="res-arrow">Ouvrir →</div>
+        </a>
+        <a href="https://mediamauricie.github.io/master-cowork/soumission.html" target="_blank" class="ressource-card">
+          <div class="res-code">Soumission</div>
+          <div class="res-name">Préparer une soumission</div>
+          <div class="res-desc">Pré-rempli depuis le lead · PDF · sauvegarde Drive</div>
+          <div class="res-arrow">Ouvrir →</div>
+        </a>
+        <a href="https://mediamauricie.github.io/master-cowork/offres/MM-BH.html" target="_blank" class="ressource-card">
+          <div class="res-code">Offre</div>
+          <div class="res-name">Banque d'heures</div>
+          <div class="res-desc">Page offre publique · partager avec client</div>
+          <div class="res-arrow">Ouvrir →</div>
+        </a>
+      </div>
+      <div class="table-title" style="margin-bottom:16px;">Propositions actives</div>
+      <div class="ressources-grid" id="propositions-container">
+        <a href="https://mediamauricie.github.io/ville-de-louiseville/" target="_blank" class="ressource-card">
+          <div class="res-code">Proposition active</div>
+          <div class="res-name">Ville de Louiseville</div>
+          <div class="res-desc">Couverture événements commandités · partenariat 2026</div>
+          <div class="res-arrow">Voir →</div>
+        </a>
+        <a href="https://mediamauricie.github.io/country-pop/" target="_blank" class="ressource-card">
+          <div class="res-code">Proposition active</div>
+          <div class="res-name">Country Pop 103.1</div>
+          <div class="res-desc">Offre de contenu · partenariat média régional</div>
+          <div class="res-arrow">Voir →</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ARCHIVES -->
+    <div class="section" id="section-archives">
+      <div class="table-wrap">
+        <div class="table-head"><span class="table-title">Projets archivés</span></div>
+        <div id="archives-container"><div class="loading"><div class="spinner"></div>Chargement...</div></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
+<!-- MODAL STATUT -->
+<div class="modal-bg" id="modal-statut">
+  <div class="modal">
+    <div class="modal-title" id="modal-statut-title">Changer le statut</div>
+    <div class="modal-field">
+      <label>Nouveau statut</label>
+      <select id="statut-select"></select>
+    </div>
+    <div class="modal-field">
+      <label>Responsable</label>
+      <select id="agent-select">
+        <option value="Victoria">Victoria</option>
+        <option value="Jim">Jim</option>
+        <option value="Jeremie">Jérémie</option>
+        <option value="Pigiste 1">Pigiste 1</option>
+        <option value="Pigiste 2">Pigiste 2</option>
+      </select>
+    </div>
+    <div class="modal-field" id="raison-field" style="display:none;">
+      <label>Raison</label>
+      <select id="raison-select">
+        <option>Trop cher</option>
+        <option>Budget insuffisant</option>
+        <option>Concurrent choisi</option>
+        <option>Pas de suite du client</option>
+        <option>Hors mandat</option>
+        <option>Délai incompatible</option>
+        <option>Autre</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>Note (optionnel)</label>
+      <input type="text" id="note-input" placeholder="Note pour le journal...">
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-dark" style="flex:1;" onclick="confirmerStatut()">Confirmer</button>
+      <button class="btn btn-ghost" onclick="fermerModal('modal-statut')">Annuler</button>
+    </div>
+  </div>
 </div>
+
+<!-- MODAL NOUVEAU LEAD -->
+<div class="modal-bg" id="modal-nouveau-lead">
+  <div class="modal">
+    <div class="modal-title">Nouveau lead manuel</div>
+    <div class="modal-field"><label>Prénom</label><input type="text" id="nl-prenom" placeholder="Marie"></div>
+    <div class="modal-field"><label>Nom</label><input type="text" id="nl-nom" placeholder="Tremblay"></div>
+    <div class="modal-field"><label>Organisation</label><input type="text" id="nl-org" placeholder="Nom de l'organisation"></div>
+    <div class="modal-field"><label>Courriel</label><input type="email" id="nl-email" placeholder="marie@exemple.com"></div>
+    <div class="modal-field"><label>Téléphone</label><input type="tel" id="nl-tel" placeholder="819-000-0000"></div>
+    <div class="modal-field">
+      <label>Service</label>
+      <select id="nl-service">
+        <option value="MM-EVT">MM-EVT — Couverture événementielle</option>
+        <option value="MM-FCM">MM-FCM — Forfait contenu mensuel</option>
+        <option value="MM-VID">MM-VID — Production vidéo</option>
+        <option value="MM-BIMG">MM-BIMG — Banque images mensuelle</option>
+        <option value="MM-PHO">MM-PHO — Séance photo</option>
+        <option value="MM-BH">MM-BH — Banque heures montage</option>
+        <option value="MM-DOC">MM-DOC — Documentaire</option>
+      </select>
+    </div>
+    <div class="modal-field"><label>Source</label>
+      <select id="nl-source">
+        <option>Appel téléphonique</option>
+        <option>Référence</option>
+        <option>Formulaire site web</option>
+        <option>Réseaux sociaux</option>
+        <option>Événement</option>
+        <option>Autre</option>
+      </select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-red" style="flex:1;" onclick="creerLeadManuel()">Créer le lead</button>
+      <button class="btn btn-ghost" onclick="fermerModal('modal-nouveau-lead')">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FINANCEMENT -->
+<div class="modal-bg" id="modal-financement">
+  <div class="modal">
+    <div class="modal-title">Nouveau financement</div>
+    <div class="modal-field"><label>Nom du programme</label><input type="text" id="fin-nom" placeholder="Ex: Fonds Mille et UN"></div>
+    <div class="modal-field"><label>Organisme</label><input type="text" id="fin-org" placeholder="Ex: La Ruche Mauricie"></div>
+    <div class="modal-field"><label>Type</label>
+      <select id="fin-type">
+        <option>Subvention</option>
+        <option>Partenariat</option>
+        <option>Commandite</option>
+        <option>Fondation</option>
+        <option>Autre</option>
+      </select>
+    </div>
+    <div class="modal-field"><label>Projet lié</label><input type="text" id="fin-projet" placeholder="Ex: MTW, MM-2026-284..."></div>
+    <div class="modal-field"><label>Montant demandé ($)</label><input type="number" id="fin-montant" placeholder="0"></div>
+    <div class="modal-field"><label>Responsable dossier</label>
+      <select id="fin-resp">
+        <option>Caroline Lessard</option>
+        <option>Victoria</option>
+        <option>Jim</option>
+        <option>Jérémie</option>
+      </select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-dark" style="flex:1;" onclick="fermerModal('modal-financement')">Sauver</button>
+      <button class="btn btn-ghost" onclick="fermerModal('modal-financement')">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ──
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwr9JYa1qRgUzto67ar24GqXTF3aZhXR1S4-VpMKxFhH3SnjkUymZ-8fJIxNelLQg/exec';
+const TOKEN      = 'MauricieMau20@!';
+const BASE       = 'https://mediamauricie.github.io/master-cowork/';
+
+const STATUTS_MM = [
+  'Nouveau lead','Pris en charge','Questionnaire envoyé','Questionnaire reçu',
+  'Soumission en préparation','Soumission envoyée','Contrat à préparer',
+  'Contrat envoyé','Contrat signé — acompte requis','Acompte reçu',
+  'En tournage','En post-production','En révision',
+  'Livré — attente solde','Livré — payé','Refusé','Annulé'
+];
+
+const STATUTS_ARCHIVE = ['Livré — payé','Refusé','Annulé'];
+
+var _cache = {};
+var _currentStatutId   = null;
+var _currentStatutType = null;
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded', function() {
+  chargerTout();
+});
+
+async function chargerTout() {
+  setConnexion('loading');
+  try {
+    await Promise.all([chargerLeads(), chargerProjets(), chargerClients()]);
+    setConnexion('ok');
+  } catch(e) {
+    setConnexion('error');
+    console.warn('Erreur chargement:', e);
+  }
+}
+
+function setConnexion(state) {
+  var dot   = document.getElementById('conn-status');
+  var label = document.getElementById('conn-label');
+  if (state === 'ok')      { dot.style.background = '#2d7a57'; label.textContent = 'Connecté'; }
+  else if (state === 'error') { dot.style.background = '#c0392b'; label.textContent = 'Erreur connexion'; }
+  else                     { dot.style.background = '#c07840'; label.textContent = 'Chargement...'; }
+}
+
+// ── NAVIGATION ──
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+  document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.remove('active'); });
+  document.getElementById('section-' + name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(function(n){
+    if (n.getAttribute('onclick') && n.getAttribute('onclick').indexOf(name) >= 0) n.classList.add('active');
+  });
+  var titles = {
+    dashboard:'Dashboard', leads:'Leads', projets:'Projets', clients:'Clients',
+    mtw:'Mat the Warrior', financement:'Financement', ressources:'Ressources', archives:'Archives'
+  };
+  document.getElementById('topbar-title').textContent = titles[name] || name;
+}
+
+// ── CHARGER LEADS ──
+async function chargerLeads() {
+  var data = await appsGet('getLeads');
+  _cache.leads = data.leads || [];
+  renderLeads(_cache.leads, false);
+  renderDashLeads(_cache.leads);
+  var actifs = _cache.leads.filter(function(l){ return STATUTS_ARCHIVE.indexOf(l.statut) < 0; }).length;
+  setBadge('badge-leads', actifs);
+  document.getElementById('al-leads').textContent = actifs;
+}
+
+function renderLeads(leads, archivesOnly) {
+  var container = document.getElementById('leads-container');
+  var actifs = leads.filter(function(l){
+    return archivesOnly ? STATUTS_ARCHIVE.indexOf(l.statut) >= 0 : STATUTS_ARCHIVE.indexOf(l.statut) < 0;
+  });
+  if (!actifs.length) { container.innerHTML = '<div class="table-empty">Aucun lead actif</div>'; return; }
+  var html = '<table class="table"><thead><tr>';
+  html += '<th>Lead</th><th>Client</th><th>Service</th><th>Statut</th><th>Responsable</th><th>Actions</th>';
+  html += '</tr></thead><tbody>';
+  actifs.forEach(function(l) {
+    var questUrl = BASE + 'questionnaire.html?lead=' + l.id + '&service=' + (l.serviceCode||'');
+    var soumUrl  = BASE + 'soumission.html?lead=' + l.id;
+    html += '<tr>';
+    html += '<td style="font-size:10px;color:var(--light);font-weight:700;">' + l.id + '</td>';
+    html += '<td><strong style="font-size:13px;">' + esc(l.client) + '</strong><br><span style="font-size:10px;color:var(--light);">' + esc(l.email||'') + '</span></td>';
+    html += '<td style="font-size:11px;">' + esc(l.service||'') + '</td>';
+    html += '<td>' + badgeStatut(l.statut) + '</td>';
+    html += '<td style="font-size:11px;color:var(--mid);">' + esc(l.agent||'—') + '</td>';
+    html += '<td style="white-space:nowrap;">';
+    html += '<span class="action-link" onclick="ouvrirModalStatut(\'' + l.id + '\',\'lead\',\'' + esc(l.statut) + '\')">Statut</span>';
+    html += '<span class="action-sep">|</span>';
+    html += '<a class="action-link" href="' + questUrl + '" target="_blank">Questionnaire</a>';
+    html += '<span class="action-sep">|</span>';
+    html += '<a class="action-link" href="' + soumUrl + '" target="_blank">Soumission</a>';
+    if (l.driveUrl) { html += '<span class="action-sep">|</span><a class="action-link" href="' + l.driveUrl + '" target="_blank" style="color:var(--blue);">Drive</a>'; }
+    html += '</td></tr>';
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+function renderDashLeads(leads) {
+  var container = document.getElementById('dash-leads-container');
+  var actifs = leads.filter(function(l){ return STATUTS_ARCHIVE.indexOf(l.statut) < 0; }).slice(0,5);
+  if (!actifs.length) { container.innerHTML = '<div class="table-empty">Aucun lead actif</div>'; return; }
+  var html = '<table class="table"><thead><tr><th>Client</th><th>Service</th><th>Statut</th><th>Actions</th></tr></thead><tbody>';
+  actifs.forEach(function(l) {
+    var soumUrl = BASE + 'soumission.html?lead=' + l.id;
+    html += '<tr>';
+    html += '<td><strong>' + esc(l.client) + '</strong><br><span style="font-size:10px;color:var(--light);">' + l.id + '</span></td>';
+    html += '<td style="font-size:11px;">' + esc(l.service||'') + '</td>';
+    html += '<td>' + badgeStatut(l.statut) + '</td>';
+    html += '<td><span class="action-link" onclick="ouvrirModalStatut(\'' + l.id + '\',\'lead\',\'' + esc(l.statut) + '\')">Statut</span>';
+    html += '<span class="action-sep">|</span><a class="action-link" href="' + soumUrl + '" target="_blank">Soumission</a></td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+// ── CHARGER PROJETS ──
+async function chargerProjets() {
+  var data = await appsGet('getProjets');
+  _cache.projets = data.projets || [];
+  renderProjets(_cache.projets, false);
+  renderDashProjets(_cache.projets);
+  renderArchives();
+
+  var actifs   = _cache.projets.filter(function(p){ return STATUTS_ARCHIVE.indexOf(p.statut) < 0; });
+  var soldeTotal = actifs.reduce(function(s,p){ return s + (parseFloat(p.solde)||0); }, 0);
+  document.getElementById('al-projets').textContent   = actifs.length;
+  document.getElementById('al-solde').textContent     = fmt$(soldeTotal);
+
+  var soumAttente = _cache.projets.filter(function(p){ return p.reponseClient === 'En attente' && p.soumissionDate; }).length;
+  document.getElementById('al-soumissions').textContent = soumAttente;
+}
+
+function renderProjets(projets, archivesOnly) {
+  var container = document.getElementById('projets-container');
+  var liste = projets.filter(function(p){
+    return archivesOnly ? STATUTS_ARCHIVE.indexOf(p.statut) >= 0 : STATUTS_ARCHIVE.indexOf(p.statut) < 0;
+  });
+  if (!liste.length) { container.innerHTML = '<div class="table-empty">Aucun projet actif</div>'; return; }
+  var html = '<table class="table"><thead><tr><th>Projet</th><th>Client</th><th>Montant HT</th><th>Solde</th><th>Statut</th><th>Actions</th></tr></thead><tbody>';
+  liste.forEach(function(p) {
+    var isMTW = p.isMTW;
+    html += '<tr>';
+    html += '<td><strong style="font-size:12px;">' + esc(p.id) + '</strong>' + (isMTW ? ' <span class="badge badge-mtw">MTW</span>' : '') + '<br><span style="font-size:10px;color:var(--light);">' + esc(p.description||'') + '</span></td>';
+    html += '<td style="font-size:12px;">' + esc(p.client) + '<br><span style="font-size:10px;color:var(--light);">' + esc(p.cliId||'') + '</span></td>';
+    html += '<td class="montant-neutre">' + fmt$(p.montantHT) + '</td>';
+    html += '<td class="' + (parseFloat(p.solde)>0?'montant-negatif':'montant-positif') + '">' + fmt$(p.solde) + '</td>';
+    html += '<td>' + badgeStatut(p.statut) + '</td>';
+    html += '<td style="white-space:nowrap;">';
+    html += '<span class="action-link" onclick="ouvrirModalStatut(\'' + p.id + '\',\'projet\',\'' + esc(p.statut) + '\')">Statut</span>';
+    if (p.driveUrl) html += '<span class="action-sep">|</span><a class="action-link" href="' + p.driveUrl + '" target="_blank" style="color:var(--blue);">Drive</a>';
+    html += '<span class="action-sep">|</span><span class="action-link" style="color:var(--light);" onclick="archiverProjet(\'' + p.id + '\')">Archiver</span>';
+    html += '</td></tr>';
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+function renderDashProjets(projets) {
+  var container = document.getElementById('dash-projets-container');
+  var actifs = projets.filter(function(p){ return STATUTS_ARCHIVE.indexOf(p.statut) < 0; }).slice(0,5);
+  if (!actifs.length) { container.innerHTML = '<div class="table-empty">Aucun projet en cours</div>'; return; }
+  var html = '<table class="table"><thead><tr><th>Projet</th><th>Client</th><th>Solde</th><th>Statut</th><th>Actions</th></tr></thead><tbody>';
+  actifs.forEach(function(p) {
+    html += '<tr>';
+    html += '<td><strong>' + esc(p.id) + '</strong>' + (p.isMTW ? ' <span class="badge badge-mtw">MTW</span>' : '') + '</td>';
+    html += '<td style="font-size:12px;">' + esc(p.client) + '</td>';
+    html += '<td class="' + (parseFloat(p.solde)>0?'montant-negatif':'montant-positif') + '">' + fmt$(p.solde) + '</td>';
+    html += '<td>' + badgeStatut(p.statut) + '</td>';
+    html += '<td><span class="action-link" onclick="ouvrirModalStatut(\'' + p.id + '\',\'projet\',\'' + esc(p.statut) + '\')">Statut</span></td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+function renderArchives() {
+  var container = document.getElementById('archives-container');
+  if (!_cache.projets) { container.innerHTML = '<div class="table-empty">Chargement...</div>'; return; }
+  var archives = _cache.projets.filter(function(p){ return STATUTS_ARCHIVE.indexOf(p.statut) >= 0; });
+  if (!archives.length) { container.innerHTML = '<div class="table-empty">Aucun projet archivé</div>'; return; }
+  var html = '<table class="table"><thead><tr><th>Projet</th><th>Client</th><th>Montant HT</th><th>Statut</th></tr></thead><tbody>';
+  archives.forEach(function(p) {
+    html += '<tr><td style="color:var(--light);">' + esc(p.id) + '</td>';
+    html += '<td style="font-size:12px;color:var(--light);">' + esc(p.client) + '</td>';
+    html += '<td style="color:var(--light);">' + fmt$(p.montantHT) + '</td>';
+    html += '<td>' + badgeStatut(p.statut) + '</td></tr>';
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+// ── CHARGER CLIENTS ──
+async function chargerClients() {
+  var data = await appsGet('getClients');
+  _cache.clients = data.clients || [];
+  renderClients(_cache.clients);
+}
+
+function renderClients(clients) {
+  var container = document.getElementById('clients-container');
+  if (!clients.length) { container.innerHTML = '<div class="table-empty">Aucun client</div>'; return; }
+  var html = '<table class="table"><thead><tr><th>ID</th><th>Client</th><th>Courriel</th><th>Statut</th><th>Drive</th></tr></thead><tbody>';
+  clients.forEach(function(c) {
+    html += '<tr>';
+    html += '<td style="font-size:10px;font-weight:700;color:var(--light);">' + esc(c.id) + '</td>';
+    html += '<td><strong>' + esc(c.nom) + '</strong><br><span style="font-size:10px;color:var(--light);">' + esc(c.org||'') + '</span></td>';
+    html += '<td style="font-size:11px;"><a href="mailto:' + esc(c.email||'') + '" style="color:var(--blue);">' + esc(c.email||'—') + '</a></td>';
+    html += '<td>' + badgeStatut(c.statut||'Actif') + '</td>';
+    html += '<td>' + (c.driveUrl ? '<a class="action-link" href="' + c.driveUrl + '" target="_blank" style="color:var(--blue);">Dossier →</a>' : '—') + '</td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+// ── MODAL STATUT ──
+function ouvrirModalStatut(id, type, statutActuel) {
+  _currentStatutId   = id;
+  _currentStatutType = type;
+  document.getElementById('modal-statut-title').textContent = 'Changer le statut — ' + id;
+  var sel = document.getElementById('statut-select');
+  sel.innerHTML = '';
+  STATUTS_MM.forEach(function(s) {
+    var o = document.createElement('option');
+    o.value = s; o.textContent = s;
+    if (s === statutActuel) o.selected = true;
+    sel.appendChild(o);
+  });
+  sel.onchange = function() {
+    var v = sel.value;
+    document.getElementById('raison-field').style.display = (v==='Refusé'||v==='Annulé') ? 'block' : 'none';
+  };
+  document.getElementById('raison-field').style.display = 'none';
+  document.getElementById('note-input').value = '';
+  ouvrirModal('modal-statut');
+}
+
+async function confirmerStatut() {
+  var statut = document.getElementById('statut-select').value;
+  var agent  = document.getElementById('agent-select').value;
+  var raison = document.getElementById('raison-select').value;
+  var note   = document.getElementById('note-input').value;
+
+  var action = _currentStatutType === 'lead' ? 'changerStatutLead' : 'changerStatutProjet';
+  var payload = { agent:agent, statut:statut, note:note };
+  if (_currentStatutType === 'lead')   payload.leadId  = _currentStatutId;
+  else                                  payload.projId  = _currentStatutId;
+  if (statut==='Refusé'||statut==='Annulé') payload.raison = raison;
+
+  fermerModal('modal-statut');
+  await appsPost(action, payload);
+  await chargerTout();
+}
+
+// ── ARCHIVER ──
+async function archiverProjet(projId) {
+  if (!confirm('Archiver ' + projId + '?')) return;
+  await appsPost('changerStatutProjet', { projId:projId, statut:'Annulé', agent:'Victoria', note:'Archivé manuellement' });
+  await chargerProjets();
+}
+
+// ── CRÉER LEAD MANUEL ──
+async function creerLeadManuel() {
+  var data = {
+    prenom:  document.getElementById('nl-prenom').value.trim(),
+    nom:     document.getElementById('nl-nom').value.trim(),
+    org:     document.getElementById('nl-org').value.trim(),
+    email:   document.getElementById('nl-email').value.trim(),
+    tel:     document.getElementById('nl-tel').value.trim(),
+    service: document.getElementById('nl-service').value,
+    source:  document.getElementById('nl-source').value
+  };
+  if (!data.email && !data.org) { alert('Courriel ou organisation requis.'); return; }
+  fermerModal('modal-nouveau-lead');
+  await appsPost('creerLeadManuel', data);
+  await chargerLeads();
+}
+
+// ── HELPERS ──
+async function appsGet(action) {
+  try {
+    var url = SCRIPT_URL + '?action=' + action + '&token=' + encodeURIComponent(TOKEN);
+    var r   = await fetch(url);
+    var j   = await r.json();
+    return j.data || j;
+  } catch(e) { console.warn(action, e); return {}; }
+}
+
+async function appsPost(action, data) {
+  data.action = action; data.token = TOKEN;
+  try {
+    await fetch(SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) });
+  } catch(e) { console.warn(action, e); }
+}
+
+function badgeStatut(s) {
+  var map = {
+    'Nouveau lead':'badge-nouveau','Pris en charge':'badge-pris',
+    'Questionnaire envoyé':'badge-questionnaire','Questionnaire reçu':'badge-questionnaire',
+    'Soumission en préparation':'badge-soumission','Soumission envoyée':'badge-soumission',
+    'Contrat à préparer':'badge-contrat','Contrat envoyé':'badge-contrat',
+    'Contrat signé — acompte requis':'badge-contrat','Acompte reçu':'badge-production',
+    'En tournage':'badge-production','En post-production':'badge-production',
+    'En révision':'badge-revision','Livré — attente solde':'badge-revision',
+    'Livré — payé':'badge-paye','Refusé':'badge-refuse','Annulé':'badge-refuse',
+    'Actif':'badge-contrat','Prospect':'badge-nouveau','Inactif':'badge-refuse'
+  };
+  var cls = map[s] || 'badge-nouveau';
+  return '<span class="badge ' + cls + '">' + esc(s||'—') + '</span>';
+}
+
+function fmt$(n) {
+  if (!n && n !== 0) return '—';
+  return parseFloat(n).toLocaleString('fr-CA',{minimumFractionDigits:0,maximumFractionDigits:0}) + ' $';
+}
+
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function setBadge(id, n) { var el=document.getElementById(id); if(el){ el.style.display=n>0?'inline':'none'; el.textContent=n; } }
+function ouvrirModal(id) { document.getElementById(id).classList.add('open'); }
+function fermerModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-bg').forEach(function(m){
+  m.addEventListener('click',function(e){ if(e.target===m) m.classList.remove('open'); });
+});
+</script>
 </body>
 </html>
