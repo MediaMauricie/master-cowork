@@ -164,7 +164,7 @@ a.doc-link:hover{text-decoration:underline;}
   <div class="header-right">
     <div class="doc-type">Contrat de services</div>
     <div class="doc-title">Couverture événementielle</div>
-    <div class="doc-ref">No. contrat : <span>MM-EVT-<input type="text" id="no-contrat" style="border:none;border-bottom:2px solid #ccc;width:80px;font-size:13px;font-weight:700;color:#2d2d2d;padding:0 4px;outline:none;font-family:Montserrat,sans-serif;" placeholder="____"></span></div>
+    <div class="doc-ref">Code de projet : <span><input type="text" id="code-projet" style="border:none;border-bottom:2px solid #ccc;width:140px;font-size:13px;font-weight:700;color:#2d2d2d;padding:0 4px;outline:none;font-family:Montserrat,sans-serif;" placeholder="ex: MM-2026-042"></span></div>
   </div>
 </div>
 
@@ -440,7 +440,7 @@ a.doc-link:hover{text-decoration:underline;}
       <div style="margin-bottom:24px;padding-bottom:22px;border-bottom:2px solid #e8e8e8;">
         <div style="font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#c0392b;margin-bottom:10px;">Merci!</div>
         <div style="font-size:15px;font-weight:700;color:#2d2d2d;line-height:1.75;margin-bottom:8px;">Merci d'avoir complété ce contrat. Nous allons le réviser et vous faire parvenir une copie PDF à signer via <strong>Zoho Sign</strong>. La réservation de votre projet sera confirmée à la réception du premier versement.</div>
-        <div style="font-size:14px;font-weight:600;color:#555;">Questions? Écrivez-nous à <a href="mailto:info@mediamauricie.com" style="color:#c0392b;font-weight:800;text-decoration:none;">info@mediamauricie.com</a> — Au plaisir!</div>
+        <div style="font-size:14px;font-weight:600;color:#555;">Questions? Écrivez-nous à info@mediamauricie.com — Au plaisir!</div>
       </div>
 
       <!-- Champs soumission -->
@@ -463,7 +463,7 @@ a.doc-link:hover{text-decoration:underline;}
       <button class="btn-submit" id="btn-soumettre" onclick="soumettreContrat()">
         <span id="btn-text">⚡ Soumettre le contrat</span>
       </button>
-      <button class="btn-submit-secondary" onclick="imprimerContrat()">🖨️ Sauvegarder en PDF manuellement</button>
+      <button class="btn-submit-secondary" onclick="imprimerContrat()">🖨️ Sauvegarder en PDF pour signature Zoho</button>
 
       <!-- Confirmations -->
       <div class="submit-confirm" id="submit-confirm">
@@ -492,7 +492,7 @@ a.doc-link:hover{text-decoration:underline;}
 
 </div><!-- /contrat-wrap -->
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── SCRIPT URL APPS SCRIPT ──────────────────────────────
 // Remplace par ton URL Apps Script deployé
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNEsJISqbsHr3rASQEQDB9Ve2Snw241LaopIXV5GliCIPlWY30_CyrOuzWjyWwfw/exec';
@@ -578,7 +578,7 @@ async function soumettreContrat(){
     var donneesContrat = {
       action: 'soumettreContrat',
       type: 'MM-EVT',
-      noContrat: document.getElementById('no-contrat').value || 'MM-EVT-' + Date.now(),
+      noContrat: document.getElementById('code-projet')?.value || 'MM-EVT-' + Date.now(),
       client: {
         entreprise: document.getElementById('cli-entreprise').value,
         rep:        document.getElementById('cli-rep').value,
@@ -645,28 +645,4 @@ async function soumettreContrat(){
         document.getElementById('submit-confirm').style.display = 'block';
 
         // Télécharger le PDF localement aussi
-        html2pdf().set(opt).from(element).save();
-
-      } catch(e) {
-        btn.disabled = false;
-        txt.textContent = '⚡ Générer le PDF et soumettre';
-        afficherErreur('Erreur réseau — le PDF a quand même été téléchargé. Envoie-le manuellement à Victoria. (' + e.message + ')');
-        html2pdf().set(opt).from(element).save();
-      }
-    };
-
-  } catch(e) {
-    btn.disabled = false;
-    txt.textContent = '⚡ Générer le PDF et soumettre';
-    afficherErreur('Erreur lors de la génération du PDF : ' + e.message);
-  }
-}
-
-function afficherErreur(msg){
-  var el = document.getElementById('submit-error');
-  document.getElementById('submit-error-text').textContent = '⚠ ' + msg;
-  el.style.display = 'block';
-}
-</script>
-</body>
-</html>
+        html2pdf().set
