@@ -778,8 +778,7 @@ async function apiCall(action, extra){
   }
 }
 
-// Pour GET (lecture) — on utilise la même URL mais on doit passer par cors-proxy ou apps script GET
-// Apps Script accepte les POST avec token — on fait tout en POST
+// Pour GET (lecture) — query string via doGet()
 async function apiGet(action, extra) {
   try {
     var params = Object.assign({action: action, token: TOKEN}, extra || {});
