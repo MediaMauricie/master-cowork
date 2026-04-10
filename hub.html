@@ -783,7 +783,7 @@ async function apiGet(action, extra) {
   try {
     var params = Object.assign({action: action, token: TOKEN}, extra || {});
     var qs = Object.keys(params).map(function(k) {
-      return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+      return encodeURIComponent(k) + '=' + encodeURIComponent(JSON.stringify(params[k]));
     }).join('&');
     var url = SCRIPT_URL + '?' + qs;
     var r = await fetch(url, {
