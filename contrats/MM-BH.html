@@ -448,7 +448,8 @@ a.doc-link:hover{text-decoration:underline;}
 function fmt(n){return n.toLocaleString('fr-CA',{minimumFractionDigits:2,maximumFractionDigits:2})+' $';}
 function getSurplus(){
   var s=0;
-  document.querySelectorAll('.surplus-row input[type=number]').forEach(function(i){s+=parseFloat(i.value)||0;});
+  var inputs=document.querySelectorAll('.surplus-row input[type=number]');
+  for(var i=0;i<inputs.length;i++){s+=parseFloat(inputs[i].value)||0;}
   return s;
 }
 function ajouterSurplus(){
@@ -462,7 +463,8 @@ function retirerSurplus(btn){
   if(rows.length>1){btn.parentElement.remove();calcTotal();}
 }
 function selectForfait(card,name){
-  document.querySelectorAll('.forfait-card[data-group="'+name+'"]').forEach(function(c){c.classList.remove('selected');});
+  var cards=document.querySelectorAll('.forfait-card[data-group="'+name+'"]');
+  for(var i=0;i<cards.length;i++){cards[i].classList.remove('selected');}
   card.classList.add('selected');
 }
 
@@ -484,12 +486,14 @@ function calcTotal(){
   document.getElementById('row-tps').style.opacity=document.getElementById('tps-check').checked?'1':'0.3';
   document.getElementById('row-tvq').style.opacity=document.getElementById('tvq-check').checked?'1':'0.3';
 }
-function selectForfaitBH(card,heures,taux,prix){
-  document.querySelectorAll('.forfait-card[data-group="bh"]').forEach(function(c){c.classList.remove('selected');});
-  card.classList.add('selected');
+function selectForfaitBH(el,heures,taux,prix){
+  var cards=document.querySelectorAll('.forfait-card[data-group="bh"]');
+  for(var i=0;i<cards.length;i++){cards[i].classList.remove('selected');}
+  el.classList.add('selected');
   document.getElementById('bh-heures').value=heures;
   document.getElementById('bh-taux').value=taux;
-  document.getElementById('solde-initial').textContent=heures+' h';
+  var si=document.getElementById('solde-initial');
+  if(si)si.textContent=heures+' h';
   calcTotal();
 }
 function ajouterLigneRegistre(){
@@ -502,6 +506,30 @@ function ajouterLigneRegistre(){
     '<td style="padding:6px 8px;text-align:center;"><input type="number" min="0" step="0.5" placeholder="0" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>'+
     '<td style="padding:6px 8px;text-align:center;"><input type="text" placeholder="—" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>';
   tbody.appendChild(tr);
+}
+
+function soumettreContrat(){
+  var btn=document.getElementById('btn-soumettre');
+  var btnText=document.getElementById('btn-text');
+  btn.disabled=true;
+  btnText.textContent='Génération en cours...';
+  try{
+    var element=document.getElementById('contrat-wrap');
+    var opt={margin:0.4,filename:'Contrat-BH-MediaMauricie.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2},jsPDF:{unit:'in',format:'letter',orientation:'portrait'}};
+    html2pdf().set(opt).from(element).save().then(function(){
+      document.getElementById('submit-confirm').style.display='block';
+      document.getElementById('submit-error').style.display='none';
+      var cli=document.getElementById('submit-cli').value||'';
+      var email=document.getElementById('submit-email').value||'';
+      document.getElementById('confirm-details').textContent=(cli?'Client: '+cli:'')+(email?' · '+email:'');
+      btnText.textContent='✅ PDF généré';
+    });
+  }catch(e){
+    document.getElementById('submit-error').style.display='block';
+    document.getElementById('submit-error-text').textContent='Erreur: '+e.message;
+    btn.disabled=false;
+    btnText.textContent='⚡ Soumettre le contrat';
+  }
 }
 
 window.addEventListener('load', calcTotal);
