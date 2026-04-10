@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculateur Production — Média Mauricie</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #c0392b;
+  --red-hover: #a93226;
+  --dark: #2d2d2d;
+  --darker: #1a1a1a;
+  --grey-bg: #f0f0f0;
+  --grey-card: #fff;
+  --grey-border: #e0e0e0;
+  --grey-mid: #888;
+  --grey-light: #f5f5f5;
+  --green: #27ae60;
+  --blue: #2471a3;
+  --gold: #d4a017;
+  --font: 'Montserrat', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  background: var(--grey-bg);
+  color: var(--dark);
+  font-size: 13px;
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.header {
+  background: var(--dark);
+  border-bottom: 4px solid var(--red);
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-left { display: flex; align-items: center; gap: 14px; }
+.header-title { font-size: 16px; font-weight: 900; color: #fff; letter-spacing: -0.5px; line-height: 1.1; }
+.header-sub { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-top: 2px; }
+.header-badge { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); }
+
+/* ── PROJECT BAR ── */
+.project-bar {
+  background: #fff;
+  border-bottom: 2px solid var(--grey-border);
+  padding: 12px 32px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.project-bar label { font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--grey-mid); display: block; margin-bottom: 4px; }
+.project-bar input, .project-bar select {
+  background: var(--grey-light);
+  border: 2px solid var(--grey-border);
+  color: var(--dark);
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 600;
+  transition: 0.15s;
+}
+.project-bar input:focus, .project-bar select:focus { outline: none; border-color: var(--red); background: #fff; }
+.rush-badge {
+  background: transparent;
+  border: 2px solid var(--red);
+  color: var(--red);
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.15s;
+}
+.rush-badge.active { background: var(--red); color: #fff; }
+
+/* ── LAYOUT ── */
+.app {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  min-height: calc(100vh - 100px);
+  gap: 0;
+}
+.main-col {
+  padding: 24px 28px;
+  border-right: 2px solid var(--grey-border);
+  overflow-y: auto;
+}
+.sidebar {
+  background: var(--dark);
+  padding: 24px 20px;
+  position: sticky;
+  top: 100px;
+  height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+
+/* ── SECTION ── */
+.section {
+  background: #fff;
+  border: 2px solid var(--grey-border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.section-header {
+  padding: 12px 18px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 2px solid var(--grey-border);
+  background: var(--grey-light);
+  color: var(--dark);
+  transition: 0.15s;
+}
+.section-header:hover { background: #ebebeb; }
+.section-header .chevron { margin-left: auto; font-size: 10px; transition: transform 0.2s; color: var(--grey-mid); }
+.section.collapsed .chevron { transform: rotate(-90deg); }
+.section.collapsed .section-body, .section.collapsed .subtotal { display: none; }
+
+/* Color accents on section headers */
+.section-header .sec-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.sec-dot.red { background: #e8a09a; }
+.sec-dot.blue { background: var(--blue); }
+.sec-dot.green { background: var(--green); }
+.sec-dot.dark { background: var(--dark); }
+.sec-dot.gold { background: var(--gold); }
+.sec-dot.purple { background: #6c3483; }
+.sec-dot.grey { background: #888; }
+
+.section-body { padding: 18px; }
+
+/* ── FORM ELEMENTS ── */
+label.field-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--grey-mid);
+}
+input[type="text"], input[type="number"], input[type="date"], select, textarea {
+  background: var(--grey-light);
+  border: 2px solid var(--grey-border);
+  color: var(--dark);
+  padding: 7px 11px;
+  border-radius: 6px;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 600;
+  width: 100%;
+  transition: 0.15s;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--red);
+  background: #fff;
+}
+input[type="number"] { font-size: 13px; text-align: right; }
+select { cursor: pointer; }
+
+.field-row {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.field-row.three { grid-template-columns: 170px 1fr 1fr; }
+.field-row.four { grid-template-columns: 170px 1fr 90px 80px; }
+.field-row.wide { grid-template-columns: 1fr; }
+
+.dollar-wrap { position: relative; }
+.dollar-wrap::before {
+  content: '$';
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--grey-mid);
+  font-size: 12px;
+  pointer-events: none;
+  font-weight: 700;
+}
+.dollar-wrap input { padding-left: 22px; }
+
+/* ── TOGGLE ── */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--grey-border);
+}
+.toggle-row:last-child { border-bottom: none; }
+.toggle {
+  width: 34px; height: 18px;
+  background: var(--grey-border);
+  border-radius: 9px;
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: 0.2s;
+}
+.toggle.on { background: var(--green); }
+.toggle::after {
+  content: '';
+  position: absolute;
+  width: 12px; height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  top: 3px; left: 3px;
+  transition: 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.toggle.on::after { left: 19px; }
+.toggle-label { flex: 1; font-size: 12px; font-weight: 600; color: var(--dark); }
+.toggle-amt { width: 110px; }
+.toggle-par { width: 70px; font-size: 11px; }
+
+/* ── STAFF TABLE ── */
+.staff-table { width: 100%; border-collapse: collapse; }
+.staff-table th {
+  font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--grey-mid); padding: 6px 8px; text-align: left;
+  border-bottom: 2px solid var(--grey-border); background: var(--grey-light);
+}
+.staff-table td { padding: 5px 6px; vertical-align: middle; }
+.staff-table tr:nth-child(even) td { background: #fafafa; }
+.staff-table input, .staff-table select { font-size: 11px; padding: 5px 8px; }
+.role-cell { font-size: 11px; font-weight: 700; color: var(--dark); white-space: nowrap; }
+
+/* ── SUBTOTAL ── */
+.subtotal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: var(--grey-light);
+  border-top: 2px solid var(--grey-border);
+}
+.subtotal-label { font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--grey-mid); }
+.subtotal-amount { font-size: 16px; font-weight: 900; color: var(--dark); letter-spacing: -0.5px; }
+
+/* ── SEP ── */
+.sep { height: 1px; background: var(--grey-border); margin: 14px 0; }
+
+/* ── SUB LABEL ── */
+.sub-label {
+  font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--grey-mid); margin-bottom: 10px; margin-top: 4px;
+  display: flex; align-items: center; gap: 8px;
+}
+.sub-label::after { content: ''; flex: 1; height: 1px; background: var(--grey-border); }
+
+/* ── REF NOTE ── */
+.ref-note {
+  font-size: 11px; font-weight: 600; color: var(--grey-mid);
+  padding: 8px 12px; background: var(--grey-light);
+  border-left: 3px solid var(--red); border-radius: 4px;
+  margin-bottom: 14px;
+}
+
+/* ── STYLE TAGS ── */
+.style-tag {
+  padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 700;
+  cursor: pointer; border: 2px solid var(--grey-border); color: var(--grey-mid);
+  transition: 0.15s; background: #fff;
+}
+.style-tag.active { background: var(--dark); border-color: var(--dark); color: #fff; }
+
+/* ── SIDEBAR ── */
+.sidebar-title {
+  font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(255,255,255,0.35); margin-bottom: 16px; padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.grand-total-card {
+  background: var(--red);
+  border-radius: 10px;
+  padding: 18px 16px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+.grand-total-label { font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 6px; }
+.grand-total-amount { font-size: 30px; font-weight: 900; color: #fff; letter-spacing: -1px; }
+
+.breakdown-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.07);
+  font-size: 11px;
+}
+.breakdown-row:last-child { border-bottom: none; }
+.breakdown-row .bl { color: rgba(255,255,255,0.5); font-weight: 500; }
+.breakdown-row .br { font-weight: 800; color: #fff; font-size: 12px; }
+.breakdown-row.zero .br { color: rgba(255,255,255,0.2); }
+
+.split-title { font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 10px; }
+
+.split-row {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+}
+.split-badge {
+  width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 800; flex-shrink: 0;
+}
+.split-badge.mm { background: var(--red); color: #fff; }
+.split-badge.af { background: var(--blue); color: #fff; }
+.split-name { flex: 1; font-size: 11px; font-weight: 700; color: #fff; }
+.split-pct { width: 52px; font-size: 12px; font-weight: 700; text-align: center; padding: 5px 8px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; border-radius: 5px; }
+.split-amt { font-size: 12px; font-weight: 800; width: 80px; text-align: right; }
+
+.split-bar-wrap { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; margin: 6px 0 4px; }
+.split-bar { height: 100%; display: flex; }
+.split-bar-mm { background: var(--red); transition: width 0.3s; }
+.split-bar-af { background: var(--blue); transition: width 0.3s; }
+
+.split-valid { font-size: 10px; text-align: center; margin-bottom: 10px; font-weight: 700; }
+.split-valid.ok { color: var(--green); }
+.split-valid.err { color: #e74c3c; }
+
+.reinvest-row {
+  display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+  background: rgba(255,255,255,0.06); border-radius: 6px; margin-bottom: 10px;
+}
+.reinvest-label { flex: 1; font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 500; }
+
+.sidebar input[type="number"] {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+  text-align: center;
+}
+.sidebar input:focus { border-color: var(--red); outline: none; background: rgba(255,255,255,0.12); }
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 20px; border-radius: 7px;
+  font-family: var(--font); font-size: 11px; font-weight: 800;
+  letter-spacing: 1px; text-transform: uppercase;
+  border: none; cursor: pointer; transition: 0.15s; width: 100%;
+  justify-content: center; margin-bottom: 8px;
+}
+.btn-primary { background: var(--red); color: #fff; }
+.btn-primary:hover { background: var(--red-hover); }
+.btn-secondary { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.15); }
+.btn-secondary:hover { background: rgba(255,255,255,0.14); color: #fff; }
+
+/* ── REELS TABLE ── */
+.reels-table { width: 100%; border-collapse: collapse; }
+.reels-table th {
+  font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--grey-mid); padding: 6px 8px; text-align: left;
+  border-bottom: 2px solid var(--grey-border); background: var(--grey-light);
+}
+.reels-table td { padding: 6px 8px; border-bottom: 1px solid var(--grey-border); vertical-align: middle; }
+.reels-table tr:last-child td { border-bottom: none; }
+
+/* ── CHECKBOX ── */
+.check-label { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--dark); cursor: pointer; }
+.check-label input[type="checkbox"] { width: auto; accent-color: var(--red); width: 15px; height: 15px; }
+
+/* ── MISC ── */
+.hint { font-size: 10px; color: var(--grey-mid); margin-top: 3px; font-style: italic; }
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar { position: relative; height: auto; top: 0; border-top: 4px solid var(--red); }
+  .main-col { padding: 16px; }
+  .field-row { grid-template-columns: 1fr; }
+  .field-row.three, .field-row.four { grid-template-columns: 1fr 1fr; }
+  .project-bar { padding: 10px 16px; }
+  .header { padding: 12px 16px; }
+}
+
+@media print {
+  .header, .project-bar, .sidebar { display: none !important; }
+  .app { display: block; }
+  body { background: white; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_M-coul.png" alt="MM" style="height:40px; width:auto;">
+    <div>
+      <div class="header-title">Calculateur de production</div>
+      <div class="header-sub">Média Mauricie × Andromede Films · Outil interne</div>
+    </div>
+  </div>
+  <div style="display:flex; align-items:center; gap:10px;">
+    <div class="header-badge">● Usage interne</div>
+    <button class="btn btn-primary" style="width:auto; margin:0; padding:8px 18px;" onclick="window.print()">⬇ Télécharger PDF (local)</button>
+  </div>
+</div>
+
+<!-- PROJECT BAR -->
+<div class="project-bar">
+  <div>
+    <label>Code projet</label>
+    <input type="text" id="codeProjet" placeholder="MM-2026-001" style="width:140px;">
+  </div>
+  <div>
+    <label>Client / Entreprise</label>
+    <input type="text" id="clientNom" placeholder="Nom du client" style="width:200px;">
+  </div>
+  <div>
+    <label>Date tournage</label>
+    <input type="date" id="dateTournage" style="width:150px;">
+  </div>
+  <div>
+    <label>Date livraison</label>
+    <input type="date" id="dateLivraison" style="width:150px;">
+  </div>
+  <div style="margin-left:auto; display:flex; align-items:center; gap:10px;">
+    <div class="rush-badge" id="rushBadge" onclick="toggleRush()">⚡ Rush</div>
+    <input type="date" id="rushDate" style="width:140px; display:none;">
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app">
+<div class="main-col">
+
+<!-- ─── GESTION / LEAD ─────────────────────────────── -->
+<div class="section" id="sec-lead">
+  <div class="section-header" onclick="toggleSection('sec-lead')">
+    <div class="sec-dot dark"></div> Gestion &amp; Prise en charge LEAD
+    <span class="chevron">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="ref-note">Communications client · Contrat · Facturation · Coordination · Meetings</div>
+    <div class="field-row">
+      <label class="field-label">Porté par</label>
+      <select id="leadPortepar"><option>MM</option><option>AF</option><option>Les deux</option></select>
+    </div>
+    <div class="field-row">
+      <label class="field-label">Mode de tarif</label>
+      <select id="leadMode" onchange="toggleLeadMode()"><option value="horaire">Horaire</option><option value="forfait">Forfait fixe $</option></select>
+    </div>
+    <div id="leadHoraireFields">
+      <div class="field-row three">
+        <label class="field-label">Heures estimées</label>
+        <input type="number" id="leadHeures" value="0" min="0" step="0.5" oninput="recalc()">
+        <div class="dollar-wrap"><input type="number" id="leadTaux" value="75" min="0" oninput="recalc()" placeholder="$/h"></div>
+      </div>
+    </div>
+    <div id="leadForfaitFields" style="display:none">
+      <div class="field-row">
+        <label class="field-label">Forfait fixe</label>
+        <div class="dollar-wrap"><input type="number" id="leadForfait" value="0" min="0" oninput="recalc()"></div>
+      </div>
+    </div>
+    <div class="sep"></div>
+    <div class="toggle-row">
+      <div class="toggle" id="tog-ref" onclick="toggleItem('ref')"></div>
+      <span class="toggle-label">Référence active</span>
+    </div>
+    <div id="ref-fields" style="display:none; margin-top:10px;">
+      <div class="field-row three">
+        <label class="field-label">Type</label>
+        <select id="refType" onchange="recalc()"><option value="pct">% du projet</option><option value="fixe">Montant fixe $</option></select>
+        <div class="dollar-wrap"><input type="number" id="refValeur" value="0" min="0" oninput="recalc()"></div>
+      </div>
+    </div>
+  </div>
+  <div class="subtotal">
+    <span class="subtotal-label">Total Gestion / LEAD</span>
+    <span class="subtotal-amount" id="tot-lead">0,00 $</span>
+  </div>
+</div>
+
+<!-- ─── CLIENT INFO ─────────────────────────────────── -->
+<div class="section" id="sec-client">
+  <div class="section-header" onclick="toggleSection('sec-client')">
+    <div class="sec-dot grey"></div> Informations client
+    <span class="chevron">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="field-row">
+      <label class="field-label">Entreprise</label>
+      <input type="text" id="entreprise" placeholder="Nom entreprise">
+    </div>
+    <div class="field-row">
+      <label class="field-label">Ville</label>
+      <input type="text" id="ville" placeholder="Trois-Rivières, Montréal...">
+    </div>
+    <div class="field-row">
+      <label class="field-label">Type de client</label>
+      <select id="typeClient"><option>Privée</option><option>OBNL</option><option>Gouvernement</option></select>
+    </div>
+    <div class="field-row">
+      <label class="field-label">Budget client</label>
+      <div class="dollar-wrap"><input type="number" id="budgetClient" value="0" min="0" oninput="recalc()"></div>
+    </div>
+    <div class="field-row">
+      <label class="field-label">Mission / Objectif</label>
+      <input type="text" id="mission" placeholder="Ex: Vidéo corporative lancement produit">
+    </div>
+    <div class="field-row wide">
+      <label class="field-label">Notes</label>
+      <textarea id="notes" rows="2" style="resize:vertical" placeholder="Notes additionnelles..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- ─── PHOTO ────────────────────────────────────────── -->
+<div class="section" id="sec-photo">
+  <div class="section-header" onclick="toggleSection('sec-photo')">
+    <div class="sec-dot red"></div> Photo
+    <span class="chevron">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="ref-note">Min 2h: 850–1 000$ · 4h: 1 500$ · 8h: 2 500$</div>
+
+    <div class="sub-label">Services photo</div>
+    <div class="toggle-row"><div class="toggle" id="tog-ph-lifestyle" onclick="toggleItem('ph-lifestyle')"></div><span class="toggle-label">Lifestyle</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-ph-lifestyle" value="0" min="0" oninput="recalc()"></div><select id="par-ph-lifestyle" class="toggle-par" onchange="recalc()"><option>MM</option><option>AF</option></select></div>
+    <div class="toggle-row"><div class="toggle" id="tog-ph-events" onclick="toggleItem('ph-events')"></div><span class="toggle-label">Événements</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-ph-events" value="0" min="0" oninput="recalc()"></div><select id="par-ph-events" class="toggle-par" onchange="recalc()"><option>MM</option><option>AF</option></select></div>
+    <div class="toggle-row"><div class="toggle" id="tog-ph-corpo" onclick="toggleItem('ph-corpo')"></div><span class="toggle-label">Corporatif</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-ph-corpo" value="0" min="0" oninput="recalc()"></div><select id="par-ph-corpo" class="toggle-par" onchange="recalc()"><option>MM</option><option>AF</option></select></div>
+    <div class="toggle-row"><div class="toggle" id="tog-ph-portraits" onclick="toggleItem('ph-portraits')"></div><span class="toggle-label">Portraits / Personnes</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-ph-portraits" value="0" min="0" oninput="recalc()"></div><select id="par-ph-portraits" class="toggle-par" onchange="recalc()"><option>MM</option><option>AF</option></select></div>
+    <div class="toggle-row"><div class="toggle" id="tog-ph-produit" onclick="toggleItem('ph-produit')"></div><span class="toggle-label">Produit</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-ph-produit" value="0" min="0" oninput="recalc()"></div><select id="par-ph-produit" class="toggle-par" onchange="recalc()"><option>MM</option><option>AF</option></select></div>
+
+    <div class="sep"></div>
+    <div class="sub-label">Captation photo</div>
+    <div class="field-row three">
+      <label class="field-label">Forfait</label>
+      <select id="photoForfait" onchange="recalc()" style="font-size:12px;">
+        <option value="0">— Sélectionner —</option>
+        <option value="850">Demi-journée 2h — 850$</option>
+        <option value="1500">Demi-journée 4h — 1 500$</option>
+        <option value="2500">Journée 8h — 2 500$</option>
+        <option value="3500">Grande journée 10h+ — 3 500$</option>
+        <option value="custom">Personnalisé $</option>
+      </select>
+      <div class="dollar-wrap"><input type="number" id="photoCustom" value="0" min="0" oninput="recalc()" placeholder="Montant $" style="display:none;"></div>
+    </div>
+    <div class="field-row three">
+      <label class="field-label"># Photos remises</label>
+      <input type="number" id="photoNbRemises" value="0" min="0" oninput="recalc()" placeholder="Nombre">
+      <div class="dollar-wrap"><input type="number" id="photoRetouchFrais" value="0" min="0" oninput="recalc()" placeholder="$/photo retouche"></div>
+    </div>
+    <div class="toggle-row">
+      <div class="toggle" id="tog-ph-2e" onclick="toggleItem('ph-2e')"></div>
+      <span class="toggle-label">2e photographe</span>
+      <div class="dollar-wrap toggle-amt"><input type="number" id="amt-ph-2e" value="0" min="0" oninput="recalc()"></div>
+    </div>
+    <div class="toggle-row">
+      <div class="toggle" id="tog-ph-rush" onclick="toggleItem('ph-rush')"></div>
+      <span class="toggle-label">Rush photo</span>
+      <div class="dollar-wrap toggle-amt"><input type="number" id="amt-ph-rush" value="0" min="0" oninput="recalc()"></div>
+    </div>
+
+    <div class="sep"></div>
+    <div class="sub-label">Équipement photo — MM</div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-nikon1" onclick="toggleItem('eq-nikon1')"></div><span class="toggle-label">Nikon Z6III #1</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-nikon1" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-nikon2" onclick="toggleItem('eq-nikon2')"></div><span class="toggle-label">Nikon Z6III #2</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-nikon2" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-35mm" onclick="toggleItem('eq-35mm')"></div><span class="toggle-label">35mm f/1.8 Z</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-35mm" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-2875" onclick="toggleItem('eq-2875')"></div><span class="toggle-label">28-75mm f/2.8 Z</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-2875" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-70200" onclick="toggleItem('eq-70200')"></div><span class="toggle-label">70-200mm f/2.8 Z</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-70200" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-studio" onclick="toggleItem('eq-studio')"></div><span class="toggle-label">Studio setup (Godox + backdrop)</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-studio" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-flash" onclick="toggleItem('eq-flash')"></div><span class="toggle-label">Godox Flash + trigger</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-flash" value="0" min="0" oninput="recalc()"></div></div>
+  </div>
+  <div class="subtotal">
+    <span class="subtotal-label">Total Photo + Équipement</span>
+    <span class="subtotal-amount" id="tot-photo">0,00 $</span>
+  </div>
+</div>
+
+<!-- ─── VIDÉO ─────────────────────────────────────────── -->
+<div class="section" id="sec-video">
+  <div class="section-header" onclick="toggleSection('sec-video')">
+    <div class="sec-dot blue"></div> Vidéo — Tournage &amp; Équipe
+    <span class="chevron">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="ref-note">2h: 1 500$ · 4h: 2 500$ · 8h: 4 000$ · 10h+: 5 000$</div>
+
+    <div style="margin-bottom:14px;">
+      <div class="sub-label">Style de tournage</div>
+      <div style="display:flex; gap:6px; flex-wrap:wrap;">
+        <span class="style-tag" onclick="this.classList.toggle('active')">Événementiel</span>
+        <span class="style-tag" onclick="this.classList.toggle('active')">Corporatif</span>
+        <span class="style-tag" onclick="this.classList.toggle('active')">Capsule</span>
+        <span class="style-tag" onclick="this.classList.toggle('active')">Documentaire</span>
+        <span class="style-tag" onclick="this.classList.toggle('active')">Publicitaire</span>
+        <span class="style-tag" onclick="this.classList.toggle('active')">Hyperlapse</span>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <label class="field-label">Format</label>
+      <div style="display:flex; gap:16px;">
+        <label class="check-label"><input type="checkbox" id="fmt169"> 16:9 Horizontal</label>
+        <label class="check-label"><input type="checkbox" id="fmt916"> 9:16 Vertical</label>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+    <div class="sub-label">Équipe de production</div>
+    <table class="staff-table">
+      <thead><tr><th>Rôle</th><th>Actif</th><th>Nom</th><th>Durée</th><th>Jours</th><th>Tarif $</th><th>Par</th></tr></thead>
+      <tbody id="staffTbody"></tbody>
+    </table>
+
+    <div class="sep"></div>
+    <div class="sub-label">Équipement vidéo — MM</div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-fx3" onclick="toggleItem('eq-fx3')"></div><span class="toggle-label">Sony FX3</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-fx3" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-sony2470" onclick="toggleItem('eq-sony2470')"></div><span class="toggle-label">24-70mm f/2.8 Sony</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-sony2470" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-mavic3cine" onclick="toggleItem('eq-mavic3cine')"></div><span class="toggle-label">DJI Mavic 3 Pro Cine</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-mavic3cine" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-mini4" onclick="toggleItem('eq-mini4')"></div><span class="toggle-label">DJI Mini 4 Pro</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-mini4" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-ronin" onclick="toggleItem('eq-ronin')"></div><span class="toggle-label">DJI Ronin RS3 Pro</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-ronin" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-mic" onclick="toggleItem('eq-mic')"></div><span class="toggle-label">Hollyland MK II Wireless</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-mic" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-lights" onclick="toggleItem('eq-lights')"></div><span class="toggle-label">Nanlite Tubes + Lights</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-lights" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-zoom" onclick="toggleItem('eq-zoom')"></div><span class="toggle-label">Zoom F3 / H4N</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-zoom" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-atomos" onclick="toggleItem('eq-atomos')"></div><span class="toggle-label">Atomos Ninja V</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-atomos" value="0" min="0" oninput="recalc()"></div></div>
+
+    <div class="sep"></div>
+    <div class="sub-label">Équipement vidéo — AF</div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-nikonzr" onclick="toggleItem('eq-nikonzr')"></div><span class="toggle-label">Nikon Z R</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-nikonzr" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-cine35" onclick="toggleItem('eq-cine35')"></div><span class="toggle-label">Cine 35mm</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-cine35" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-cine50" onclick="toggleItem('eq-cine50')"></div><span class="toggle-label">Cine 50mm</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-cine50" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-mavic3af" onclick="toggleItem('eq-mavic3af')"></div><span class="toggle-label">DJI Mavic 3 Pro (AF)</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-mavic3af" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-soundaf" onclick="toggleItem('eq-soundaf')"></div><span class="toggle-label">Sound Equipment AF</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-soundaf" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-eq-lightsaf" onclick="toggleItem('eq-lightsaf')"></div><span class="toggle-label">Lighting kit AF</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-eq-lightsaf" value="0" min="0" oninput="recalc()"></div></div>
+  </div>
+  <div class="subtotal">
+    <span class="subtotal-label">Total Vidéo + Équipement</span>
+    <span class="subtotal-amount" id="tot-video">0,00 $</span>
+  </div>
+</div>
+
+<!-- ─── DRONE ─────────────────────────────────────────── -->
+<div class="section" id="sec-drone">
+  <div class="section-header" onclick="toggleSection('sec-drone')">
+    <div class="sec-dot green"></div> Drone
+    <span class="chevron">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="toggle-row">
+      <div class="toggle" id="tog-drone" onclick="toggleItem('drone')"></div>
+      <span class="toggle-label">Service drone actif</span>
+      <select id="par-drone" class="toggle-par" onchange="recalc()"><option>MM</option><option>AF</option></select>
+    </div>
+    <div id="drone-fields" style="display:none; margin-top:12px;">
+      <div class="toggle-row"><div class="toggle" id="tog-drone-permis" onclick="toggleItem('drone-permis')"></div><span class="toggle-label">Permis avancé requis</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-drone-permis" value="0" min="0" oninput="recalc()"></div></div>
+      <div class="field-row" style="margin-top:10px;">
+        <label class="field-label">Adresse de vol</label>
+        <input type="text" id="droneAdresse" placeholder="Adresse ou secteur">
+      </div>
+      <div class="field-row three">
+        <label class="field-label">Durée (h)</label>
+        <input type="number" id="droneDuree" value="0" min="0" step="0.5" oninput="recalc()">
+        <div class="dollar-wrap"><input type="number" id="droneTaux" value="200" min="0" oninput="recalc()" placeholder="$/h"></div>
+      </div>
+      <div class="field-row">
+        <label class="field-label">Livrables</label>
+        <div class="dollar-wrap"><input type="number" id="droneLivrables" value="0" min="0" oninput="recalc()"></div>
+      </div>
+    </div>
+  </div>
+  <div class="subtotal">
+    <span class="subtotal-label">Total Drone</span>
+    <span class="subtotal-amount" id="tot-drone">0,00 $</span>
+  </div>
+</div>
+
+<!-- ─── POST-PRODUCTION ───────────────────────────────── -->
+<div class="section" id="sec-post">
+  <div class="section-header" onclick="toggleSection('sec-post')">
+    <div class="sec-dot purple"></div> Post-production
+    <span class="chevron">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="field-row four">
+      <label class="field-label">Heures montage</label>
+      <input type="number" id="montageHeures" value="0" min="0" step="0.5" oninput="recalc()">
+      <div class="dollar-wrap"><input type="number" id="montageTaux" value="100" min="0" oninput="recalc()" placeholder="$/h"></div>
+      <select id="montagePar" onchange="recalc()"><option>MM</option><option>AF</option><option>Les deux</option></select>
+    </div>
+    <div class="sep"></div>
+    <div class="toggle-row"><div class="toggle" id="tog-post-motion" onclick="toggleItem('post-motion')"></div><span class="toggle-label">Motion graphics</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-post-motion" value="0" min="0" oninput="recalc()"></div><select id="par-post-motion" class="toggle-par" onchange="recalc()"><option>MM</option><option>AF</option></select></div>
+    <div class="toggle-row"><div class="toggle" id="tog-post-titles" onclick="toggleItem('post-titles')"></div><span class="toggle-label">Titres / Lower thirds</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-post-titles" value="0" min="0" oninput="recalc()"></div><select id="par-post-titles" class="toggle-par" onchange="recalc()"><option>MM</option><option>AF</option></select></div>
+    <div class="toggle-row"><div class="toggle" id="tog-post-color" onclick="toggleItem('post-color')"></div><span class="toggle-label">Color grading / Étalonnage</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-post-color" value="0" min="0" oninput="recalc()"></div><select id="par-post-color" class="toggle-par" onchange="recalc()"><option>MM</option><option>AF</option></select></div>
+    <div class="toggle-row"><div class="toggle" id="tog-post-music" onclick="toggleItem('post-music')"></div><span class="toggle-label">Musique licenciée</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-post-music" value="0" min="0" oninput="recalc()"></div><select id="par-post-music" class="toggle-par" onchange="recalc()"><option>MM</option><option>AF</option></select></div>
+    <div class="toggle-row"><div class="toggle" id="tog-post-logo" onclick="toggleItem('post-logo')"></div><span class="toggle-label">Animation logo</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-post-logo" value="0" min="0" oninput="recalc()"></div><select id="par-post-logo" class="toggle-par" onchange="recalc()"><option>MM</option><option>AF</option></select></div>
+    <div class="toggle-row"><div class="toggle" id="tog-post-ai" onclick="toggleItem('post-ai')"></div><span class="toggle-label">Effets AI</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-post-ai" value="0" min="0" oninput="recalc()"></div><select id="par-post-ai" class="toggle-par" onchange="recalc()"><option>MM</option><option>AF</option></select></div>
+    <div class="toggle-row"><div class="toggle" id="tog-post-cine" onclick="toggleItem('post-cine')"></div><span class="toggle-label">Approche cinématique</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-post-cine" value="0" min="0" oninput="recalc()"></div><select id="par-post-cine" class="toggle-par" onchange="recalc()"><option>MM</option><option>AF</option></select></div>
+    <div class="toggle-row"><div class="toggle" id="tog-post-yt" onclick="toggleItem('post-yt')"></div><span class="toggle-label">Couverture YouTube / FB</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-post-yt" value="0" min="0" oninput="recalc()"></div><select id="par-post-yt" class="toggle-par" onchange="recalc()"><option>MM</option><option>AF</option></select></div>
+    <div class="toggle-row"><div class="toggle" id="tog-voix" onclick="toggleItem('voix')"></div><span class="toggle-label">🎙️ Voix-off</span><select id="voixLang" style="width:70px; margin-left:8px;"><option>FR</option><option>EN</option><option>FR+EN</option></select><div class="dollar-wrap toggle-amt"><input type="number" id="amt-voix" value="500" min="0" oninput="recalc()"></div></div>
+  </div>
+  <div class="subtotal">
+    <span class="subtotal-label">Total Post-production</span>
+    <span class="subtotal-amount" id="tot-post">0,00 $</span>
+  </div>
+</div>
+
+<!-- ─── REELS ─────────────────────────────────────────── -->
+<div class="section" id="sec-reels">
+  <div class="section-header" onclick="toggleSection('sec-reels')">
+    <div class="sec-dot gold"></div> Reels &amp; Courts formats
+    <span class="chevron">▼</span>
+  </div>
+  <div class="section-body">
+    <table class="reels-table">
+      <thead><tr><th>Durée</th><th>Actif</th><th>Qté</th><th>$/u</th><th>Total</th></tr></thead>
+      <tbody id="reelsTbody"></tbody>
+    </table>
+    <div class="sep"></div>
+    <div class="sub-label">Extras reels</div>
+    <div class="toggle-row"><div class="toggle" id="tog-reel-sous" onclick="toggleItem('reel-sous')"></div><span class="toggle-label">Sous-titres</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-reel-sous" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-reel-logo" onclick="toggleItem('reel-logo')"></div><span class="toggle-label">Logo à la fin</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-reel-logo" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-reel-color" onclick="toggleItem('reel-color')"></div><span class="toggle-label">Coloration</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-reel-color" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-reel-thumb" onclick="toggleItem('reel-thumb')"></div><span class="toggle-label">Thumbnail</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-reel-thumb" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-reel-complex" onclick="toggleItem('reel-complex')"></div><span class="toggle-label">Montage complexe</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-reel-complex" value="0" min="0" oninput="recalc()"></div></div>
+  </div>
+  <div class="subtotal">
+    <span class="subtotal-label">Total Reels</span>
+    <span class="subtotal-amount" id="tot-reels">0,00 $</span>
+  </div>
+</div>
+
+<!-- ─── LOGICIELS / STORAGE / MKT ────────────────────── -->
+<div class="section" id="sec-soft">
+  <div class="section-header" onclick="toggleSection('sec-soft')">
+    <div class="sec-dot grey"></div> Logiciels · Storage · Marketing
+    <span class="chevron">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="sub-label">Logiciels</div>
+    <div class="toggle-row"><div class="toggle" id="tog-soft-premiere" onclick="toggleItem('soft-premiere')"></div><span class="toggle-label">Premiere Pro / After Effects</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-soft-premiere" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-soft-davinci" onclick="toggleItem('soft-davinci')"></div><span class="toggle-label">DaVinci Resolve</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-soft-davinci" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-soft-runway" onclick="toggleItem('soft-runway')"></div><span class="toggle-label">RunwayML</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-soft-runway" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-soft-capcut" onclick="toggleItem('soft-capcut')"></div><span class="toggle-label">CapCut Pro</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-soft-capcut" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="toggle-row"><div class="toggle" id="tog-soft-envato" onclick="toggleItem('soft-envato')"></div><span class="toggle-label">Envato Elements</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-soft-envato" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="sep"></div>
+    <div class="sub-label">Storage — dépenses MM</div>
+    <div class="ref-note">Coûts d'achat réels imputés à Média Mauricie · estimés selon le volume capté</div>
+    <div class="field-row three">
+      <label class="field-label">TB estimés tournage</label>
+      <input type="number" id="storageTB" value="0" min="0" step="0.5" oninput="calcStorage()" placeholder="TB captés">
+      <select id="storageType" onchange="calcStorage()" style="font-size:12px;">
+        <option value="55">HDD 1 To — 55$/To</option>
+        <option value="45">HDD 2 To — 45$/To</option>
+        <option value="35">HDD 4 To — 35$/To</option>
+        <option value="80">SSD portable — 80$/To</option>
+        <option value="0">Personnalisé</option>
+      </select>
+    </div>
+    <div class="field-row">
+      <label class="field-label">Coût storage estimé</label>
+      <div class="dollar-wrap"><input type="number" id="storageHDD" value="0" min="0" oninput="recalc()" placeholder="Calculé auto ou manuel"></div>
+    </div>
+    <div class="field-row">
+      <label class="field-label">Cloud / Dropbox / Drive</label>
+      <div class="dollar-wrap"><input type="number" id="storageCloud" value="0" min="0" oninput="recalc()" placeholder="Abonnement mensuel $"></div>
+    </div>
+    <div class="toggle-row"><div class="toggle" id="tog-remise" onclick="toggleItem('remise')"></div><span class="toggle-label">Remise fichiers bruts au client</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-remise" value="0" min="0" oninput="recalc()"></div></div>
+    <div class="sep"></div>
+    <div class="sub-label">Marketing</div>
+    <div class="field-row three">
+      <label class="field-label">Gestion réseaux $/sem</label>
+      <input type="number" id="mktGestion" value="0" min="0" oninput="recalc()">
+      <input type="number" id="mktSemaines" value="1" min="0" oninput="recalc()" placeholder="# sem">
+    </div>
+    <div class="toggle-row"><div class="toggle" id="tog-mkt-meta" onclick="toggleItem('mkt-meta')"></div><span class="toggle-label">Meta Ads (gestion + setup)</span><div class="dollar-wrap toggle-amt"><input type="number" id="amt-mkt-meta" value="0" min="0" oninput="recalc()"></div></div>
+  </div>
+  <div class="subtotal">
+    <span class="subtotal-label">Total Logiciels + Storage + Mkt</span>
+    <span class="subtotal-amount" id="tot-soft">0,00 $</span>
+  </div>
+</div>
+
+<!-- ─── TRANSPORT ─────────────────────────────────────── -->
+<div class="section" id="sec-transport">
+  <div class="section-header" onclick="toggleSection('sec-transport')">
+    <div class="sec-dot dark"></div> Transport
+    <span class="chevron">▼</span>
+  </div>
+  <div class="section-body">
+    <table class="reels-table">
+      <thead><tr><th>Personne</th><th>De → À</th><th>Km</th><th>$/km</th><th>Par</th></tr></thead>
+      <tbody id="transportTbody"></tbody>
+    </table>
+  </div>
+  <div class="subtotal">
+    <span class="subtotal-label">Total Transport</span>
+    <span class="subtotal-amount" id="tot-transport">0,00 $</span>
+  </div>
+</div>
+
+<!-- ─── AUTRES ────────────────────────────────────────── -->
+<div class="section" id="sec-autres">
+  <div class="section-header" onclick="toggleSection('sec-autres')">
+    <div class="sec-dot red"></div> Autres services
+    <span class="chevron">▼</span>
+  </div>
+  <div class="section-body">
+    <table class="reels-table">
+      <thead><tr><th>Description</th><th>Montant $</th><th>Par</th></tr></thead>
+      <tbody id="autresTbody"></tbody>
+    </table>
+  </div>
+  <div class="subtotal">
+    <span class="subtotal-label">Total Autres</span>
+    <span class="subtotal-amount" id="tot-autres">0,00 $</span>
+  </div>
+</div>
+
+</div><!-- /main-col -->
+
+<!-- ─── SIDEBAR ───────────────────────────────────────── -->
+<div class="sidebar">
+  <div class="sidebar-title">Sommaire · Co-production MM × AF</div>
+
+  <div class="grand-total-card">
+    <div class="grand-total-label">Grand Total</div>
+    <div class="grand-total-amount" id="grandTotal">0,00 $</div>
+  </div>
+
+  <div id="breakdownList" style="margin-bottom:16px;"></div>
+
+  <div style="height:1px; background:rgba(255,255,255,0.08); margin:14px 0;"></div>
+
+  <div class="split-title">Co-production — Distribution des revenus</div>
+  <div style="font-size:10px; color:rgba(255,255,255,0.3); margin-bottom:10px; line-height:1.6;">Toutes les dépenses sont imputées à MM · Le split indique comment les revenus nets sont distribués</div>
+  <div class="split-row">
+    <div class="split-badge mm">MM</div>
+    <span class="split-name" style="color:#e74c3c;">Média Mauricie</span>
+    <input type="number" id="mmPct" class="split-pct" value="50" min="0" max="100" oninput="recalc()">
+    <span style="font-size:11px; color:rgba(255,255,255,0.3);">%</span>
+    <span class="split-amt" id="mmAmount" style="color:#e74c3c;">0,00 $</span>
+  </div>
+  <div class="split-row">
+    <div class="split-badge af">AF</div>
+    <span class="split-name" style="color:#3498db;">Andromede Films</span>
+    <input type="number" id="afPct" class="split-pct" value="50" min="0" max="100" oninput="recalc()">
+    <span style="font-size:11px; color:rgba(255,255,255,0.3);">%</span>
+    <span class="split-amt" id="afAmount" style="color:#3498db;">0,00 $</span>
+  </div>
+  <div class="split-bar-wrap">
+    <div class="split-bar">
+      <div class="split-bar-mm" id="splitBarMM" style="width:50%"></div>
+      <div class="split-bar-af" id="splitBarAF" style="width:50%"></div>
+    </div>
+  </div>
+  <div class="split-valid ok" id="splitValidation">✓ Total: 100%</div>
+
+  <div style="height:1px; background:rgba(255,255,255,0.08); margin:14px 0;"></div>
+
+  <div class="split-title">Contribution bannière MM</div>
+  <div class="toggle-row" style="border:none; padding:0; margin-bottom:8px;">
+    <div class="toggle" id="tog-banniere" onclick="toggleItem('banniere')" style="border:1px solid rgba(255,255,255,0.2);"></div>
+    <span style="font-size:11px; color:rgba(255,255,255,0.45); flex:1;">Activer (% mis de côté)</span>
+  </div>
+  <div id="banniere-fields" style="display:none; margin-bottom:10px;">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <input type="number" id="bannierePct" value="15" min="0" max="100" style="width:55px; text-align:center;" oninput="recalc()">
+      <span style="font-size:11px; color:rgba(255,255,255,0.3);">%</span>
+      <span style="font-size:14px; font-weight:800; color:var(--gold);" id="banniereAmt">0,00 $</span>
+    </div>
+    <div style="font-size:10px; color:rgba(255,255,255,0.25); margin-top:4px;">Non redistribué aux partenaires</div>
+  </div>
+
+  <div style="height:1px; background:rgba(255,255,255,0.08); margin:14px 0;"></div>
+
+  <div class="split-title">Réinvestissement suggéré</div>
+  <div class="reinvest-row">
+    <span class="reinvest-label">% à réinvestir</span>
+    <input type="number" id="reinvestPct" value="0" min="0" max="100" style="width:52px; text-align:center;" oninput="recalc()">
+    <span style="font-size:11px; color:rgba(255,255,255,0.3);">%</span>
+  </div>
+  <div style="display:flex; justify-content:space-between; font-size:11px; padding:0 2px; margin-bottom:16px;">
+    <span style="color:#e74c3c; font-weight:700;">MM: <span id="reinvestMM">0,00 $</span></span>
+    <span style="color:#3498db; font-weight:700;">AF: <span id="reinvestAF">0,00 $</span></span>
+  </div>
+
+  <button class="btn btn-primary" onclick="window.print()">⬇ Télécharger PDF (local)</button>
+  <div style="margin-top:6px; font-size:10px; color:rgba(255,255,255,0.4); line-height:1.4; text-align:center;">Fichier sauvegardé localement sur votre Mac · À partager manuellement avec vos collaborateurs</div>
+  <button class="btn btn-secondary" onclick="if(confirm('Réinitialiser tous les champs?')) location.reload()">↺ Réinitialiser</button>
+
+  <div style="margin-top:20px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.08); text-align:center;">
+    <img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_M-coul.png" alt="MM" style="height:28px; width:auto; opacity:0.5;">
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<script>
+const STAFF = [
+  { role:'Shooter principal / DOP', nom:'', duree:'4h (demi-journée)', jours:1, tarif:3000, par:'AF' },
+  { role:'B-Cam 1', nom:'', duree:'4h (demi-journée)', jours:1, tarif:0, par:'MM' },
+  { role:'B-Cam 2', nom:'', duree:'4h (demi-journée)', jours:1, tarif:0, par:'AF' },
+  { role:'Preneur de son', nom:'', duree:'4h (demi-journée)', jours:1, tarif:0, par:'AF' },
+  { role:'Opérateur drone', nom:'', duree:'4h (demi-journée)', jours:1, tarif:0, par:'MM' },
+  { role:'Réalisateur', nom:'', duree:'4h (demi-journée)', jours:1, tarif:0, par:'AF' },
+  { role:'Assistant', nom:'', duree:'4h (demi-journée)', jours:1, tarif:0, par:'MM' },
+  { role:'Animateur / Présentateur', nom:'', duree:'4h (demi-journée)', jours:1, tarif:0, par:'AF' },
+  { role:'Figurants', nom:'', duree:'4h (demi-journée)', jours:1, tarif:0, par:'AF' },
+];
+const DUREES = ['2h (quart)','4h (demi-journée)','8h (journée)','10h+ (grande journée)'];
+const REELS = [
+  { dur:'10–15s', prixU:150 },
+  { dur:'15–25s', prixU:200 },
+  { dur:'25–45s', prixU:300 },
+  { dur:'45–60s', prixU:400 },
+  { dur:'60s+',   prixU:500 },
+];
+const TRANSPORT_ROWS = 6;
+const state = { toggles:{}, rush:false };
+
+function calcStorage() {
+  const tb = v('storageTB');
+  const rate = parseFloat(document.getElementById('storageType').value) || 0;
+  if(rate > 0) {
+    document.getElementById('storageHDD').value = (tb * rate).toFixed(2);
+  }
+  recalc();
+}
+
+function init() {
+  buildStaff(); buildReels(); buildTransport(); buildAutres(); recalc();
+}
+
+function buildStaff() {
+  const tb = document.getElementById('staffTbody');
+  STAFF.forEach((s,i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="role-cell">${s.role}</td>
+      <td style="text-align:center"><div class="toggle" id="tog-staff-${i}" onclick="toggleStaff(${i})"></div></td>
+      <td><input type="text" id="staff-nom-${i}" value="${s.nom}" placeholder="Nom" style="min-width:90px;font-size:11px;"></td>
+      <td><select id="staff-duree-${i}" onchange="recalc()" style="font-size:11px;">${DUREES.map(d=>`<option${d===s.duree?' selected':''}>${d}</option>`).join('')}</select></td>
+      <td><input type="number" id="staff-jours-${i}" value="${s.jours}" min="1" max="30" oninput="recalc()" style="width:46px;text-align:center;font-size:11px;"></td>
+      <td><input type="number" id="staff-tarif-${i}" value="${s.tarif}" min="0" oninput="recalc()" style="width:80px;font-size:11px;"></td>
+      <td><select id="staff-par-${i}" onchange="recalc()" style="width:56px;font-size:11px;"><option${s.par==='MM'?' selected':''}>MM</option><option${s.par==='AF'?' selected':''}>AF</option></select></td>`;
+    tb.appendChild(tr);
+  });
+}
+
+function buildReels() {
+  const tb = document.getElementById('reelsTbody');
+  REELS.forEach((r,i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="font-size:12px;font-weight:700;">${r.dur}</td>
+      <td style="text-align:center"><div class="toggle" id="tog-reel-${i}" onclick="toggleReelRow(${i})"></div></td>
+      <td><input type="number" id="reel-qty-${i}" value="0" min="0" oninput="recalc()" style="width:55px;text-align:right;font-size:12px;"></td>
+      <td style="text-align:right;font-size:12px;font-weight:700;color:var(--grey-mid);">${r.prixU} $</td>
+      <td style="text-align:right;font-size:13px;font-weight:800;color:var(--dark);" id="reel-total-${i}">0 $</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+function buildTransport() {
+  const tb = document.getElementById('transportTbody');
+  const pars = ['MM','MM','MM','AF','AF','AF'];
+  for(let i=0;i<TRANSPORT_ROWS;i++) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="text" id="transp-nom-${i}" placeholder="Personne" style="width:100px;font-size:11px;"></td>
+      <td><input type="text" id="transp-trajet-${i}" placeholder="De → À" style="width:120px;font-size:11px;"></td>
+      <td><input type="number" id="transp-km-${i}" value="0" min="0" oninput="recalc()" style="width:65px;text-align:right;font-size:11px;"></td>
+      <td><input type="number" id="transp-rate-${i}" value="0.68" min="0" step="0.01" oninput="recalc()" style="width:58px;text-align:right;font-size:11px;"></td>
+      <td style="text-align:center"><select id="transp-par-${i}" onchange="recalc()" style="width:58px;font-size:11px;"><option${pars[i]==='MM'?' selected':''}>MM</option><option${pars[i]==='AF'?' selected':''}>AF</option></select></td>`;
+    tb.appendChild(tr);
+  }
+}
+
+function buildAutres() {
+  const tb = document.getElementById('autresTbody');
+  for(let i=0;i<6;i++) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="text" id="autre-desc-${i}" placeholder="Description" style="font-size:11px;"></td>
+      <td><div class="dollar-wrap"><input type="number" id="autre-amt-${i}" value="0" min="0" oninput="recalc()" style="font-size:11px;text-align:right;"></div></td>
+      <td style="text-align:center"><select id="autre-par-${i}" onchange="recalc()" style="width:70px;font-size:11px;"><option>MM</option><option>AF</option><option>Les deux</option></select></td>`;
+    tb.appendChild(tr);
+  }
+}
+
+function toggleItem(key) {
+  state.toggles[key] = !state.toggles[key];
+  const el = document.getElementById('tog-'+key);
+  if(el) el.className = 'toggle'+(state.toggles[key]?' on':'');
+  const fieldMap = { ref:'ref-fields', drone:'drone-fields', banniere:'banniere-fields' };
+  if(fieldMap[key]) document.getElementById(fieldMap[key]).style.display = state.toggles[key]?'block':'none';
+  recalc();
+}
+function toggleStaff(i) {
+  const k='staff-'+i; state.toggles[k]=!state.toggles[k];
+  document.getElementById('tog-staff-'+i).className='toggle'+(state.toggles[k]?' on':'');
+  recalc();
+}
+function toggleReelRow(i) {
+  const k='reel-row-'+i; state.toggles[k]=!state.toggles[k];
+  document.getElementById('tog-reel-'+i).className='toggle'+(state.toggles[k]?' on':'');
+  recalc();
+}
+function toggleSection(id) { document.getElementById(id).classList.toggle('collapsed'); }
+function toggleLeadMode() {
+  const m=document.getElementById('leadMode').value;
+  document.getElementById('leadHoraireFields').style.display=m==='horaire'?'block':'none';
+  document.getElementById('leadForfaitFields').style.display=m==='forfait'?'block':'none';
+  recalc();
+}
+function toggleRush() {
+  state.rush=!state.rush;
+  document.getElementById('rushBadge').className='rush-badge'+(state.rush?' active':'');
+  document.getElementById('rushDate').style.display=state.rush?'inline-block':'none';
+}
+function on(k){return!!state.toggles[k];}
+function v(id){return parseFloat(document.getElementById(id)?.value)||0;}
+function fmt(n){return n.toLocaleString('fr-CA',{minimumFractionDigits:2,maximumFractionDigits:2})+' $';}
+
+function recalc() {
+  let totLead = document.getElementById('leadMode').value==='horaire'
+    ? v('leadHeures')*v('leadTaux') : v('leadForfait');
+  if(on('ref')) {
+    const rv=v('refValeur'), rt=document.getElementById('refType')?.value;
+    // ref is informational, not added to total
+  }
+  document.getElementById('tot-lead').textContent=fmt(totLead);
+
+  let totPhoto=0;
+  ['lifestyle','events','corpo','portraits','produit'].forEach(s=>{if(on('ph-'+s))totPhoto+=v('amt-ph-'+s);});
+  // Forfait captation
+  const forfaitSel = document.getElementById('photoForfait').value;
+  if(forfaitSel === 'custom') {
+    totPhoto += v('photoCustom');
+    document.getElementById('photoCustom').style.display = '';
+  } else {
+    totPhoto += parseFloat(forfaitSel)||0;
+    document.getElementById('photoCustom').style.display = 'none';
+  }
+  // Photos remises (retouche $/photo)
+  totPhoto += v('photoNbRemises') * v('photoRetouchFrais');
+  if(on('ph-2e'))totPhoto+=v('amt-ph-2e');
+  if(on('ph-rush'))totPhoto+=v('amt-ph-rush');
+  ['nikon1','nikon2','35mm','2875','70200','studio','flash'].forEach(e=>{if(on('eq-'+e))totPhoto+=v('amt-eq-'+e);});
+  document.getElementById('tot-photo').textContent=fmt(totPhoto);
+
+  let totVideo=0;
+  STAFF.forEach((_,i)=>{if(on('staff-'+i))totVideo+=v('staff-tarif-'+i)*v('staff-jours-'+i);});
+  ['fx3','sony2470','mavic3cine','mini4','ronin','mic','lights','zoom','atomos'].forEach(e=>{if(on('eq-'+e))totVideo+=v('amt-eq-'+e);});
+  ['nikonzr','cine35','cine50','mavic3af','soundaf','lightsaf'].forEach(e=>{if(on('eq-'+e))totVideo+=v('amt-eq-'+e);});
+  document.getElementById('tot-video').textContent=fmt(totVideo);
+
+  let totDrone=0;
+  if(on('drone')){totDrone=v('droneDuree')*v('droneTaux')+v('droneLivrables');if(on('drone-permis'))totDrone+=v('amt-drone-permis');}
+  document.getElementById('tot-drone').textContent=fmt(totDrone);
+
+  let totPost=v('montageHeures')*v('montageTaux');
+  ['motion','titles','color','music','logo','ai','cine','yt'].forEach(s=>{if(on('post-'+s))totPost+=v('amt-post-'+s);});
+  if(on('voix'))totPost+=v('amt-voix');
+  document.getElementById('tot-post').textContent=fmt(totPost);
+
+  let totReels=0;
+  REELS.forEach((r,i)=>{
+    if(on('reel-row-'+i)){const sub=v('reel-qty-'+i)*r.prixU;totReels+=sub;document.getElementById('reel-total-'+i).textContent=fmt(sub);}
+    else document.getElementById('reel-total-'+i).textContent='0 $';
+  });
+  ['sous','logo','color','thumb','complex'].forEach(e=>{if(on('reel-'+e))totReels+=v('amt-reel-'+e);});
+  document.getElementById('tot-reels').textContent=fmt(totReels);
+
+  let totSoft=0;
+  ['premiere','davinci','runway','capcut','envato'].forEach(s=>{if(on('soft-'+s))totSoft+=v('amt-soft-'+s);});
+  totSoft+=v('storageHDD')+v('storageCloud');
+  if(on('remise'))totSoft+=v('amt-remise');
+  totSoft+=v('mktGestion')*v('mktSemaines');
+  if(on('mkt-meta'))totSoft+=v('amt-mkt-meta');
+  document.getElementById('tot-soft').textContent=fmt(totSoft);
+
+  let totTransport=0;
+  for(let i=0;i<TRANSPORT_ROWS;i++)totTransport+=v('transp-km-'+i)*v('transp-rate-'+i);
+  document.getElementById('tot-transport').textContent=fmt(totTransport);
+
+  let totAutres=0;
+  for(let i=0;i<6;i++)totAutres+=v('autre-amt-'+i);
+  document.getElementById('tot-autres').textContent=fmt(totAutres);
+
+  const grand=totLead+totPhoto+totVideo+totDrone+totPost+totReels+totSoft+totTransport+totAutres;
+  document.getElementById('grandTotal').textContent=fmt(grand);
+
+  const items=[
+    ['Gestion / LEAD',totLead],['Photo + Équip',totPhoto],['Vidéo + Équip',totVideo],
+    ['Drone',totDrone],['Post-production',totPost],['Reels',totReels],
+    ['Logiciels / Storage',totSoft],['Transport',totTransport],['Autres',totAutres],
+  ];
+  document.getElementById('breakdownList').innerHTML=items.map(([l,a])=>
+    `<div class="breakdown-row${a===0?' zero':''}"><span class="bl">${l}</span><span class="br">${fmt(a)}</span></div>`
+  ).join('');
+
+  const mmPct=v('mmPct'), afPct=v('afPct'), total=mmPct+afPct;
+  const mmAmt=grand*mmPct/100, afAmt=grand*afPct/100;
+  document.getElementById('mmAmount').textContent=fmt(mmAmt);
+  document.getElementById('afAmount').textContent=fmt(afAmt);
+  document.getElementById('splitBarMM').style.width=(total>0?mmPct/total*100:50)+'%';
+  document.getElementById('splitBarAF').style.width=(total>0?afPct/total*100:50)+'%';
+  const sv=document.getElementById('splitValidation');
+  if(Math.abs(total-100)<0.01){sv.textContent='✓ Total: 100%';sv.className='split-valid ok';}
+  else{sv.textContent=`⚠ Total: ${total}% (doit = 100%)`;sv.className='split-valid err';}
+
+  if(on('banniere'))document.getElementById('banniereAmt').textContent=fmt(grand*v('bannierePct')/100);
+  const r=v('reinvestPct')/100;
+  document.getElementById('reinvestMM').textContent=fmt(mmAmt*r);
+  document.getElementById('reinvestAF').textContent=fmt(afAmt*r);
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
