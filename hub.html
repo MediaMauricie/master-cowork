@@ -179,6 +179,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--dark);
     <div class="topbar-badge">Hub interne</div>
   </div>
   <div class="topbar-right">
+    <button onclick="forceRefresh()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);font-family:inherit;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border-radius:5px;cursor:pointer;" id="btn-refresh">↻ Rafraichir</button>
     <div class="topbar-status"><div class="status-dot" id="status-dot"></div><span id="status-txt">Connexion...</span></div>
     <div class="topbar-time" id="topbar-time"></div>
   </div>
@@ -733,8 +734,12 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--dark);
 const SCRIPT_URL  = 'https://script.google.com/macros/s/AKfycbz3te2O_1GE6UWMY0yKUrXHaHKQMzZAyn2XYXCSAby09f7HgkOY22Buz2HFLzrM7g/exec';
 const TOKEN       = 'MauricieMau20'; // ← changer dans Apps Script PORTAL_TOKEN
 
-// ── ÉTAT ────────────────────────────────────────────────────────
-var cache = {};
+// ── ÉTAT + CACHE UNIFIÉ ─────────────────────────────────────────
+var CACHE_KEY   = 'mm_cache';
+var CACHE_TS    = 'mm_cache_time';
+var CACHE_TTL   = 5 * 60 * 1000; // 5 minutes
+var allData     = null;
+var dataLoading = null;
 
 // ── HORLOGE ─────────────────────────────────────────────────────
 function tick(){
@@ -778,31 +783,8 @@ async function apiCall(action, extra){
   }
 }
 
-// Pour GET (lecture) — query string via doGet() + cache localStorage 5 min
-var CACHE_TTL = 5 * 60 * 1000; // 5 minutes
-
-function cacheKey(action, extra) {
-  return 'mm_' + action + (extra ? '_' + JSON.stringify(extra) : '');
-}
-
-function cacheGet(key) {
-  try {
-    var raw = localStorage.getItem(key);
-    if (!raw) return null;
-    var entry = JSON.parse(raw);
-    if (Date.now() - entry.ts > CACHE_TTL) { localStorage.removeItem(key); return null; }
-    return entry.data;
-  } catch(e) { return null; }
-}
-
-function cacheSet(key, data) {
-  try { localStorage.setItem(key, JSON.stringify({ts: Date.now(), data: data})); } catch(e) {}
-}
-
+// GET simple pour actions avec extra params (creer*, etc.)
 async function apiGet(action, extra) {
-  var key = cacheKey(action, extra);
-  var cached = cacheGet(key);
-  if (cached) { setConnected(true); return cached; }
   try {
     var url = SCRIPT_URL + '?action=' + encodeURIComponent(action) + '&token=' + encodeURIComponent(TOKEN);
     if (extra) {
@@ -810,21 +792,84 @@ async function apiGet(action, extra) {
         url += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(String(extra[k]));
       });
     }
-    var r = await fetch(url, {
-      method: 'GET',
-      redirect: 'follow'
-    });
+    var r = await fetch(url, { method: 'GET', redirect: 'follow' });
     if (!r.ok) throw new Error('HTTP ' + r.status);
     var json = await r.json();
-    var data = json.data || json;
-    cacheSet(key, data);
     setConnected(true);
-    return data;
+    return json.data || json;
   } catch(e) {
     setConnected(false);
     console.warn('API ' + action + ':', e.message);
     return null;
   }
+}
+
+// ── CACHE UNIFIÉ — getAllData en 1 appel ────────────────────────
+function loadCache() {
+  try {
+    var ts = parseInt(localStorage.getItem(CACHE_TS) || '0');
+    if (Date.now() - ts < CACHE_TTL) {
+      var raw = localStorage.getItem(CACHE_KEY);
+      if (raw) return JSON.parse(raw);
+    }
+  } catch(e) {}
+  return null;
+}
+
+function saveCache(data) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+    localStorage.setItem(CACHE_TS, String(Date.now()));
+  } catch(e) {}
+}
+
+function clearCache() {
+  localStorage.removeItem(CACHE_KEY);
+  localStorage.removeItem(CACHE_TS);
+  allData = null;
+}
+
+async function ensureData() {
+  // Déjà en mémoire
+  if (allData) return allData;
+  // Essayer le cache localStorage
+  var cached = loadCache();
+  if (cached) { allData = cached; setConnected(true); return allData; }
+  // Sinon fetch getAllData en 1 appel
+  if (!dataLoading) {
+    dataLoading = fetchAllData();
+  }
+  return await dataLoading;
+}
+
+async function fetchAllData() {
+  try {
+    var url = SCRIPT_URL + '?action=getAllData&token=' + encodeURIComponent(TOKEN);
+    var r = await fetch(url, { method: 'GET', redirect: 'follow' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    var json = await r.json();
+    var data = json.data || json;
+    allData = data;
+    saveCache(data);
+    setConnected(true);
+    dataLoading = null;
+    return data;
+  } catch(e) {
+    setConnected(false);
+    console.warn('getAllData:', e.message);
+    dataLoading = null;
+    return null;
+  }
+}
+
+function forceRefresh() {
+  var btn = document.getElementById('btn-refresh');
+  btn.textContent = '↻ Chargement...';
+  clearCache();
+  fetchAllData().then(function() {
+    btn.textContent = '↻ Rafraichir';
+    showView('dashboard');
+  });
 }
 
 function setConnected(ok){
@@ -854,12 +899,13 @@ function tagStatut(s){
 
 // ── DASHBOARD ────────────────────────────────────────────────────
 async function loadDashboard(){
-  if(cache.dashboard){ renderDashboard(cache.dashboard); return; }
-  var data = await apiGet('getDashboard');
-  if(!data){ renderDashboardOffline(); return; }
-  cache.dashboard = data;
-  setTimeout(()=>{ cache.dashboard=null; }, 60000); // refresh every 60s
-  renderDashboard(data);
+  var all = allData;
+  if (!all) {
+    document.getElementById('dash-stats').innerHTML = '<div class="loading" style="grid-column:span 4;"><div class="spinner"></div> Chargement...</div>';
+    all = await ensureData();
+  }
+  if(!all || !all.dashboard){ renderDashboardOffline(); return; }
+  renderDashboard(all.dashboard);
 }
 
 function renderDashboard(d){
@@ -967,8 +1013,9 @@ function renderDashboardOffline(){
 // ── PROJETS ──────────────────────────────────────────────────────
 async function loadProjets(){
   var el = document.getElementById('projets-table');
-  el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement...</div>';
-  var data = await apiGet('getProjets');
+  var all = allData;
+  if (!all) { el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement...</div>'; all = await ensureData(); }
+  var data = all && all.projets ? all.projets : null;
   if(!data){ el.innerHTML='<div class="empty">⚠ Erreur connexion</div>'; return; }
   if(!data.length){ el.innerHTML='<div class="empty">Aucun projet</div>'; return; }
   var actifs = data.filter(p=>!['Livre - paye','Refuse','Expire','Annule'].includes(p.statut));
@@ -990,8 +1037,9 @@ async function loadProjets(){
 // ── CLIENTS ──────────────────────────────────────────────────────
 async function loadClients(){
   var el = document.getElementById('clients-table');
-  el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement...</div>';
-  var data = await apiGet('getClients');
+  var all = allData;
+  if (!all) { el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement...</div>'; all = await ensureData(); }
+  var data = all && all.clients ? all.clients : null;
   if(!data){ el.innerHTML='<div class="empty">⚠ Erreur connexion</div>'; return; }
   el.innerHTML = `<table class="tbl"><thead><tr>
     <th>ID</th><th>Client</th><th>Contact</th><th>Courriel</th><th>Type</th><th>Statut</th><th>Drive</th>
@@ -1011,8 +1059,9 @@ async function loadClients(){
 // ── LEADS ────────────────────────────────────────────────────────
 async function loadLeads(){
   var el = document.getElementById('leads-table');
-  el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement...</div>';
-  var data = await apiGet('getLeads');
+  var all = allData;
+  if (!all) { el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement...</div>'; all = await ensureData(); }
+  var data = all && all.leads ? all.leads : null;
   if(!data){ el.innerHTML='<div class="empty">⚠ Erreur connexion</div>'; return; }
   var recents = data.slice(-50).reverse();
   el.innerHTML = `<table class="tbl"><thead><tr>
@@ -1032,8 +1081,9 @@ async function loadLeads(){
 // ── SÉANCES ──────────────────────────────────────────────────────
 async function loadSeances(){
   var el = document.getElementById('seances-table');
-  el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement...</div>';
-  var data = await apiGet('getSeances');
+  var all = allData;
+  if (!all) { el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement...</div>'; all = await ensureData(); }
+  var data = all && all.seances ? all.seances : null;
   if(!data){ el.innerHTML='<div class="empty">⚠ Erreur connexion</div>'; return; }
   var actives = data.filter(s=>!['Livree','Annulee'].includes(s.statut)).slice(-40).reverse();
   el.innerHTML = `<table class="tbl"><thead><tr>
@@ -1054,8 +1104,9 @@ async function loadSeances(){
 // ── FACTURES ─────────────────────────────────────────────────────
 async function loadFactures(){
   var el = document.getElementById('factures-table');
-  el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement...</div>';
-  var data = await apiGet('getFactures');
+  var all = allData;
+  if (!all) { el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement...</div>'; all = await ensureData(); }
+  var data = all && all.factures ? all.factures : null;
   if(!data){ el.innerHTML='<div class="empty">⚠ Erreur connexion</div>'; return; }
   var recents = data.slice(-60).reverse();
   el.innerHTML = `<table class="tbl"><thead><tr>
@@ -1075,8 +1126,9 @@ async function loadFactures(){
 // ── BANQUES D'HEURES ─────────────────────────────────────────────
 async function loadBH(){
   var el = document.getElementById('bh-table');
-  el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement...</div>';
-  var data = await apiGet('getBanquesHeures');
+  var all = allData;
+  if (!all) { el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement...</div>'; all = await ensureData(); }
+  var data = all && all.banquesHeures ? all.banquesHeures : null;
   if(!data){ el.innerHTML='<div class="empty">⚠ Erreur connexion</div>'; return; }
   var registre = data.registre||[];
   if(!registre.length){ el.innerHTML='<div class="empty">Aucune banque enregistrée</div>'; return; }
@@ -1123,7 +1175,7 @@ async function creerLead(){
   if(res && res.leadId){
     el.textContent = '✅ Lead '+res.leadId+' créé avec succès!';
     el.style.display='block';
-    cache.dashboard=null;
+    clearCache();
     setTimeout(()=>closeModal('modal-lead'),2000);
   } else {
     el.textContent = '⚠ Mode no-cors — lead envoyé au Sheet (impossible de confirmer, vérifier dans Google Sheets)';
@@ -1167,7 +1219,7 @@ async function creerProjet(){
   if(res && res.numProjet){
     el.textContent = '✅ '+res.numProjet+' — Total TTC: '+fmt$(res.totalTTC)+' | Dépôt: '+fmt$(res.depot);
     el.style.display='block';
-    cache.dashboard=null;
+    clearCache();
     setTimeout(()=>closeModal('modal-projet'),3000);
   } else {
     el.textContent = '⚠ Envoyé — vérifier dans Google Sheets';
@@ -1216,6 +1268,12 @@ async function creerDepense(){
 }
 
 // ── INIT ────────────────────────────────────────────────────────
+// Charger le cache localStorage si dispo, sinon fetch getAllData
+var cached = loadCache();
+if (cached) {
+  allData = cached;
+  setConnected(true);
+}
 loadDashboard();
 </script>
 </body>
