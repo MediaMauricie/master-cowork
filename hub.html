@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CoWork MM — Hub Interne</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --red:#c0392b;--red-l:#fdf4f3;--red-d:#8c3d36;
+  --dark:#2d2d2d;--mid:#555;--light:#888;--border:#e4e4e4;
+  --bg:#f2f2f0;--white:#ffffff;--green:#2d7a57;--green-l:#edf7f2;
+  --gold:#f5a623;--gold-l:#fef9ee;--blue:#3d6e9e;--blue-l:#eef4fb;
+  --purple:#6b5ea8;--purple-l:#f4f0fb;
+}
+body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;font-size:13px;}
+
+/* ── TOP BAR ── */
+.topbar{background:var(--dark);padding:0 28px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.topbar-logo{display:flex;align-items:center;gap:12px;}
+.topbar-logo img{height:28px;}
+.topbar-badge{background:var(--red);color:#fff;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:20px;}
+.topbar-right{display:flex;align-items:center;gap:16px;}
+.topbar-time{font-size:11px;color:rgba(255,255,255,0.4);font-weight:600;}
+.topbar-status{display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,0.6);font-weight:600;}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#888;animation:pulse 2s infinite;}
+.status-dot.connected{background:#2ecc71;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+
+/* ── LAYOUT ── */
+.shell{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 52px);}
+
+/* ── SIDEBAR ── */
+.sidebar{background:var(--white);border-right:2px solid var(--border);padding:20px 0;}
+.sidebar-section{margin-bottom:6px;}
+.sidebar-label{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--light);padding:8px 20px 4px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;cursor:pointer;transition:all .15s;border-left:3px solid transparent;font-size:12px;font-weight:600;color:var(--mid);}
+.nav-item:hover{background:var(--bg);color:var(--dark);}
+.nav-item.active{background:var(--red-l);color:var(--red);border-left-color:var(--red);font-weight:700;}
+.nav-item .ico{font-size:15px;width:20px;text-align:center;flex-shrink:0;}
+.nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:8px;font-weight:800;padding:2px 7px;border-radius:10px;min-width:18px;text-align:center;}
+.nav-badge.green{background:var(--green);}
+.nav-badge.gold{background:var(--gold);}
+.sidebar-divider{height:1px;background:var(--border);margin:10px 16px;}
+
+/* ── MAIN ── */
+.main{padding:24px 28px;overflow-y:auto;}
+.view{display:none;}
+.view.active{display:block;}
+
+/* ── PAGE HEADER ── */
+.page-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.page-title{font-size:20px;font-weight:900;color:var(--dark);letter-spacing:-.5px;}
+.page-sub{font-size:12px;color:var(--light);font-weight:500;margin-top:2px;}
+.btn{border:none;border-radius:8px;padding:9px 18px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px;}
+.btn-primary{background:var(--dark);color:#fff;}.btn-primary:hover{background:#1a1a1a;}
+.btn-red{background:var(--red);color:#fff;}.btn-red:hover{background:var(--red-d);}
+.btn-ghost{background:var(--bg);color:var(--dark);border:2px solid var(--border);}.btn-ghost:hover{border-color:var(--dark);}
+.btn-sm{padding:6px 12px;font-size:10px;}
+
+/* ── DASHBOARD STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.stat-card{background:var(--white);border:2px solid var(--border);border-radius:12px;padding:16px 18px;position:relative;overflow:hidden;}
+.stat-card.highlight{border-color:var(--green);background:var(--green-l);}
+.stat-card.warn{border-color:var(--gold);background:var(--gold-l);}
+.stat-card.danger{border-color:var(--red);background:var(--red-l);}
+.stat-card.info{border-color:var(--blue);background:var(--blue-l);}
+.stat-label{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--light);margin-bottom:8px;}
+.stat-val{font-size:26px;font-weight:900;color:var(--dark);letter-spacing:-1px;line-height:1;}
+.stat-val.green{color:var(--green);}
+.stat-val.red{color:var(--red);}
+.stat-val.gold{color:var(--gold);}
+.stat-val.blue{color:var(--blue);}
+.stat-sub{font-size:10px;font-weight:600;color:var(--light);margin-top:6px;}
+.stat-bar{height:3px;background:var(--border);border-radius:2px;margin-top:10px;overflow:hidden;}
+.stat-bar-fill{height:100%;background:var(--green);border-radius:2px;transition:width 1s;}
+
+/* ── PROGRESS ── */
+.objectif-block{background:var(--white);border:2px solid var(--border);border-radius:12px;padding:18px 22px;margin-bottom:20px;}
+.obj-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.obj-title{font-size:12px;font-weight:800;color:var(--dark);}
+.obj-pct{font-size:22px;font-weight:900;color:var(--green);}
+.progress-track{height:8px;background:var(--border);border-radius:4px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),#52c47a);border-radius:4px;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
+.obj-details{display:flex;gap:24px;margin-top:10px;}
+.obj-det{font-size:11px;color:var(--light);font-weight:600;}
+.obj-det strong{color:var(--dark);}
+
+/* ── ALERTES ── */
+.alertes{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.alerte{border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;border:1.5px solid;}
+.alerte.danger{background:var(--red-l);border-color:#f0d0cc;}
+.alerte.warn{background:var(--gold-l);border-color:#f5e4b0;}
+.alerte.info{background:var(--blue-l);border-color:#c5d9ed;}
+.alerte-ico{font-size:18px;flex-shrink:0;}
+.alerte-text{font-size:12px;font-weight:600;color:var(--dark);flex:1;}
+.alerte-sub{font-size:11px;font-weight:500;color:var(--mid);}
+
+/* ── SECTION CARDS ── */
+.section-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.section-card{background:var(--white);border:2px solid var(--border);border-radius:12px;overflow:hidden;}
+.section-card.full{grid-column:span 2;}
+.card-hdr{background:var(--dark);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;}
+.card-hdr-title{font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#fff;}
+.card-hdr-action{font-size:10px;font-weight:700;color:rgba(255,255,255,.5);cursor:pointer;background:none;border:none;font-family:inherit;}
+.card-hdr-action:hover{color:#fff;}
+.card-body{padding:14px 16px;}
+
+/* ── TABLE ── */
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);padding:6px 8px;text-align:left;border-bottom:2px solid var(--border);}
+.tbl td{padding:8px 8px;font-size:11px;font-weight:600;color:var(--dark);border-bottom:1px solid var(--bg);vertical-align:middle;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:var(--bg);}
+.tbl .mono{font-size:10px;font-weight:800;color:var(--red);}
+.tbl .muted{font-size:10px;color:var(--light);font-weight:500;}
+.tag{display:inline-block;font-size:9px;font-weight:800;padding:2px 8px;border-radius:10px;letter-spacing:.5px;}
+.tag.green{background:var(--green-l);color:var(--green);}
+.tag.red{background:var(--red-l);color:var(--red);}
+.tag.gold{background:var(--gold-l);color:#c07840;}
+.tag.blue{background:var(--blue-l);color:var(--blue);}
+.tag.purple{background:var(--purple-l);color:var(--purple);}
+.tag.gray{background:#f0f0f0;color:#888;}
+
+/* ── LIENS RAPIDES ── */
+.links-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.link-card{border:2px solid var(--border);border-radius:10px;padding:14px;text-decoration:none;display:flex;flex-direction:column;gap:6px;transition:all .15s;background:var(--white);}
+.link-card:hover{border-color:var(--dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.08);}
+.link-card.red{border-color:var(--red);background:var(--red-l);}
+.link-ico{font-size:22px;}
+.link-name{font-size:11px;font-weight:800;color:var(--dark);}
+.link-desc{font-size:10px;color:var(--light);font-weight:500;}
+
+/* ── FORMS ── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--white);border-radius:14px;padding:28px;width:520px;max-height:85vh;overflow-y:auto;}
+.modal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.modal-title{font-size:16px;font-weight:900;color:var(--dark);}
+.modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--light);}
+.form-field{margin-bottom:14px;}
+.form-field label{display:block;font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);margin-bottom:5px;}
+.form-field input,.form-field select,.form-field textarea{width:100%;border:2px solid var(--border);border-radius:8px;padding:9px 12px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:var(--dark);outline:none;transition:border-color .2s;background:var(--white);}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--dark);}
+.form-field textarea{min-height:70px;resize:vertical;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* ── LOADING ── */
+.loading{display:flex;align-items:center;gap:10px;padding:20px;color:var(--light);font-size:12px;font-weight:600;}
+.spinner{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.empty{padding:28px;text-align:center;color:var(--light);font-size:12px;font-weight:500;}
+
+/* ── PORTAIL CLIENT LIENS ── */
+.portal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.portal-item{border:2px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;}
+.portal-info{}
+.portal-name{font-size:12px;font-weight:800;color:var(--dark);}
+.portal-id{font-size:10px;color:var(--red);font-weight:700;}
+.portal-actions{display:flex;gap:6px;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .shell{grid-template-columns:1fr;}
+  .sidebar{display:none;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .section-row,.form-row{grid-template-columns:1fr;}
+  .section-card.full{grid-column:span 1;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_M-coul.png" alt="MM">
+    <div class="topbar-badge">Hub interne</div>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-status"><div class="status-dot" id="status-dot"></div><span id="status-txt">Connexion...</span></div>
+    <div class="topbar-time" id="topbar-time"></div>
+  </div>
+</div>
+
+<div class="shell">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-section">
+    <div class="sidebar-label">Vue principale</div>
+    <div class="nav-item active" onclick="showView('dashboard')" data-view="dashboard">
+      <span class="ico">📊</span> Dashboard
+    </div>
+  </div>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Gestion</div>
+    <div class="nav-item" onclick="showView('projets')" data-view="projets">
+      <span class="ico">📋</span> Projets
+      <span class="nav-badge" id="badge-projets">—</span>
+    </div>
+    <div class="nav-item" onclick="showView('clients')" data-view="clients">
+      <span class="ico">👥</span> Clients
+    </div>
+    <div class="nav-item" onclick="showView('leads')" data-view="leads">
+      <span class="ico">📥</span> Leads
+      <span class="nav-badge" id="badge-leads">—</span>
+    </div>
+    <div class="nav-item" onclick="showView('seances')" data-view="seances">
+      <span class="ico">📅</span> Séances
+    </div>
+    <div class="nav-item" onclick="showView('factures')" data-view="factures">
+      <span class="ico">🧾</span> Factures
+      <span class="nav-badge gold" id="badge-factures">—</span>
+    </div>
+    <div class="nav-item" onclick="showView('bh')" data-view="bh">
+      <span class="ico">🎬</span> Banques d'heures
+    </div>
+  </div>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Outils</div>
+    <div class="nav-item" onclick="showView('contrats')" data-view="contrats">
+      <span class="ico">📝</span> Contrats
+    </div>
+    <div class="nav-item" onclick="showView('offres')" data-view="offres">
+      <span class="ico">🔗</span> Pages offres live
+    </div>
+    <div class="nav-item" onclick="showView('nouveau')" data-view="nouveau">
+      <span class="ico">⚡</span> Actions rapides
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- ── DASHBOARD ── -->
+  <div class="view active" id="view-dashboard">
+    <div class="page-hdr">
+      <div>
+        <div class="page-title">Dashboard</div>
+        <div class="page-sub" id="dash-update">Chargement...</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="loadDashboard()">↻ Actualiser</button>
+    </div>
+
+    <div id="dash-alertes" class="alertes"></div>
+
+    <div id="objectif-block" class="objectif-block" style="display:none;">
+      <div class="obj-hdr">
+        <div class="obj-title">🎯 Objectif annuel <span id="obj-annee"></span></div>
+        <div class="obj-pct" id="obj-pct">—</div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="obj-bar" style="width:0%"></div></div>
+      <div class="obj-details">
+        <div class="obj-det">Encaissé : <strong id="obj-encaisse">—</strong></div>
+        <div class="obj-det">Objectif : <strong id="obj-total">—</strong></div>
+        <div class="obj-det">Reste : <strong id="obj-reste">—</strong></div>
+        <div class="obj-det">Facturé : <strong id="obj-facture">—</strong></div>
+      </div>
+    </div>
+
+    <div class="stats-grid" id="dash-stats">
+      <div class="stat-card"><div class="stat-label">Chargement</div><div class="spinner"></div></div>
+    </div>
+
+    <div class="section-row">
+      <div class="section-card">
+        <div class="card-hdr"><span class="card-hdr-title">🚨 Factures en retard</span></div>
+        <div class="card-body" id="dash-retard"><div class="loading"><div class="spinner"></div> Chargement...</div></div>
+      </div>
+      <div class="section-card">
+        <div class="card-hdr"><span class="card-hdr-title">📅 Agenda — 30 prochains jours</span></div>
+        <div class="card-body" id="dash-agenda"><div class="loading"><div class="spinner"></div> Chargement...</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PROJETS ── -->
+  <div class="view" id="view-projets">
+    <div class="page-hdr">
+      <div>
+        <div class="page-title">Projets</div>
+        <div class="page-sub">Tous les projets actifs</div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="openModal('modal-projet')">+ Nouveau projet</button>
+    </div>
+    <div class="section-card full">
+      <div class="card-hdr">
+        <span class="card-hdr-title">Projets actifs</span>
+        <button class="card-hdr-action" onclick="loadProjets()">↻</button>
+      </div>
+      <div class="card-body" id="projets-table"><div class="loading"><div class="spinner"></div> Chargement...</div></div>
+    </div>
+  </div>
+
+  <!-- ── CLIENTS ── -->
+  <div class="view" id="view-clients">
+    <div class="page-hdr">
+      <div>
+        <div class="page-title">Clients</div>
+        <div class="page-sub">Répertoire complet</div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="openModal('modal-client')">+ Nouveau client</button>
+    </div>
+    <div class="section-card full">
+      <div class="card-hdr">
+        <span class="card-hdr-title">Clients</span>
+        <button class="card-hdr-action" onclick="loadClients()">↻</button>
+      </div>
+      <div class="card-body" id="clients-table"><div class="loading"><div class="spinner"></div> Chargement...</div></div>
+    </div>
+  </div>
+
+  <!-- ── LEADS ── -->
+  <div class="view" id="view-leads">
+    <div class="page-hdr">
+      <div>
+        <div class="page-title">Leads</div>
+        <div class="page-sub">Nouveaux leads et prospects</div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="openModal('modal-lead')">+ Nouveau lead</button>
+    </div>
+    <div class="section-card full">
+      <div class="card-hdr">
+        <span class="card-hdr-title">Leads</span>
+        <button class="card-hdr-action" onclick="loadLeads()">↻</button>
+      </div>
+      <div class="card-body" id="leads-table"><div class="loading"><div class="spinner"></div> Chargement...</div></div>
+    </div>
+  </div>
+
+  <!-- ── SÉANCES ── -->
+  <div class="view" id="view-seances">
+    <div class="page-hdr">
+      <div>
+        <div class="page-title">Séances</div>
+        <div class="page-sub">Tournages, photos, réunions</div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="openModal('modal-seance')">+ Nouvelle séance</button>
+    </div>
+    <div class="section-card full">
+      <div class="card-hdr">
+        <span class="card-hdr-title">Séances</span>
+        <button class="card-hdr-action" onclick="loadSeances()">↻</button>
+      </div>
+      <div class="card-body" id="seances-table"><div class="loading"><div class="spinner"></div> Chargement...</div></div>
+    </div>
+  </div>
+
+  <!-- ── FACTURES ── -->
+  <div class="view" id="view-factures">
+    <div class="page-hdr">
+      <div>
+        <div class="page-title">Factures</div>
+        <div class="page-sub">Historique et statuts</div>
+      </div>
+    </div>
+    <div class="section-card full">
+      <div class="card-hdr">
+        <span class="card-hdr-title">Factures</span>
+        <button class="card-hdr-action" onclick="loadFactures()">↻</button>
+      </div>
+      <div class="card-body" id="factures-table"><div class="loading"><div class="spinner"></div> Chargement...</div></div>
+    </div>
+  </div>
+
+  <!-- ── BANQUES D'HEURES ── -->
+  <div class="view" id="view-bh">
+    <div class="page-hdr">
+      <div>
+        <div class="page-title">Banques d'heures</div>
+        <div class="page-sub">Registre et sessions</div>
+      </div>
+    </div>
+    <div class="section-card full">
+      <div class="card-hdr">
+        <span class="card-hdr-title">Registre des banques</span>
+        <button class="card-hdr-action" onclick="loadBH()">↻</button>
+      </div>
+      <div class="card-body" id="bh-table"><div class="loading"><div class="spinner"></div> Chargement...</div></div>
+    </div>
+  </div>
+
+  <!-- ── CONTRATS ── -->
+  <div class="view" id="view-contrats">
+    <div class="page-hdr">
+      <div>
+        <div class="page-title">Contrats interactifs</div>
+        <div class="page-sub">Ouvrir, remplir, générer PDF → Zoho Sign</div>
+      </div>
+    </div>
+    <div class="links-grid">
+      <a href="https://mediamauricie.github.io/master-cowork/contrats/MM-EVT.html" target="_blank" class="link-card red">
+        <div class="link-ico">🎉</div>
+        <div class="link-name">MM-EVT — Couverture événementielle</div>
+        <div class="link-desc">Packages 2h à 12h · Photo + Vidéo</div>
+      </a>
+      <a href="https://mediamauricie.github.io/master-cowork/contrats/MM-BIMG.html" target="_blank" class="link-card">
+        <div class="link-ico">📸</div>
+        <div class="link-name">MM-BIMG — Banque d'images mensuelle</div>
+        <div class="link-desc">Essentiel / Pro / Sur mesure · MEL inclus</div>
+      </a>
+      <a href="https://mediamauricie.github.io/master-cowork/contrats/MM-FCM.html" target="_blank" class="link-card">
+        <div class="link-ico">📱</div>
+        <div class="link-name">MM-FCM — Forfait contenu mensuel</div>
+        <div class="link-desc">Essentiel 2h / Pro 4h · vidéo + photo</div>
+      </a>
+      <a href="https://mediamauricie.github.io/master-cowork/contrats/MM-VID.html" target="_blank" class="link-card">
+        <div class="link-ico">🎬</div>
+        <div class="link-name">MM-VID — Production vidéo</div>
+        <div class="link-desc">Tournages multiples · livrables détaillés</div>
+      </a>
+      <a href="https://mediamauricie.github.io/master-cowork/contrats/MM-PHO.html" target="_blank" class="link-card">
+        <div class="link-ico">🖼️</div>
+        <div class="link-name">MM-PHO — Séance photo unique</div>
+        <div class="link-desc">Portraits, événement, corporate</div>
+      </a>
+      <a href="https://mediamauricie.github.io/master-cowork/contrats/MM-BH.html" target="_blank" class="link-card">
+        <div class="link-ico">⏱️</div>
+        <div class="link-name">MM-BH — Banque d'heures montage</div>
+        <div class="link-desc">Essentiel 15h / Pro 25h / Premium 50h</div>
+      </a>
+    </div>
+    <div style="margin-top:20px;">
+      <div class="page-title" style="font-size:15px;margin-bottom:14px;">Outils</div>
+      <div class="links-grid">
+        <a href="https://mediamauricie.github.io/master-cowork/outils/calculateur-production.html" target="_blank" class="link-card">
+          <div class="link-ico">🧮</div>
+          <div class="link-name">Calculateur de production</div>
+          <div class="link-desc">Co-production MM × Andromede</div>
+        </a>
+        <a href="https://mediamauricie.github.io/master-cowork/offres/post-production.html" target="_blank" class="link-card">
+          <div class="link-ico">🎞️</div>
+          <div class="link-name">Post-production</div>
+          <div class="link-desc">Banques d'heures + fichiers bruts</div>
+        </a>
+        <a href="https://sign.zoho.com/zsfl/y77deZQnQhgW1KbmdeH6?i=2660" target="_blank" class="link-card">
+          <div class="link-ico">✍️</div>
+          <div class="link-name">Décharge MEL — Zoho Sign</div>
+          <div class="link-desc">Autorisation Mauricie en lumière</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PAGES OFFRES LIVE ── -->
+  <div class="view" id="view-offres">
+    <div class="page-hdr">
+      <div>
+        <div class="page-title">Pages offres live</div>
+        <div class="page-sub">Pages publiques mediamauricie.com — sans prix</div>
+      </div>
+    </div>
+    <div class="links-grid">
+      <a href="https://mediamauricie.com/banques-dimages" target="_blank" class="link-card">
+        <div class="link-ico">📸</div>
+        <div class="link-name">Banques d'images</div>
+        <div class="link-desc">mediamauricie.com/banques-dimages</div>
+      </a>
+      <a href="https://mediamauricie.com/productions-video-forfaits/" target="_blank" class="link-card">
+        <div class="link-ico">🎬</div>
+        <div class="link-name">Productions vidéo — Forfaits</div>
+        <div class="link-desc">mediamauricie.com/productions-video-forfaits</div>
+      </a>
+      <a href="https://mediamauricie.com/services-video/" target="_blank" class="link-card">
+        <div class="link-ico">📹</div>
+        <div class="link-name">Services vidéo</div>
+        <div class="link-desc">mediamauricie.com/services-video</div>
+      </a>
+      <a href="https://mediamauricie.com/forfaits-media-mauricie/" target="_blank" class="link-card">
+        <div class="link-ico">📦</div>
+        <div class="link-name">Forfaits Média Mauricie</div>
+        <div class="link-desc">mediamauricie.com/forfaits-media-mauricie</div>
+      </a>
+      <a href="https://mediamauricie.com/evenements/" target="_blank" class="link-card">
+        <div class="link-ico">🎉</div>
+        <div class="link-name">Couverture événements</div>
+        <div class="link-desc">mediamauricie.com/evenements</div>
+      </a>
+      <a href="https://mediamauricie.github.io/master-cowork/offres/post-production.html" target="_blank" class="link-card">
+        <div class="link-ico">🎞️</div>
+        <div class="link-name">Post-production (GitHub)</div>
+        <div class="link-desc">BH de montage + fichiers bruts</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ── ACTIONS RAPIDES ── -->
+  <div class="view" id="view-nouveau">
+    <div class="page-hdr">
+      <div>
+        <div class="page-title">Actions rapides</div>
+        <div class="page-sub">Créer directement dans le Sheet</div>
+      </div>
+    </div>
+    <div class="links-grid" style="grid-template-columns:repeat(2,1fr);">
+      <div class="link-card" style="cursor:pointer;" onclick="openModal('modal-lead')">
+        <div class="link-ico">📥</div>
+        <div class="link-name">Nouveau lead</div>
+        <div class="link-desc">Ajouter dans 📥 Leads du Sheet</div>
+      </div>
+      <div class="link-card" style="cursor:pointer;" onclick="openModal('modal-client')">
+        <div class="link-ico">👤</div>
+        <div class="link-name">Nouveau client</div>
+        <div class="link-desc">CLI-XXX + dossier Drive automatique</div>
+      </div>
+      <div class="link-card" style="cursor:pointer;" onclick="openModal('modal-projet')">
+        <div class="link-ico">📋</div>
+        <div class="link-name">Nouveau projet</div>
+        <div class="link-desc">MM-2026-XXX + calcul taxes auto</div>
+      </div>
+      <div class="link-card" style="cursor:pointer;" onclick="openModal('modal-seance')">
+        <div class="link-ico">📅</div>
+        <div class="link-name">Nouvelle séance</div>
+        <div class="link-desc">SCA-2026-XXX + sync Google Calendar</div>
+      </div>
+      <div class="link-card" style="cursor:pointer;" onclick="openModal('modal-depense')">
+        <div class="link-ico">💸</div>
+        <div class="link-name">Ajouter une dépense</div>
+        <div class="link-desc">Lier à un projet ou GENERAL</div>
+      </div>
+      <a href="https://docs.google.com/spreadsheets/d/1hYkzPOzdZ_yU7Mkylvaq-Qq4GUy3gle0" target="_blank" class="link-card">
+        <div class="link-ico">📊</div>
+        <div class="link-name">Ouvrir le Sheet Google</div>
+        <div class="link-desc">CoWork MM v5.1 — accès direct</div>
+      </a>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<!-- ── MODALS ── -->
+
+<!-- Modal Nouveau Lead -->
+<div class="modal-bg" id="modal-lead">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-title">📥 Nouveau lead</div>
+      <button class="modal-close" onclick="closeModal('modal-lead')">×</button>
+    </div>
+    <div class="form-row">
+      <div class="form-field"><label>Prénom</label><input type="text" id="lead-prenom" placeholder="Prénom"></div>
+      <div class="form-field"><label>Nom</label><input type="text" id="lead-nom" placeholder="Nom"></div>
+    </div>
+    <div class="form-field"><label>Organisation</label><input type="text" id="lead-org" placeholder="Nom de l'entreprise"></div>
+    <div class="form-row">
+      <div class="form-field"><label>Courriel</label><input type="email" id="lead-email" placeholder="email@..."></div>
+      <div class="form-field"><label>Téléphone</label><input type="text" id="lead-tel" placeholder="(819) 000-0000"></div>
+    </div>
+    <div class="form-field"><label>Service</label>
+      <select id="lead-service">
+        <option value="">— Sélectionner —</option>
+        <option>MM-VID — Production video</option>
+        <option>MM-FCM — Forfait contenu mensuel</option>
+        <option>MM-BIMG — Banque images mensuelle</option>
+        <option>MM-EVT — Couverture evenementielle</option>
+        <option>MM-PHO — Seance et evenement photo</option>
+        <option>MM-BH — Banque heures montage</option>
+        <option>MTW-VID — Mat the Warrior / Production</option>
+      </select>
+    </div>
+    <div class="form-field"><label>Source</label>
+      <select id="lead-source">
+        <option>Formulaire site web</option>
+        <option>Instagram</option>
+        <option>Facebook</option>
+        <option>Référence</option>
+        <option>Appel entrant</option>
+        <option>Autre</option>
+      </select>
+    </div>
+    <div class="form-field"><label>Notes</label><textarea id="lead-notes" placeholder="Description du projet..."></textarea></div>
+    <div style="display:flex;gap:10px;margin-top:4px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="creerLead()"><span id="btn-lead-txt">⚡ Créer le lead</span></button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-lead')">Annuler</button>
+    </div>
+    <div id="lead-result" style="display:none;margin-top:12px;padding:12px;background:var(--green-l);border-radius:8px;font-size:12px;font-weight:600;color:var(--green);"></div>
+  </div>
+</div>
+
+<!-- Modal Nouveau Client -->
+<div class="modal-bg" id="modal-client">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-title">👤 Nouveau client</div>
+      <button class="modal-close" onclick="closeModal('modal-client')">×</button>
+    </div>
+    <div class="form-field"><label>Nom / Organisation</label><input type="text" id="cli-nom" placeholder="Nom de l'entreprise ou du client"></div>
+    <div class="form-field"><label>Contact principal</label><input type="text" id="cli-contact" placeholder="Prénom Nom"></div>
+    <div class="form-row">
+      <div class="form-field"><label>Courriel</label><input type="email" id="cli-email" placeholder="email@..."></div>
+      <div class="form-field"><label>Téléphone</label><input type="text" id="cli-tel" placeholder="(819) 000-0000"></div>
+    </div>
+    <div class="form-field"><label>Type</label>
+      <select id="cli-type">
+        <option>Corporatif</option><option>OBNL</option><option>Municipal</option>
+        <option>Festival</option><option>Agence</option><option>Individuel</option><option>Autre</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:4px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="creerClient()"><span id="btn-cli-txt">⚡ Créer + dossier Drive</span></button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-client')">Annuler</button>
+    </div>
+    <div id="cli-result" style="display:none;margin-top:12px;padding:12px;background:var(--green-l);border-radius:8px;font-size:12px;font-weight:600;color:var(--green);"></div>
+  </div>
+</div>
+
+<!-- Modal Nouveau Projet -->
+<div class="modal-bg" id="modal-projet">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-title">📋 Nouveau projet</div>
+      <button class="modal-close" onclick="closeModal('modal-projet')">×</button>
+    </div>
+    <div class="form-row">
+      <div class="form-field"><label>ID Client (CLI-XXX)</label><input type="text" id="proj-cli" placeholder="CLI-001"></div>
+      <div class="form-field"><label>Nom client</label><input type="text" id="proj-clinom" placeholder="Nom de l'organisation"></div>
+    </div>
+    <div class="form-field"><label>Service</label>
+      <select id="proj-service">
+        <option value="">— Sélectionner —</option>
+        <option>MM-VID — Production video</option>
+        <option>MM-FCM — Forfait contenu mensuel</option>
+        <option>MM-BIMG — Banque images mensuelle</option>
+        <option>MM-EVT — Couverture evenementielle</option>
+        <option>MM-PHO — Seance et evenement photo</option>
+        <option>MM-BH — Banque heures montage</option>
+        <option>MTW-VID — Mat the Warrior / Production</option>
+      </select>
+    </div>
+    <div class="form-field"><label>Description</label><input type="text" id="proj-desc" placeholder="Titre du projet..."></div>
+    <div class="form-row">
+      <div class="form-field"><label>Montant HT $</label><input type="number" id="proj-ht" placeholder="0.00" min="0" step="0.01"></div>
+      <div class="form-field"><label>Responsable</label>
+        <select id="proj-resp">
+          <option>Victoria</option><option>Jim</option><option>Victoria + Jim</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:4px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="creerProjet()"><span id="btn-proj-txt">⚡ Créer le projet</span></button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-projet')">Annuler</button>
+    </div>
+    <div id="proj-result" style="display:none;margin-top:12px;padding:12px;background:var(--green-l);border-radius:8px;font-size:12px;font-weight:700;color:var(--green);"></div>
+  </div>
+</div>
+
+<!-- Modal Nouvelle Séance -->
+<div class="modal-bg" id="modal-seance">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-title">📅 Nouvelle séance</div>
+      <button class="modal-close" onclick="closeModal('modal-seance')">×</button>
+    </div>
+    <div class="form-row">
+      <div class="form-field"><label># Projet</label><input type="text" id="sea-proj" placeholder="MM-2026-XXX"></div>
+      <div class="form-field"><label>Client</label><input type="text" id="sea-client" placeholder="Nom du client"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-field"><label>Date</label><input type="date" id="sea-date"></div>
+      <div class="form-field"><label>Type</label>
+        <select id="sea-type">
+          <option>Tournage - video</option><option>Photo - evenement</option>
+          <option>Photo - corporatif</option><option>Drone - mixte</option>
+          <option>Montage / post-prod</option><option>Consultation / reunion</option>
+          <option>Autre</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field"><label>Heure début</label><input type="time" id="sea-hdeb" value="09:00"></div>
+      <div class="form-field"><label>Heure fin</label><input type="time" id="sea-hfin" value="17:00"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-field"><label>Lieu</label><input type="text" id="sea-lieu" placeholder="Adresse complète"></div>
+      <div class="form-field"><label>Responsable</label>
+        <select id="sea-resp">
+          <option>Victoria</option><option>Jim</option><option>Victoria + Jim</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:4px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="creerSeance()"><span id="btn-sea-txt">⚡ Créer + Google Calendar</span></button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-seance')">Annuler</button>
+    </div>
+    <div id="sea-result" style="display:none;margin-top:12px;padding:12px;background:var(--green-l);border-radius:8px;font-size:12px;font-weight:600;color:var(--green);"></div>
+  </div>
+</div>
+
+<!-- Modal Dépense -->
+<div class="modal-bg" id="modal-depense">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-title">💸 Ajouter une dépense</div>
+      <button class="modal-close" onclick="closeModal('modal-depense')">×</button>
+    </div>
+    <div class="form-row">
+      <div class="form-field"><label># Projet ou GENERAL</label><input type="text" id="dep-proj" placeholder="MM-2026-XXX ou GENERAL"></div>
+      <div class="form-field"><label>Montant $</label><input type="number" id="dep-mnt" placeholder="0.00" min="0" step="0.01"></div>
+    </div>
+    <div class="form-field"><label>Catégorie</label>
+      <select id="dep-cat">
+        <option>Transport / KM</option><option>Equipement - location</option>
+        <option>Equipement - achat</option><option>Logiciels / licences</option>
+        <option>Sous-traitant</option><option>Musique / droits</option>
+        <option>Repas / per diem</option><option>Hebergement</option>
+        <option>Marketing</option><option>GENERAL - Entreprise</option><option>Autre</option>
+      </select>
+    </div>
+    <div class="form-field"><label>Description</label><input type="text" id="dep-desc" placeholder="Description de la dépense"></div>
+    <div class="form-row">
+      <div class="form-field"><label>Payé par</label>
+        <select id="dep-paye">
+          <option>Victoria</option><option>Jim</option><option>Carte entreprise</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:4px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="creerDepense()"><span id="btn-dep-txt">⚡ Ajouter</span></button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-depense')">Annuler</button>
+    </div>
+    <div id="dep-result" style="display:none;margin-top:12px;padding:12px;background:var(--green-l);border-radius:8px;font-size:12px;font-weight:600;color:var(--green);"></div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────────
+const SCRIPT_URL  = 'https://script.google.com/macros/s/AKfycbz3te2O_1GE6UWMY0yKUrXHaHKQMzZAyn2XYXCSAby09f7HgkOY22Buz2HFLzrM7g/exec';
+const TOKEN       = 'MauricieMau20'; // ← changer dans Apps Script PORTAL_TOKEN
+
+// ── ÉTAT ────────────────────────────────────────────────────────
+var cache = {};
+
+// ── HORLOGE ─────────────────────────────────────────────────────
+function tick(){
+  var now = new Date();
+  document.getElementById('topbar-time').textContent =
+    now.toLocaleDateString('fr-CA') + ' ' +
+    now.toLocaleTimeString('fr-CA',{hour:'2-digit',minute:'2-digit'});
+}
+tick(); setInterval(tick,1000);
+
+// ── NAVIGATION ──────────────────────────────────────────────────
+function showView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  document.querySelectorAll('[data-view="'+id+'"]').forEach(n=>n.classList.add('active'));
+  // Lazy load
+  if(id==='dashboard') loadDashboard();
+  else if(id==='projets')  loadProjets();
+  else if(id==='clients')  loadClients();
+  else if(id==='leads')    loadLeads();
+  else if(id==='seances')  loadSeances();
+  else if(id==='factures') loadFactures();
+  else if(id==='bh')       loadBH();
+}
+
+// ── API ──────────────────────────────────────────────────────────
+async function apiCall(action, extra){
+  var body = Object.assign({action:action, token:TOKEN}, extra||{});
+  try{
+    var r = await fetch(SCRIPT_URL, {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    setConnected(true);
+    return {status:'ok'};
+  } catch(e){
+    setConnected(false);
+    throw e;
+  }
+}
+
+// Pour GET (lecture) — on utilise la même URL mais on doit passer par cors-proxy ou apps script GET
+// Apps Script accepte les POST avec token — on fait tout en POST
+async function apiGet(action, extra){
+  var body = Object.assign({action:action, token:TOKEN}, extra||{});
+  try{
+    var r = await fetch(SCRIPT_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    var json = await r.json();
+    setConnected(true);
+    return json.data || json;
+  } catch(e){
+    setConnected(false);
+    console.warn('API '+action+':', e.message);
+    return null;
+  }
+}
+
+function setConnected(ok){
+  var dot = document.getElementById('status-dot');
+  var txt = document.getElementById('status-txt');
+  if(ok){ dot.className='status-dot connected'; txt.textContent='Connecté'; }
+  else { dot.className='status-dot'; txt.textContent='Hors ligne'; }
+}
+
+// ── FORMATTERS ───────────────────────────────────────────────────
+function fmt$(n){ return parseFloat(n||0).toLocaleString('fr-CA',{minimumFractionDigits:2,maximumFractionDigits:2})+' $'; }
+function fmtN(n){ return parseInt(n||0).toLocaleString('fr-CA'); }
+function tagStatut(s){
+  var map = {
+    'Actif':'green','Confirmee':'green','Livre - paye':'green','Paye':'green',
+    'En production':'blue','Post-production':'purple','Approuve':'blue',
+    'En cours':'blue','Planifiee':'gray',
+    'Brouillon / En soumission':'gray','Nouveau':'gray','Prospect':'gray',
+    'Contrat a preparer':'gold','Contrat envoye':'gold','Fini - attente de paiement':'gold',
+    'En attente':'gold','Partiellement paye':'gold','A payer':'gold',
+    'Envoye':'gold','Contrat signe - depot requis':'gold',
+    'Refuse':'red','Annule':'red','En retard':'red','Perdu':'red'
+  };
+  var col = map[s]||'gray';
+  return '<span class="tag '+col+'">'+s+'</span>';
+}
+
+// ── DASHBOARD ────────────────────────────────────────────────────
+async function loadDashboard(){
+  if(cache.dashboard){ renderDashboard(cache.dashboard); return; }
+  var data = await apiGet('getDashboard');
+  if(!data){ renderDashboardOffline(); return; }
+  cache.dashboard = data;
+  setTimeout(()=>{ cache.dashboard=null; }, 60000); // refresh every 60s
+  renderDashboard(data);
+}
+
+function renderDashboard(d){
+  document.getElementById('dash-update').textContent = 'Mis à jour : '+(d.lastUpdate||'—');
+
+  // Objectif
+  var pct = d.objectif>0 ? Math.min(Math.round(d.encaisse/d.objectif*100),100) : 0;
+  var ob = document.getElementById('objectif-block');
+  ob.style.display='block';
+  document.getElementById('obj-annee').textContent = d.annee||'';
+  document.getElementById('obj-pct').textContent = pct+'%';
+  document.getElementById('obj-bar').style.width = pct+'%';
+  document.getElementById('obj-encaisse').textContent = fmt$(d.encaisse);
+  document.getElementById('obj-total').textContent = fmt$(d.objectif);
+  document.getElementById('obj-reste').textContent = fmt$(Math.max(0,d.objectif-d.encaisse));
+  document.getElementById('obj-facture').textContent = fmt$(d.factureAnnee);
+
+  // Stats
+  var sg = document.getElementById('dash-stats');
+  sg.innerHTML = `
+    <div class="stat-card highlight">
+      <div class="stat-label">Encaissé ${d.annee}</div>
+      <div class="stat-val green">${fmt$(d.encaisse)}</div>
+      <div class="stat-sub">Paiements confirmés</div>
+      <div class="stat-bar"><div class="stat-bar-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div class="stat-card ${d.retard>0?'danger':''}">
+      <div class="stat-label">En retard</div>
+      <div class="stat-val ${d.retard>0?'red':''}">${fmt$(d.retard)}</div>
+      <div class="stat-sub">Action requise</div>
+    </div>
+    <div class="stat-card ${d.attente>0?'warn':''}">
+      <div class="stat-label">En attente</div>
+      <div class="stat-val gold">${fmt$(d.attente)}</div>
+      <div class="stat-sub">À percevoir</div>
+    </div>
+    <div class="stat-card info">
+      <div class="stat-label">Pipeline</div>
+      <div class="stat-val blue">${fmt$(d.pipeline)}</div>
+      <div class="stat-sub">${d.enProduction} en prod</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Leads nouveaux</div>
+      <div class="stat-val ${d.leadsNouveaux>0?'red':''}">${d.leadsNouveaux}</div>
+      <div class="stat-sub">À traiter</div>
+    </div>
+    <div class="stat-card highlight">
+      <div class="stat-label">Clients actifs</div>
+      <div class="stat-val green">${d.clientsActifs}</div>
+      <div class="stat-sub">Dossiers ouverts</div>
+    </div>
+    <div class="stat-card info">
+      <div class="stat-label">Séances cette semaine</div>
+      <div class="stat-val blue">${d.seancesSemaine}</div>
+      <div class="stat-sub">${d.seances30j} dans 30 jours</div>
+    </div>
+    <div class="stat-card ${d.sousTraitantsAPayer>0?'warn':''}">
+      <div class="stat-label">Sous-traitants à payer</div>
+      <div class="stat-val gold">${fmt$(d.sousTraitantsAPayer)}</div>
+      <div class="stat-sub">Dû à l'équipe</div>
+    </div>
+  `;
+
+  // Badges nav
+  if(d.leadsNouveaux>0) document.getElementById('badge-leads').textContent=d.leadsNouveaux;
+  if(d.enProduction>0)  document.getElementById('badge-projets').textContent=d.enProduction;
+  if(d.retard>0)        document.getElementById('badge-factures').textContent='!';
+
+  // Alertes
+  var al = document.getElementById('dash-alertes');
+  var html = '';
+  if(d.leadsNouveaux>0)
+    html += `<div class="alerte info"><div class="alerte-ico">📥</div><div><div class="alerte-text">${d.leadsNouveaux} lead(s) nouveau(x) à traiter</div></div></div>`;
+  if(d.retard>0)
+    html += `<div class="alerte danger"><div class="alerte-ico">🚨</div><div><div class="alerte-text">Factures en retard — ${fmt$(d.retard)}</div><div class="alerte-sub">Vérifier l'onglet Factures</div></div></div>`;
+  if(d.sousTraitantsAPayer>0)
+    html += `<div class="alerte warn"><div class="alerte-ico">👷</div><div><div class="alerte-text">Sous-traitants à payer — ${fmt$(d.sousTraitantsAPayer)}</div></div></div>`;
+  al.innerHTML = html;
+
+  // Factures retard
+  var fr = document.getElementById('dash-retard');
+  if(d.facturesRetard && d.facturesRetard.length>0){
+    fr.innerHTML = '<table class="tbl"><thead><tr><th>Facture</th><th>Client</th><th>Montant</th><th>Retard</th></tr></thead><tbody>'+
+      d.facturesRetard.map(f=>`<tr><td class="mono">${f.facture}</td><td>${f.client}</td><td>${fmt$(f.montant)}</td><td><span class="tag red">${f.jours}j</span></td></tr>`).join('')+
+      '</tbody></table>';
+  } else {
+    fr.innerHTML = '<div class="empty">✅ Aucune facture en retard</div>';
+  }
+
+  // Agenda
+  var ag = document.getElementById('dash-agenda');
+  ag.innerHTML = `<div style="padding:8px 0;font-size:12px;color:var(--mid);"><strong style="color:var(--dark);">${d.seances30j}</strong> séance(s) planifiée(s)<br><strong style="color:var(--dark);">${d.seancesSemaine}</strong> cette semaine</div>`;
+}
+
+function renderDashboardOffline(){
+  document.getElementById('dash-update').textContent = '⚠ Mode hors ligne';
+  document.getElementById('dash-stats').innerHTML = `
+    <div class="alerte warn" style="grid-column:span 4;">
+      <div class="alerte-ico">⚠️</div>
+      <div><div class="alerte-text">Impossible de contacter Apps Script</div>
+      <div class="alerte-sub">Vérifier que le script est déployé en mode "Tout le monde" et que l'URL est correcte · <a href="${SCRIPT_URL}" target="_blank">Tester l'URL</a></div></div>
+    </div>`;
+}
+
+// ── PROJETS ──────────────────────────────────────────────────────
+async function loadProjets(){
+  var el = document.getElementById('projets-table');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement...</div>';
+  var data = await apiGet('getProjets');
+  if(!data){ el.innerHTML='<div class="empty">⚠ Erreur connexion</div>'; return; }
+  if(!data.length){ el.innerHTML='<div class="empty">Aucun projet</div>'; return; }
+  var actifs = data.filter(p=>!['Livre - paye','Refuse','Expire','Annule'].includes(p.statut));
+  el.innerHTML = `<table class="tbl"><thead><tr>
+    <th>Projet</th><th>Client</th><th>Service</th><th>Total TTC</th><th>Statut</th><th>Responsable</th><th>Drive</th>
+  </tr></thead><tbody>` +
+  actifs.map(p=>`<tr>
+    <td class="mono">${p.numProjet}</td>
+    <td><div>${p.client}</div><div class="muted">${p.idClient}</div></td>
+    <td style="font-size:10px;max-width:120px;">${(p.service||'').split('—')[0]}</td>
+    <td style="font-weight:800;">${fmt$(p.totalTTC)}</td>
+    <td>${tagStatut(p.statut)}</td>
+    <td>${p.responsable||'—'}</td>
+    <td></td>
+  </tr>`).join('')+
+  '</tbody></table>';
+}
+
+// ── CLIENTS ──────────────────────────────────────────────────────
+async function loadClients(){
+  var el = document.getElementById('clients-table');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement...</div>';
+  var data = await apiGet('getClients');
+  if(!data){ el.innerHTML='<div class="empty">⚠ Erreur connexion</div>'; return; }
+  el.innerHTML = `<table class="tbl"><thead><tr>
+    <th>ID</th><th>Client</th><th>Contact</th><th>Courriel</th><th>Type</th><th>Statut</th><th>Drive</th>
+  </tr></thead><tbody>` +
+  data.map(c=>`<tr>
+    <td class="mono">${c.id}</td>
+    <td><strong>${c.nom}</strong></td>
+    <td>${c.contact||'—'}</td>
+    <td style="font-size:10px;">${c.email||'—'}</td>
+    <td>${c.type||'—'}</td>
+    <td>${tagStatut(c.statut||'Actif')}</td>
+    <td>${c.lienDrive?`<a href="${c.lienDrive}" target="_blank" style="color:var(--blue);font-size:10px;font-weight:700;">📁 Drive</a>`:'—'}</td>
+  </tr>`).join('')+
+  '</tbody></table>';
+}
+
+// ── LEADS ────────────────────────────────────────────────────────
+async function loadLeads(){
+  var el = document.getElementById('leads-table');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement...</div>';
+  var data = await apiGet('getLeads');
+  if(!data){ el.innerHTML='<div class="empty">⚠ Erreur connexion</div>'; return; }
+  var recents = data.slice(-50).reverse();
+  el.innerHTML = `<table class="tbl"><thead><tr>
+    <th>Lead</th><th>Contact</th><th>Service</th><th>Source</th><th>Statut</th><th>Pris en charge</th>
+  </tr></thead><tbody>` +
+  recents.map(l=>`<tr>
+    <td class="mono">${l.id||'—'}</td>
+    <td><div>${l.prenom} ${l.nom}</div><div class="muted">${l.org||l.email||''}</div></td>
+    <td style="font-size:10px;">${(l.service||'—').split('—')[0]}</td>
+    <td style="font-size:10px;">${l.source||'—'}</td>
+    <td>${tagStatut(l.statut||'Nouveau')}</td>
+    <td>${l.prisEnCharge||'—'}</td>
+  </tr>`).join('')+
+  '</tbody></table>';
+}
+
+// ── SÉANCES ──────────────────────────────────────────────────────
+async function loadSeances(){
+  var el = document.getElementById('seances-table');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement...</div>';
+  var data = await apiGet('getSeances');
+  if(!data){ el.innerHTML='<div class="empty">⚠ Erreur connexion</div>'; return; }
+  var actives = data.filter(s=>!['Livree','Annulee'].includes(s.statut)).slice(-40).reverse();
+  el.innerHTML = `<table class="tbl"><thead><tr>
+    <th>ID</th><th>Client</th><th>Date</th><th>Type</th><th>Lieu</th><th>Resp.</th><th>Statut</th>
+  </tr></thead><tbody>` +
+  actives.map(s=>`<tr>
+    <td class="mono">${s.id}</td>
+    <td>${s.client||'—'}</td>
+    <td style="font-weight:700;">${s.date||'—'}</td>
+    <td style="font-size:10px;">${s.type||'—'}</td>
+    <td style="font-size:10px;max-width:130px;">${s.lieu||'—'}</td>
+    <td>${s.responsable||'—'}</td>
+    <td>${tagStatut(s.statut||'Planifiee')}</td>
+  </tr>`).join('')+
+  '</tbody></table>';
+}
+
+// ── FACTURES ─────────────────────────────────────────────────────
+async function loadFactures(){
+  var el = document.getElementById('factures-table');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement...</div>';
+  var data = await apiGet('getFactures');
+  if(!data){ el.innerHTML='<div class="empty">⚠ Erreur connexion</div>'; return; }
+  var recents = data.slice(-60).reverse();
+  el.innerHTML = `<table class="tbl"><thead><tr>
+    <th>Facture</th><th>Client</th><th>Type</th><th>Total TTC</th><th>Échéance</th><th>Statut</th>
+  </tr></thead><tbody>` +
+  recents.map(f=>`<tr>
+    <td class="mono">${f.numFacture}</td>
+    <td>${f.client}</td>
+    <td style="font-size:10px;">${f.type||'—'}</td>
+    <td style="font-weight:800;">${fmt$(f.totalTTC)}</td>
+    <td style="font-size:11px;">${f.echeance||'—'}</td>
+    <td>${tagStatut(f.statut||'En attente')}</td>
+  </tr>`).join('')+
+  '</tbody></table>';
+}
+
+// ── BANQUES D'HEURES ─────────────────────────────────────────────
+async function loadBH(){
+  var el = document.getElementById('bh-table');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement...</div>';
+  var data = await apiGet('getBanquesHeures');
+  if(!data){ el.innerHTML='<div class="empty">⚠ Erreur connexion</div>'; return; }
+  var registre = data.registre||[];
+  if(!registre.length){ el.innerHTML='<div class="empty">Aucune banque enregistrée</div>'; return; }
+  el.innerHTML = `<table class="tbl"><thead><tr>
+    <th>No. BH</th><th>Client</th><th>Palier</th><th>Achetées</th><th>Utilisées</th><th>Restantes</th><th>Expiration</th><th>Statut</th>
+  </tr></thead><tbody>` +
+  registre.map(b=>`<tr>
+    <td class="mono">${b.bhId}</td>
+    <td>${b.client||'—'}</td>
+    <td style="font-size:10px;">${(b.palier||'—').split('-')[0]}</td>
+    <td>${b.achetees||'—'}</td>
+    <td style="color:var(--red);font-weight:700;">${b.utilisees||0}</td>
+    <td style="color:var(--green);font-weight:800;">${b.restantes||'—'}</td>
+    <td style="font-size:10px;">${b.expiration||'—'}</td>
+    <td>${tagStatut(b.statut||'Active')}</td>
+  </tr>`).join('')+
+  '</tbody></table>';
+}
+
+// ── MODALS ───────────────────────────────────────────────────────
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-bg').forEach(m=>{
+  m.addEventListener('click',e=>{ if(e.target===m) m.classList.remove('open'); });
+});
+
+// ── ACTIONS CRÉER ────────────────────────────────────────────────
+async function creerLead(){
+  var btn = document.getElementById('btn-lead-txt');
+  btn.textContent = '⏳ Création...';
+  var res = await apiGet('nouveauLead',{
+    prenom: document.getElementById('lead-prenom').value,
+    nom:    document.getElementById('lead-nom').value,
+    org:    document.getElementById('lead-org').value,
+    email:  document.getElementById('lead-email').value,
+    tel:    document.getElementById('lead-tel').value,
+    service:document.getElementById('lead-service').value,
+    source: document.getElementById('lead-source').value,
+    notes:  document.getElementById('lead-notes').value,
+    prisEnCharge:'Victoria'
+  });
+  btn.textContent = '⚡ Créer le lead';
+  var el = document.getElementById('lead-result');
+  if(res && res.leadId){
+    el.textContent = '✅ Lead '+res.leadId+' créé avec succès!';
+    el.style.display='block';
+    cache.dashboard=null;
+    setTimeout(()=>closeModal('modal-lead'),2000);
+  } else {
+    el.textContent = '⚠ Mode no-cors — lead envoyé au Sheet (impossible de confirmer, vérifier dans Google Sheets)';
+    el.style.background='var(--gold-l)';el.style.color='#c07840';
+    el.style.display='block';
+  }
+}
+
+async function creerClient(){
+  var btn = document.getElementById('btn-cli-txt');
+  btn.textContent = '⏳ Création...';
+  var res = await apiGet('nouveauClient',{
+    nom:     document.getElementById('cli-nom').value,
+    contact: document.getElementById('cli-contact').value,
+    email:   document.getElementById('cli-email').value,
+    tel:     document.getElementById('cli-tel').value,
+    type:    document.getElementById('cli-type').value,
+  });
+  btn.textContent = '⚡ Créer + dossier Drive';
+  var el = document.getElementById('cli-result');
+  el.textContent = res && res.clientId ? '✅ Client '+res.clientId+' créé + Drive!' : '⚠ Envoyé — vérifier le Sheet';
+  if(!res?.clientId){el.style.background='var(--gold-l)';el.style.color='#c07840';}
+  el.style.display='block';
+  cache.dashboard=null;
+  setTimeout(()=>closeModal('modal-client'),2000);
+}
+
+async function creerProjet(){
+  var btn = document.getElementById('btn-proj-txt');
+  btn.textContent = '⏳ Création...';
+  var res = await apiGet('nouveauProjet',{
+    idClient:    document.getElementById('proj-cli').value,
+    client:      document.getElementById('proj-clinom').value,
+    service:     document.getElementById('proj-service').value,
+    description: document.getElementById('proj-desc').value,
+    montantHT:   document.getElementById('proj-ht').value,
+    responsable: document.getElementById('proj-resp').value,
+  });
+  btn.textContent = '⚡ Créer le projet';
+  var el = document.getElementById('proj-result');
+  if(res && res.numProjet){
+    el.textContent = '✅ '+res.numProjet+' — Total TTC: '+fmt$(res.totalTTC)+' | Dépôt: '+fmt$(res.depot);
+    el.style.display='block';
+    cache.dashboard=null;
+    setTimeout(()=>closeModal('modal-projet'),3000);
+  } else {
+    el.textContent = '⚠ Envoyé — vérifier dans Google Sheets';
+    el.style.background='var(--gold-l)';el.style.color='#c07840';
+    el.style.display='block';
+  }
+}
+
+async function creerSeance(){
+  var btn = document.getElementById('btn-sea-txt');
+  btn.textContent = '⏳ Création...';
+  await apiGet('nouvelleSeance',{
+    projet:      document.getElementById('sea-proj').value,
+    client:      document.getElementById('sea-client').value,
+    date:        document.getElementById('sea-date').value,
+    type:        document.getElementById('sea-type').value,
+    hDeb:        document.getElementById('sea-hdeb').value,
+    hFin:        document.getElementById('sea-hfin').value,
+    lieu:        document.getElementById('sea-lieu').value,
+    responsable: document.getElementById('sea-resp').value,
+  });
+  btn.textContent = '⚡ Créer + Google Calendar';
+  var el = document.getElementById('sea-result');
+  el.textContent = '✅ Séance créée + envoyée au Calendar!';
+  el.style.display='block';
+  cache.dashboard=null;
+  setTimeout(()=>closeModal('modal-seance'),2000);
+}
+
+async function creerDepense(){
+  var btn = document.getElementById('btn-dep-txt');
+  btn.textContent = '⏳ Ajout...';
+  await apiGet('ajouterDepense',{
+    projet:     document.getElementById('dep-proj').value||'GENERAL',
+    montant:    document.getElementById('dep-mnt').value,
+    categorie:  document.getElementById('dep-cat').value,
+    description:document.getElementById('dep-desc').value,
+    payePar:    document.getElementById('dep-paye').value,
+  });
+  btn.textContent = '⚡ Ajouter';
+  var el = document.getElementById('dep-result');
+  el.textContent = '✅ Dépense ajoutée!';
+  el.style.display='block';
+  cache.dashboard=null;
+  setTimeout(()=>closeModal('modal-depense'),2000);
+}
+
+// ── INIT ────────────────────────────────────────────────────────
+loadDashboard();
+</script>
+</body>
+</html>
