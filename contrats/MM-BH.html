@@ -148,7 +148,7 @@ a.doc-link:hover{text-decoration:underline;}
   <div class="header-right">
     <div class="doc-type">Contrat de services</div>
     <div class="doc-title">Banque d'heures de montage</div>
-    <div class="doc-ref">Code de projet : <span><input type="text" id="code-projet" style="border:none;border-bottom:2px solid #ccc;width:140px;font-size:13px;font-weight:700;color:#2d2d2d;padding:0 4px;outline:none;font-family:Montserrat,sans-serif;" placeholder="ex: MM-2026-042"></span></div>
+    <div class="doc-ref">No. client : <span><input type="text" id="code-client" style="border:none;border-bottom:2px solid #ccc;width:140px;font-size:13px;font-weight:700;color:#2d2d2d;padding:0 4px;outline:none;font-family:Montserrat,sans-serif;" placeholder="CLI-XXX"></span></div>
   </div>
 </div>
 
@@ -231,24 +231,16 @@ a.doc-link:hover{text-decoration:underline;}
         <div class="field"><label>Taux horaire</label><input type="number" min="0" id="bh-taux" placeholder="0" oninput="calcTotal()" readonly style="background:#f0f0f0;font-size:18px;font-weight:800;"> <span style="font-size:12px;color:#aaa;"> $/h</span></div>
       </div>
       <div class="field-row">
-        <div class="field"><label>No. banque</label><input type="text" placeholder="MM-BH-___"></div>
-        <div class="field"><label>Code de projet associé</label><input type="text" placeholder="ex: MM-2026-042"></div>
-      </div>
-      <div class="field-row">
+        <div class="field"><label>No. client (CLI-XXX)</label><input type="text" placeholder="CLI-XXX"></div>
         <div class="field"><label>Date d'achat</label><input type="date"></div>
-        <div class="field"><label>Date d'expiration</label><input type="date"> <span style="font-size:11px;color:#aaa;margin-top:4px;display:block;">12 mois à partir de la date d'achat</span></div>
+      </div>
+      <div class="field">
+        <label>Date d'expiration</label><input type="date"> <span style="font-size:11px;color:#aaa;margin-top:4px;display:block;">12 mois à partir de la date d'achat</span>
       </div>
     </div>
 
-    <div style="background:#2d2d2d;border-radius:10px;padding:14px 18px;margin-bottom:16px;">
-      <div style="font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:10px;">Inclus dans chaque projet débité</div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;">
-        <span style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.85);">Colorisation</span>
-        <span style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.85);">Sous-titres synchronisés</span>
-        <span style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.85);">Logo animé</span>
-        <span style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.85);">Musique sous licence MM</span>
-        <span style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.85);">1 révision mineure / livrable</span>
-      </div>
+    <div style="background:#f8f8f8;border:2px solid #e0e0e0;border-radius:10px;padding:14px 18px;margin-bottom:16px;">
+      <p style="font-size:13px;font-weight:500;color:#555;line-height:1.85;margin:0;">Chaque projet débité inclut les livrables convenus au préalable. Une liste de tâches et un plafond d'heures maximum peuvent être définis par projet sur demande. Si le plafond risque d'être dépassé ou si le délai semble irréaliste, nous vous contacterons avant de procéder.</p>
     </div>
   </div>
 </div>
@@ -256,7 +248,7 @@ a.doc-link:hover{text-decoration:underline;}
 <div class="sec">
   <div class="sec-head"><span class="sec-num">03</span><span class="sec-title">Registre de suivi des heures</span></div>
   <div class="sec-body">
-    <p style="font-size:13px;font-weight:500;color:#555;margin-bottom:16px;line-height:1.8;">Une estimation est soumise au client <strong>avant le démarrage de chaque projet</strong>. Si un plafond est souhaité, il est indiqué ci-dessous — Média Mauricie demande l'autorisation avant de le dépasser.</p>
+    <p style="font-size:13px;font-weight:500;color:#555;margin-bottom:16px;line-height:1.8;">Avant chaque projet, les tâches et besoins de base sont indiqués. Un plafond maximum d'heures peut être défini — nous vous contacterons si ce plafond risque d'être atteint ou si le délai ne permet pas un résultat de qualité.</p>
     <div style="overflow-x:auto;">
       <table style="width:100%;border-collapse:collapse;min-width:600px;">
         <thead><tr style="background:#f8f8f8;border-bottom:2px solid #e0e0e0;">
@@ -265,7 +257,6 @@ a.doc-link:hover{text-decoration:underline;}
           <th style="padding:10px 10px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#aaa;text-align:center;">Estimé (h)</th>
           <th style="padding:10px 10px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#aaa;text-align:center;">Réel (h)</th>
           <th style="padding:10px 10px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#aaa;text-align:center;">Solde</th>
-          <th style="padding:10px 10px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#aaa;text-align:center;">Approuvé</th>
         </tr></thead>
         <tbody id="registre-body">
           <tr style="border-bottom:1px solid #f0f0f0;background:#fafafa;">
@@ -273,7 +264,6 @@ a.doc-link:hover{text-decoration:underline;}
             <td style="padding:8px 10px;font-size:12px;color:#aaa;">Solde initial</td>
             <td></td><td></td>
             <td style="padding:8px 10px;text-align:center;"><strong id="solde-initial" style="font-size:14px;color:#2d2d2d;">0 h</strong></td>
-            <td></td>
           </tr>
           <tr style="border-bottom:1px solid #f0f0f0;">
             <td style="padding:6px 8px;"><input type="date" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:130px;"></td>
@@ -281,7 +271,6 @@ a.doc-link:hover{text-decoration:underline;}
             <td style="padding:6px 8px;text-align:center;"><input type="number" min="0" step="0.5" placeholder="0" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>
             <td style="padding:6px 8px;text-align:center;"><input type="number" min="0" step="0.5" placeholder="0" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>
             <td style="padding:6px 8px;text-align:center;"><input type="text" placeholder="—" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>
-            <td style="padding:6px 8px;text-align:center;"><input type="checkbox" style="width:16px;height:16px;accent-color:#c0392b;"></td>
           </tr>
           <tr style="border-bottom:1px solid #f0f0f0;">
             <td style="padding:6px 8px;"><input type="date" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:130px;"></td>
@@ -289,7 +278,6 @@ a.doc-link:hover{text-decoration:underline;}
             <td style="padding:6px 8px;text-align:center;"><input type="number" min="0" step="0.5" placeholder="0" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>
             <td style="padding:6px 8px;text-align:center;"><input type="number" min="0" step="0.5" placeholder="0" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>
             <td style="padding:6px 8px;text-align:center;"><input type="text" placeholder="—" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>
-            <td style="padding:6px 8px;text-align:center;"><input type="checkbox" style="width:16px;height:16px;accent-color:#c0392b;"></td>
           </tr>
           <tr style="border-bottom:1px solid #f0f0f0;">
             <td style="padding:6px 8px;"><input type="date" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:130px;"></td>
@@ -297,13 +285,12 @@ a.doc-link:hover{text-decoration:underline;}
             <td style="padding:6px 8px;text-align:center;"><input type="number" min="0" step="0.5" placeholder="0" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>
             <td style="padding:6px 8px;text-align:center;"><input type="number" min="0" step="0.5" placeholder="0" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>
             <td style="padding:6px 8px;text-align:center;"><input type="text" placeholder="—" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>
-            <td style="padding:6px 8px;text-align:center;"><input type="checkbox" style="width:16px;height:16px;accent-color:#c0392b;"></td>
           </tr>
         </tbody>
       </table>
     </div>
     <button class="btn-add" onclick="ajouterLigneRegistre()" style="margin-top:10px;">+ Ajouter une ligne</button>
-    <div style="font-size:11px;font-weight:500;color:#aaa;margin-top:10px;">Suivi également disponible dans l'espace client · Approuvé = validation du client avant démarrage</div>
+    <div style="font-size:11px;font-weight:500;color:#aaa;margin-top:10px;">Suivi également disponible dans l'espace client</div>
   </div>
 </div>
 
@@ -350,14 +337,10 @@ a.doc-link:hover{text-decoration:underline;}
     </div>
     <div class="clause">
       <div class="ctitle">3. Validité et utilisation</div>
-      <div class="ctext">Valide <strong>12 mois</strong> à partir de la date d'achat. Utilisable sur plusieurs projets distincts. Les heures couvrent la <strong>post-production uniquement</strong> (montage, colorisation, sous-titres, logo animé, musique, révisions) — pas la captation terrain. Les heures non utilisées à l'expiration sont <strong>non remboursables</strong>. Prolongation de 3 mois possible sur demande écrite avant expiration.</div>
+      <div class="ctext">Valide <strong>12 mois</strong> à partir de la date d'achat. Utilisable sur plusieurs projets distincts. Les heures couvrent la <strong>post-production uniquement</strong> (montage, colorisation, sous-titres, logo animé, musique) — pas la captation terrain. Les heures non utilisées à l'expiration sont <strong>non remboursables</strong>. Prolongation de 3 mois possible sur demande écrite avant expiration.</div>
     </div>
     <div class="clause">
-      <div class="ctitle">4. Révisions</div>
-      <div class="ctext"><strong>1 round de révisions mineures</strong> inclus par livrable. Les révisions majeures sont décomptées des heures restantes. Si la banque est épuisée, les révisions supplémentaires sont facturées à 100$/h.</div>
-    </div>
-    <div class="clause">
-      <div class="ctitle">5. Suppléments rush</div>
+      <div class="ctitle">4. Suppléments rush</div>
       <div class="ctext">Des suppléments rush s'appliquent en sus des heures décomptées : <strong>Reels / voxpops :</strong> +200$ à +450$ par livrable selon complexité. Ces frais sont facturés séparément.</div>
     </div>
     
@@ -517,4 +500,12 @@ function ajouterLigneRegistre(){
     '<td style="padding:6px 8px;"><input type="text" placeholder="Livrable..." style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:100%;"></td>'+
     '<td style="padding:6px 8px;text-align:center;"><input type="number" min="0" step="0.5" placeholder="0" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>'+
     '<td style="padding:6px 8px;text-align:center;"><input type="number" min="0" step="0.5" placeholder="0" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>'+
-    '<td style="padding:6px 8px;text-align:center;"><input type="text"
+    '<td style="padding:6px 8px;text-align:center;"><input type="text" placeholder="—" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>';
+  tbody.appendChild(tr);
+}
+
+window.addEventListener('load', calcTotal);
+
+</script>
+</body>
+</html>
