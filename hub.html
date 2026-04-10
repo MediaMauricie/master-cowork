@@ -781,11 +781,12 @@ async function apiCall(action, extra){
 // Pour GET (lecture) — query string via doGet()
 async function apiGet(action, extra) {
   try {
-    var params = Object.assign({action: action, token: TOKEN}, extra || {});
-    var qs = Object.keys(params).map(function(k) {
-      return encodeURIComponent(k) + '=' + encodeURIComponent(JSON.stringify(params[k]));
-    }).join('&');
-    var url = SCRIPT_URL + '?' + qs;
+    var url = SCRIPT_URL + '?action=' + encodeURIComponent(action) + '&token=' + encodeURIComponent(TOKEN);
+    if (extra) {
+      Object.keys(extra).forEach(function(k) {
+        url += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(String(extra[k]));
+      });
+    }
     var r = await fetch(url, {
       method: 'GET',
       redirect: 'follow'
