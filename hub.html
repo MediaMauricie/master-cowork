@@ -778,8 +778,31 @@ async function apiCall(action, extra){
   }
 }
 
-// Pour GET (lecture) — query string via doGet()
+// Pour GET (lecture) — query string via doGet() + cache localStorage 5 min
+var CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+function cacheKey(action, extra) {
+  return 'mm_' + action + (extra ? '_' + JSON.stringify(extra) : '');
+}
+
+function cacheGet(key) {
+  try {
+    var raw = localStorage.getItem(key);
+    if (!raw) return null;
+    var entry = JSON.parse(raw);
+    if (Date.now() - entry.ts > CACHE_TTL) { localStorage.removeItem(key); return null; }
+    return entry.data;
+  } catch(e) { return null; }
+}
+
+function cacheSet(key, data) {
+  try { localStorage.setItem(key, JSON.stringify({ts: Date.now(), data: data})); } catch(e) {}
+}
+
 async function apiGet(action, extra) {
+  var key = cacheKey(action, extra);
+  var cached = cacheGet(key);
+  if (cached) { setConnected(true); return cached; }
   try {
     var url = SCRIPT_URL + '?action=' + encodeURIComponent(action) + '&token=' + encodeURIComponent(TOKEN);
     if (extra) {
@@ -793,8 +816,10 @@ async function apiGet(action, extra) {
     });
     if (!r.ok) throw new Error('HTTP ' + r.status);
     var json = await r.json();
+    var data = json.data || json;
+    cacheSet(key, data);
     setConnected(true);
-    return json.data || json;
+    return data;
   } catch(e) {
     setConnected(false);
     console.warn('API ' + action + ':', e.message);
