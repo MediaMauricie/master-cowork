@@ -780,21 +780,24 @@ async function apiCall(action, extra){
 
 // Pour GET (lecture) — on utilise la même URL mais on doit passer par cors-proxy ou apps script GET
 // Apps Script accepte les POST avec token — on fait tout en POST
-async function apiGet(action, extra){
-  var body = Object.assign({action:action, token:TOKEN}, extra||{});
-  try{
-    var r = await fetch(SCRIPT_URL, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(body)
+async function apiGet(action, extra) {
+  try {
+    var params = Object.assign({action: action, token: TOKEN}, extra || {});
+    var qs = Object.keys(params).map(function(k) {
+      return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+    }).join('&');
+    var url = SCRIPT_URL + '?' + qs;
+    var r = await fetch(url, {
+      method: 'GET',
+      redirect: 'follow'
     });
-    if(!r.ok) throw new Error('HTTP '+r.status);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
     var json = await r.json();
     setConnected(true);
     return json.data || json;
-  } catch(e){
+  } catch(e) {
     setConnected(false);
-    console.warn('API '+action+':', e.message);
+    console.warn('API ' + action + ':', e.message);
     return null;
   }
 }
