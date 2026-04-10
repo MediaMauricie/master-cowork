@@ -47,17 +47,12 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;min-he
 .check-item{display:flex;align-items:center;gap:8px;cursor:pointer;}
 .check-item input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:#c0392b;}
 .check-item label{font-size:13px;font-weight:600;color:#2d2d2d;cursor:pointer;}
-.check-single{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;cursor:pointer;transition:border-color 0.2s;margin-bottom:8px;}
-.check-single:hover{border-color:#2d2d2d;}
-.check-single input{width:16px;height:16px;margin-top:2px;flex-shrink:0;accent-color:#c0392b;}
-.check-single-text{font-size:13px;font-weight:700;color:#2d2d2d;line-height:1.4;}
-.check-single-sub{font-size:11px;font-weight:500;color:#888;margin-top:2px;line-height:1.5;}
-.forfait-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;}
+.forfait-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px;}
 .forfait-card{border:2px solid #e0e0e0;border-radius:10px;padding:14px 16px;cursor:pointer;transition:all 0.2s;position:relative;}
 .forfait-card:hover{border-color:#2d2d2d;}
 .forfait-card.selected{border-color:#c0392b;background:#fdf9f9;}
-.forfait-card-name{font-size:14px;font-weight:800;color:#2d2d2d;margin-bottom:4px;}
-.forfait-card-price{font-size:18px;font-weight:900;color:#2d2d2d;}
+.forfait-card-name{font-size:13px;font-weight:800;color:#2d2d2d;margin-bottom:4px;}
+.forfait-card-price{font-size:17px;font-weight:900;color:#2d2d2d;}
 .forfait-card-unit{font-size:10px;font-weight:600;color:#aaa;}
 .forfait-card-check{width:18px;height:18px;border:2px solid #ddd;border-radius:50%;display:inline-block;margin-bottom:10px;transition:all 0.2s;}
 .forfait-card.selected .forfait-card-check{background:#c0392b;border-color:#c0392b;}
@@ -80,18 +75,7 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;min-he
 .tax-toggle{display:flex;gap:16px;margin-bottom:12px;}
 .tax-toggle label{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#2d2d2d;cursor:pointer;}
 .tax-toggle input{width:16px;height:16px;accent-color:#c0392b;}
-.map-block{border-radius:12px;overflow:hidden;border:2px solid #e0e0e0;}
-.map-img{width:100%;height:auto;display:block;}
-.map-footer{background:#2d2d2d;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;}
-.map-footer-text{font-size:12px;font-weight:600;color:rgba(255,255,255,0.6);}
-.map-footer-price{font-size:16px;font-weight:800;color:#fff;}
 .mel-block{background:#f0faf4;border:2px solid #b7e4c7;border-radius:10px;padding:16px 20px;margin-bottom:14px;}
-.mel-title{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#27ae60;margin-bottom:10px;}
-.mel-check{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;}
-.mel-check input{width:18px;height:18px;margin-top:2px;flex-shrink:0;accent-color:#27ae60;}
-.mel-check-text{font-size:13px;font-weight:600;color:#2d4a35;line-height:1.6;}
-.mel-link{font-size:12px;font-weight:700;color:#27ae60;text-decoration:none;}
-.mel-link:hover{text-decoration:underline;}
 .sec-div{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#aaa;margin:20px 0 12px;display:flex;align-items:center;gap:12px;}
 .sec-div::after{content:'';flex:1;height:1px;background:#e0e0e0;}
 .btn-add{background:#f8f8f8;border:2px dashed #e0e0e0;border-radius:8px;padding:12px 20px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:800;color:#888;cursor:pointer;width:100%;text-align:center;transition:all 0.2s;letter-spacing:1px;text-transform:uppercase;}
@@ -104,9 +88,6 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;min-he
 .ctext{font-size:13px;font-weight:500;color:#444;line-height:1.85;}
 .ctext strong{color:#2d2d2d;font-weight:700;}
 .hl{background:#f8f8f8;border-left:4px solid #e0e0e0;padding:10px 16px;border-radius:0 8px 8px 0;margin-top:10px;}
-.hl-row{font-size:12px;font-weight:500;color:#444;line-height:1.8;margin-bottom:6px;padding-left:4px;}
-.hl-row:last-child{margin-bottom:0;}
-.hl-row strong{color:#2d2d2d;font-weight:700;}
 .sigs{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
 .sig{border:2px solid #e0e0e0;border-radius:10px;padding:20px;}
 .sig-label{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#aaa;margin-bottom:10px;}
@@ -119,8 +100,13 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;min-he
 .footer{margin-top:24px;padding-top:18px;border-top:2px solid #ddd;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;}
 .footer-legal{font-size:11px;font-weight:500;color:#aaa;line-height:1.8;text-align:right;}
 .footer-legal strong{color:#888;}
-a.doc-link{color:#c0392b;font-weight:700;font-size:12px;text-decoration:none;}
-a.doc-link:hover{text-decoration:underline;}
+
+/* FIX: custom forfait field */
+.custom-bh-wrap{display:none;background:#fff3f3;border:2px solid #f0c0c0;border-radius:8px;padding:14px 16px;margin-bottom:14px;}
+.custom-bh-wrap.visible{display:block;}
+.custom-bh-wrap label{font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#c0392b;display:block;margin-bottom:6px;}
+.custom-bh-wrap .field-row input{border:2px solid #e0e0e0;border-radius:8px;padding:10px 14px;font-family:'Montserrat',sans-serif;font-size:15px;font-weight:800;color:#2d2d2d;background:#fff;outline:none;width:100%;}
+.custom-bh-wrap .field-row input:focus{border-color:#c0392b;}
 
 .submit-field{margin-bottom:14px;}
 .submit-field label{display:block;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:6px;}
@@ -156,6 +142,7 @@ a.doc-link:hover{text-decoration:underline;}
   <div class="notice-text"><strong>Signature électronique via Zoho Sign</strong> — Ce contrat entre en vigueur à la date de la dernière signature et au paiement complet de la banque. La banque est activée dès réception du paiement.</div>
 </div>
 
+<!-- SECTION 01 — PARTIES -->
 <div class="sec">
   <div class="sec-head"><span class="sec-num">01</span><span class="sec-title">Parties contractantes</span></div>
   <div class="sec-body"><div class="parties">
@@ -165,7 +152,7 @@ a.doc-link:hover{text-decoration:underline;}
         <div class="fr"><span class="fk">Représentante</span><span class="fv">Victoria J. Polsoni, Présidente</span></div>
         <div class="fr"><span class="fk">Adresse</span><span class="fv">2750 Rang des Chutes, Sainte-Ursule, QC G0X 3B0</span></div>
         <div class="fr"><span class="fk">Téléphone</span><span class="fv">(819) 852-0851</span></div>
-        <div class="fr"><span class="fk">Courriel</span><span class="fv"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b4dddad2dbf4d9d1d0ddd5d9d5c1c6ddd7ddd19ad7dbd9">[email&#160;protected]</a></span></div>
+        <div class="fr"><span class="fk">Courriel</span><span class="fv">info@mediamauricie.com</span></div>
         <div class="fr"><span class="fk">TPS</span><span class="fv">71110 6229 RT 0001</span></div>
         <div class="fr"><span class="fk">TVQ</span><span class="fv">12 3255 2049 TQ 0001</span></div>
         <div class="fr"><span class="fk">NEQ</span><span class="fv">1180690985</span></div>
@@ -176,7 +163,7 @@ a.doc-link:hover{text-decoration:underline;}
             <div><div class="bank-item-label">Institution</div><div class="bank-item-val">004</div></div>
             <div><div class="bank-item-label">Compte</div><div class="bank-item-val">5213392</div></div>
           </div>
-          <div style="font-size:11px;color:#aaa;font-weight:500;margin-top:8px;">Interac : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f0999e969fb09d959499919d91858299939995de939f9d">[email&#160;protected]</a> <em>(mot de passe transmis séparément)</em> · Chèque à l'ordre de Média Mauricie Inc.</div>
+          <div style="font-size:11px;color:#aaa;font-weight:500;margin-top:8px;">Interac : info@mediamauricie.com <em>(mot de passe transmis séparément)</em> · Chèque à l'ordre de Média Mauricie Inc.</div>
         </div>
       </div>
       <div class="partie">
@@ -193,16 +180,18 @@ a.doc-link:hover{text-decoration:underline;}
             <label class="check-item"><input type="checkbox"><label>OBNL</label></label>
             <label class="check-item"><input type="checkbox"><label>Municipal</label></label>
             <label class="check-item"><input type="checkbox"><label>Festival</label></label>
-            
             <label class="check-item"><input type="checkbox"><label>Autre</label></label>
           </div>
         </div>
-      </div></div></div>
+      </div>
+  </div></div>
 </div>
 
+<!-- SECTION 02 — BANQUE -->
 <div class="sec">
   <div class="sec-head"><span class="sec-num">02</span><span class="sec-title">Banque d'heures sélectionnée</span></div>
   <div class="sec-body">
+    <!-- 4 forfait cards including custom -->
     <div class="forfait-grid">
       <div class="forfait-card" data-group="bh" onclick="selectForfaitBH(this,15,100,1500)">
         <div class="forfait-card-check"></div>
@@ -222,20 +211,47 @@ a.doc-link:hover{text-decoration:underline;}
         <div class="forfait-card-price">4 500$</div>
         <div class="forfait-card-unit">90$/h + tx · économie 500$</div>
       </div>
+      <div class="forfait-card" data-group="bh" onclick="selectForfaitBH(this,0,0,0,'custom')">
+        <div class="forfait-card-check"></div>
+        <div class="forfait-card-name">Personnalisé</div>
+        <div class="forfait-card-price" style="font-size:14px;color:#888;">Saisir manuellement</div>
+        <div class="forfait-card-unit">heures + taux libres</div>
+      </div>
+    </div>
+
+    <!-- Custom fields — shown only when "Personnalisé" selected -->
+    <div class="custom-bh-wrap" id="custom-bh-wrap">
+      <div class="field-row" style="gap:14px;">
+        <div>
+          <label>Heures personnalisées</label>
+          <input type="number" id="bh-heures-custom" min="0" step="0.5" placeholder="ex: 10" oninput="syncCustomBH()">
+        </div>
+        <div>
+          <label>Taux horaire ($/h)</label>
+          <input type="number" id="bh-taux-custom" min="0" placeholder="ex: 100" oninput="syncCustomBH()">
+        </div>
+      </div>
     </div>
 
     <div style="background:#f8f8f8;border:2px solid #e0e0e0;border-radius:10px;padding:16px 20px;margin-bottom:16px;">
       <div style="font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#aaa;margin-bottom:12px;">Détails de la banque</div>
       <div class="field-row">
-        <div class="field"><label>Heures totales</label><input type="number" min="0" id="bh-heures" placeholder="0" oninput="calcTotal()" readonly style="background:#f0f0f0;font-size:18px;font-weight:800;"></div>
-        <div class="field"><label>Taux horaire</label><input type="number" min="0" id="bh-taux" placeholder="0" oninput="calcTotal()" readonly style="background:#f0f0f0;font-size:18px;font-weight:800;"> <span style="font-size:12px;color:#aaa;"> $/h</span></div>
+        <!-- READ-ONLY display fields — populated by forfait selection or custom inputs -->
+        <div class="field"><label>Heures totales</label>
+          <input type="number" min="0" id="bh-heures" placeholder="0" style="background:#f0f0f0;font-size:18px;font-weight:800;" readonly>
+        </div>
+        <div class="field"><label>Taux horaire ($/h)</label>
+          <input type="number" min="0" id="bh-taux" placeholder="0" style="background:#f0f0f0;font-size:18px;font-weight:800;" readonly>
+        </div>
       </div>
       <div class="field-row">
         <div class="field"><label>No. client (CLI-XXX)</label><input type="text" placeholder="CLI-XXX"></div>
-        <div class="field"><label>Date d'achat</label><input type="date"></div>
+        <div class="field"><label>Date d'achat</label><input type="date" id="date-achat" onchange="calcExpiration()"></div>
       </div>
       <div class="field">
-        <label>Date d'expiration</label><input type="date"> <span style="font-size:11px;color:#aaa;margin-top:4px;display:block;">12 mois à partir de la date d'achat</span>
+        <label>Date d'expiration</label>
+        <input type="date" id="date-expiration" readonly style="background:#f0f0f0;">
+        <span style="font-size:11px;color:#aaa;margin-top:4px;display:block;">Calculée automatiquement — 12 mois à partir de la date d'achat</span>
       </div>
     </div>
 
@@ -245,6 +261,7 @@ a.doc-link:hover{text-decoration:underline;}
   </div>
 </div>
 
+<!-- SECTION 03 — REGISTRE -->
 <div class="sec">
   <div class="sec-head"><span class="sec-num">03</span><span class="sec-title">Registre de suivi des heures</span></div>
   <div class="sec-body">
@@ -294,42 +311,58 @@ a.doc-link:hover{text-decoration:underline;}
   </div>
 </div>
 
+<!-- SECTION 04 — TARIFICATION -->
 <div class="sec">
   <div class="sec-head"><span class="sec-num">04</span><span class="sec-title">Tarification</span></div>
   <div class="sec-body">
-    
+
     <div class="sec-div">Éléments additionnels</div>
     <div id="surplus-container">
-      <div class="surplus-row"><input type="text" placeholder="Description (ex: rabais, commandite, km, matériel...)"><input type="number" min="0" placeholder="0" oninput="calcTotal()"><button class="btn-remove" onclick="retirerSurplus(this)">×</button></div>
-      <div class="surplus-row"><input type="text" placeholder="Description..."><input type="number" min="0" placeholder="0" oninput="calcTotal()"><button class="btn-remove" onclick="retirerSurplus(this)">×</button></div>
-      <div class="surplus-row"><input type="text" placeholder="Description..."><input type="number" min="0" placeholder="0" oninput="calcTotal()"><button class="btn-remove" onclick="retirerSurplus(this)">×</button></div>
+      <div class="surplus-row"><input type="text" placeholder="Description (ex: rabais, commandite, km, matériel...)"><input type="number" placeholder="0" oninput="calcTotal()"><button class="btn-remove" onclick="retirerSurplus(this)">×</button></div>
+      <div class="surplus-row"><input type="text" placeholder="Description..."><input type="number" placeholder="0" oninput="calcTotal()"><button class="btn-remove" onclick="retirerSurplus(this)">×</button></div>
+      <div class="surplus-row"><input type="text" placeholder="Description..."><input type="number" placeholder="0" oninput="calcTotal()"><button class="btn-remove" onclick="retirerSurplus(this)">×</button></div>
     </div>
     <button class="btn-add" onclick="ajouterSurplus()" style="margin-bottom:14px;">+ Ajouter un élément</button>
     <div class="field"><label>Notes de facturation</label><textarea style="width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:10px 14px;font-family:'Montserrat',sans-serif;font-size:13px;min-height:60px;outline:none;resize:vertical;" placeholder="Notes, conditions particulières..."></textarea></div>
-    
+
     <div class="calc-block">
       <div class="calc-title">Calcul automatique</div>
       <div class="tax-toggle">
         <label><input type="checkbox" id="tps-check" checked onchange="calcTotal()"> TPS 5% applicable</label>
         <label><input type="checkbox" id="tvq-check" checked onchange="calcTotal()"> TVQ 9,975% applicable</label>
       </div>
-      <div class="calc-row"><span class="calc-label">Sous-total HT</span><span class="calc-val" id="calc-ht">0,00 $</span></div>
-      
+
+      <!-- Live preview of selected forfait -->
+      <div style="background:#fff;border:2px solid #e0e0e0;border-radius:8px;padding:12px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:12px;font-weight:700;color:#888;" id="calc-forfait-label">Aucun forfait sélectionné</span>
+        <span style="font-size:16px;font-weight:900;color:#2d2d2d;" id="calc-forfait-preview">—</span>
+      </div>
+
+      <div class="calc-row"><span class="calc-label">Banque d'heures (<span id="calc-heures-label">0h</span> × <span id="calc-taux-label">0$/h</span>)</span><span class="calc-val" id="calc-banque">0,00 $</span></div>
+      <div class="calc-row"><span class="calc-label">Éléments additionnels</span><span class="calc-val" id="calc-surplus">0,00 $</span></div>
+      <div class="calc-row"><span class="calc-label">Sous-total avant taxes</span><span class="calc-val" id="calc-ht">0,00 $</span></div>
       <div class="calc-row" id="row-tps"><span class="calc-label">TPS 5%</span><span class="calc-val" id="calc-tps">0,00 $</span></div>
       <div class="calc-row" id="row-tvq"><span class="calc-label">TVQ 9,975%</span><span class="calc-val" id="calc-tvq">0,00 $</span></div>
-      <div class="calc-total"><span class="calc-total-label">Total TTC</span><span class="calc-total-val" id="calc-total">0,00 $</span></div>
-      <div class="calc-versement"><span class="calc-versement-label">Total payable à la signature</span><span class="calc-versement-val" id="calc-versement">0,00 $</span></div>
-      <div class="calc-versement"><span class="calc-versement-label">Banque activée dès réception du paiement complet</span><span class="calc-versement-val" id="calc-solde">0,00 $</span></div>
+      <div class="calc-total">
+        <span class="calc-total-label">Total TTC</span>
+        <span class="calc-total-val" id="calc-total">0,00 $</span>
+      </div>
+      <div class="calc-versement" style="border-top:2px solid #e0e0e0;margin-top:4px;padding-top:12px;">
+        <span class="calc-versement-label" style="font-weight:800;color:#2d2d2d;">💳 Montant payable à la signature</span>
+        <span class="calc-versement-val" style="font-size:20px;color:#c0392b;" id="calc-versement">0,00 $</span>
+      </div>
+      <div style="font-size:11px;font-weight:500;color:#aaa;margin-top:8px;text-align:right;">Banque activée dès réception du paiement complet</div>
     </div>
   </div>
 </div>
 
+<!-- SECTION 05 — CONDITIONS -->
 <div class="sec">
   <div class="sec-head"><span class="sec-num">05</span><span class="sec-title">Conditions générales</span></div>
   <div class="sec-body">
     <div class="clause">
       <div class="ctitle">1. Paiement</div>
-      <div class="ctext">La banque d'heures est payée <strong>en totalité à la signature</strong>. La banque est activée dès réception du paiement complet. Modes de paiement : virement Interac (<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="630a0d050c230e06070a020e0216110a000a064d000c0e">[email&#160;protected]</a>), virement bancaire TD (voir section 01), ou chèque à l'ordre de Média Mauricie Inc.</div>
+      <div class="ctext">La banque d'heures est payée <strong>en totalité à la signature</strong>. La banque est activée dès réception du paiement complet. Modes de paiement : virement Interac (info@mediamauricie.com), virement bancaire TD (voir section 01), ou chèque à l'ordre de Média Mauricie Inc.</div>
     </div>
     <div class="clause">
       <div class="ctitle">2. Intérêts sur retard</div>
@@ -343,50 +376,14 @@ a.doc-link:hover{text-decoration:underline;}
       <div class="ctitle">4. Suppléments rush</div>
       <div class="ctext">Des suppléments rush s'appliquent en sus des heures décomptées : <strong>Reels / voxpops :</strong> +200$ à +450$ par livrable selon complexité. Ces frais sont facturés séparément.</div>
     </div>
-    
-    <!--
-      <div class="ctext">--><!--
-      <div class="ctext">Tout montant impayé après <strong>30 jours</strong> de la date de facturation est sujet à des intérêts de <strong>1,5% par mois (18% annuellement)</strong>. Média Mauricie Inc. se réserve le droit de suspendre les services ou retenir les livrables en cas de solde impayé.</div>
-    </div>
-    <div class="clause">
-      <div class="ctitle">Annulation et report</div>
-      <div class="ctext">Toute annulation doit être transmise par écrit à info@mediamauricie.com.</div>
-      <div class="hl">
-        <div class="hl-row"><strong>Plus de 7 jours avant :</strong> premier versement remboursable à 50% — temps bloqué, communications et planification engagés. Report sans frais selon disponibilités.</div>
-        <div class="hl-row"><strong>3 à 7 jours avant :</strong> premier versement non remboursable — préparation avancée et date perdue. Report possible selon disponibilités.</div>
-        <div class="hl-row"><strong>Moins de 72h avant :</strong> premier versement non remboursable + frais de préparation terrain applicables.</div>
-        <div class="hl-row"><strong>Force majeure :</strong> report sans frais — date convenue mutuellement.</div>
-      </div>
-    </div>
-    <div class="clause">
-      <div class="ctitle">Révisions</div>
-      <div class="ctext"><strong>1 round de révisions mineures</strong> inclus par livrable. Délai de demande : <strong>7 jours ouvrables</strong> après réception. Révisions majeures facturées à 100$/h ou décomptées d'une banque d'heures.</div>
-    </div>
-    
-    <div class="clause">
-      <div class="ctitle">Droits à l'image — figurants</div>
-      <div class="ctext">Média Mauricie Inc. fournit une décharge d'utilisation d'image pour ses propres fins de portfolio et promotion. <strong>Le client est seul responsable</strong> d'obtenir les autorisations des personnes reconnaissables à l'image pour ses propres usages commerciaux.</div>
-    </div>
-    <div class="clause">
-      <div class="ctitle">Droits et propriété intellectuelle</div>
-      <div class="ctext">Le client reçoit une <strong>licence commerciale illimitée</strong> sur les contenus livrés pour ses propres usages. Média Mauricie Inc. conserve le droit d'auteur et se réserve le droit d'utiliser les contenus à des fins de portfolio et de promotion. La revente des contenus n'est pas permise.</div>
-    </div>
-    
-    <div class="clause">
-      <div class="ctitle">Assurances</div>
-      <div class="ctext">Média Mauricie Inc. détient une assurance responsabilité professionnelle et générale couvrant photographie, vidéo et drone (polices TIP660274 et TGL660274) — couverture de <strong>2 000 000$</strong>.</div>
-    </div>
-    <div class="clause">
-      <div class="ctitle">Loi applicable</div>
-      <div class="ctext">Contrat régi par les lois de la province de Québec. Résolution à l'amiable en priorité. Tribunal compétent : district judiciaire de <strong>Trois-Rivières</strong>.</div>
-    </div>
   </div>
 </div>
 
+<!-- SECTION 06 — SIGNATURES -->
 <div class="sec">
   <div class="sec-head"><span class="sec-num">06</span><span class="sec-title">Signatures</span></div>
   <div class="sec-body">
-    <p style="font-size:13px;font-weight:500;color:#555;margin-bottom:20px;line-height:1.8;">Les soussignés confirment avoir <strong>lu, compris et accepté</strong> l'ensemble des termes du présent contrat. Ce contrat entre en vigueur à la date de la dernière signature et à la réception du premier versement.</p>
+    <p style="font-size:13px;font-weight:500;color:#555;margin-bottom:20px;line-height:1.8;">Les soussignés confirment avoir <strong>lu, compris et accepté</strong> l'ensemble des termes du présent contrat. Ce contrat entre en vigueur à la date de la dernière signature et à la réception du paiement complet.</p>
     <div class="sigs">
       <div class="sig">
         <div class="sig-label">Prestataire</div>
@@ -415,10 +412,11 @@ a.doc-link:hover{text-decoration:underline;}
       <span style="font-size:18px;flex-shrink:0;">⚡</span>
       <div style="font-size:14px;font-weight:600;color:#555;line-height:1.7;">Signature via <strong style="color:#2d2d2d;">Zoho Sign</strong> — La version signée constitue l'original légal.</div>
     </div>
+
     <div class="no-print" style="margin-top:28px;background:#f8f8f8;border:2px solid #e0e0e0;border-radius:12px;padding:24px 26px;">
       <div style="margin-bottom:24px;padding-bottom:22px;border-bottom:2px solid #e8e8e8;">
         <div style="font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#c0392b;margin-bottom:10px;">Merci!</div>
-        <div style="font-size:15px;font-weight:700;color:#2d2d2d;line-height:1.75;margin-bottom:8px;">Merci d'avoir complété ce contrat. Nous allons le réviser et vous faire parvenir une copie PDF à signer via <strong>Zoho Sign</strong>. La réservation de votre projet sera confirmée à la réception du premier versement.</div>
+        <div style="font-size:15px;font-weight:700;color:#2d2d2d;line-height:1.75;margin-bottom:8px;">Merci d'avoir complété ce contrat. Nous allons le réviser et vous faire parvenir une copie PDF à signer via <strong>Zoho Sign</strong>.</div>
         <div style="font-size:14px;font-weight:600;color:#555;">Questions? <a href="mailto:info@mediamauricie.com" style="color:#c0392b;font-weight:800;text-decoration:none;">info@mediamauricie.com</a> — Au plaisir!</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
@@ -428,7 +426,10 @@ a.doc-link:hover{text-decoration:underline;}
       <div class="submit-field" style="margin-bottom:20px;"><label>Notes internes</label><input type="text" id="submit-notes" placeholder="Notes pour le dossier..."></div>
       <button class="btn-submit" id="btn-soumettre" onclick="soumettreContrat()"><span id="btn-text">⚡ Soumettre le contrat</span></button>
       <button class="btn-submit-secondary" onclick="window.print()">🖨️ Sauvegarder en PDF manuellement</button>
-      <div class="submit-confirm" id="submit-confirm"><div class="submit-confirm-title">✅ Contrat soumis — merci!</div><div class="submit-confirm-text">Le PDF a été généré. Notre équipe le révisera et vous enverra le lien Zoho Sign pour signature.<br><br><span id="confirm-details" style="color:#27ae60;font-weight:700;"></span></div></div>
+      <div class="submit-confirm" id="submit-confirm">
+        <div class="submit-confirm-title">✅ Contrat soumis — merci!</div>
+        <div class="submit-confirm-text">Le PDF a été généré. Notre équipe le révisera et vous enverra le lien Zoho Sign pour signature.<br><br><span id="confirm-details" style="color:#27ae60;font-weight:700;"></span></div>
+      </div>
       <div class="submit-error" id="submit-error"><div class="submit-error-text" id="submit-error-text"></div></div>
     </div>
   </div>
@@ -442,65 +443,141 @@ a.doc-link:hover{text-decoration:underline;}
   </div>
 </div>
 
-</div>
-<script>
+</div><!-- /wrap -->
 
-function fmt(n){return n.toLocaleString('fr-CA',{minimumFractionDigits:2,maximumFractionDigits:2})+' $';}
+<script>
+/* ─── HELPERS ─── */
+function fmt(n){
+  return n.toLocaleString('fr-CA',{minimumFractionDigits:2,maximumFractionDigits:2})+' $';
+}
 function getSurplus(){
   var s=0;
-  var inputs=document.querySelectorAll('.surplus-row input[type=number]');
-  for(var i=0;i<inputs.length;i++){s+=parseFloat(inputs[i].value)||0;}
+  document.querySelectorAll('#surplus-container .surplus-row input[type=number]')
+    .forEach(function(i){s+=parseFloat(i.value)||0;});
   return s;
 }
+
+/* ─── FORFAIT SELECTION ─── */
+function selectForfaitBH(el, heures, taux, prix, mode){
+  // Deselect all cards
+  document.querySelectorAll('.forfait-card[data-group="bh"]')
+    .forEach(function(c){c.classList.remove('selected');});
+  el.classList.add('selected');
+
+  var customWrap = document.getElementById('custom-bh-wrap');
+
+  if(mode === 'custom'){
+    // Show custom input fields
+    customWrap.classList.add('visible');
+    // Pull current custom values (if any)
+    var h = parseFloat(document.getElementById('bh-heures-custom').value)||0;
+    var t = parseFloat(document.getElementById('bh-taux-custom').value)||0;
+    document.getElementById('bh-heures').value = h||'';
+    document.getElementById('bh-taux').value = t||'';
+    var si = document.getElementById('solde-initial');
+    if(si) si.textContent = (h||0)+' h';
+  } else {
+    // Hide custom inputs, set values from preset
+    customWrap.classList.remove('visible');
+    document.getElementById('bh-heures').value = heures;
+    document.getElementById('bh-taux').value = taux;
+    var si = document.getElementById('solde-initial');
+    if(si) si.textContent = heures+' h';
+  }
+  calcTotal();
+}
+
+/* ─── SYNC CUSTOM INPUTS → display fields ─── */
+function syncCustomBH(){
+  var h = parseFloat(document.getElementById('bh-heures-custom').value)||0;
+  var t = parseFloat(document.getElementById('bh-taux-custom').value)||0;
+  document.getElementById('bh-heures').value = h||'';
+  document.getElementById('bh-taux').value = t||'';
+  var si = document.getElementById('solde-initial');
+  if(si) si.textContent = h+' h';
+  calcTotal();
+}
+
+/* ─── EXPIRATION AUTO ─── */
+function calcExpiration(){
+  var d = document.getElementById('date-achat').value;
+  if(!d) return;
+  var dt = new Date(d);
+  dt.setFullYear(dt.getFullYear()+1);
+  // Format as YYYY-MM-DD
+  var y = dt.getFullYear();
+  var m = String(dt.getMonth()+1).padStart(2,'0');
+  var day = String(dt.getDate()).padStart(2,'0');
+  document.getElementById('date-expiration').value = y+'-'+m+'-'+day;
+}
+
+/* ─── MAIN CALC ─── */
+function calcTotal(){
+  var heures = parseFloat(document.getElementById('bh-heures').value)||0;
+  var taux   = parseFloat(document.getElementById('bh-taux').value)||0;
+  var banque = heures * taux;
+  var surplus = getSurplus();
+  var ht = banque + surplus;
+
+  var tpsOn = document.getElementById('tps-check').checked;
+  var tvqOn = document.getElementById('tvq-check').checked;
+  var tps = tpsOn ? ht*0.05 : 0;
+  var tvq = tvqOn ? ht*0.09975 : 0;
+  var total = ht + tps + tvq;
+
+  // Update breakdown labels
+  document.getElementById('calc-heures-label').textContent = heures+'h';
+  document.getElementById('calc-taux-label').textContent = taux+'$/h';
+
+  // Forfait preview label
+  var fl = document.getElementById('calc-forfait-label');
+  var fp = document.getElementById('calc-forfait-preview');
+  var selected = document.querySelector('.forfait-card.selected');
+  if(selected && heures > 0){
+    fl.textContent = selected.querySelector('.forfait-card-name').textContent + ' — ' + heures + 'h × ' + taux + '$/h';
+    fp.textContent = fmt(banque);
+  } else if(!selected){
+    fl.textContent = 'Aucun forfait sélectionné';
+    fp.textContent = '—';
+  } else {
+    fl.textContent = selected.querySelector('.forfait-card-name').textContent;
+    fp.textContent = '—';
+  }
+
+  // Update all display values
+  document.getElementById('calc-banque').textContent  = fmt(banque);
+  document.getElementById('calc-surplus').textContent = fmt(surplus);
+  document.getElementById('calc-ht').textContent      = fmt(ht);
+  document.getElementById('calc-tps').textContent     = fmt(tps);
+  document.getElementById('calc-tvq').textContent     = fmt(tvq);
+  document.getElementById('calc-total').textContent   = fmt(total);
+  document.getElementById('calc-versement').textContent = fmt(total);
+
+  // Dim inactive tax rows
+  document.getElementById('row-tps').style.opacity = tpsOn ? '1':'0.3';
+  document.getElementById('row-tvq').style.opacity = tvqOn ? '1':'0.3';
+}
+
+/* ─── SURPLUS ROWS ─── */
 function ajouterSurplus(){
-  var c=document.getElementById('surplus-container');
-  var d=document.createElement('div');d.className='surplus-row';
-  d.innerHTML='<input type="text" placeholder="Description..."><input type="number" min="0" placeholder="0" oninput="calcTotal()"><button class="btn-remove" onclick="retirerSurplus(this)">×</button>';
+  var c = document.getElementById('surplus-container');
+  var d = document.createElement('div');
+  d.className = 'surplus-row';
+  d.innerHTML = '<input type="text" placeholder="Description..."><input type="number" placeholder="0" oninput="calcTotal()"><button class="btn-remove" onclick="retirerSurplus(this)">×</button>';
   c.appendChild(d);
 }
 function retirerSurplus(btn){
-  var rows=document.querySelectorAll('#surplus-container .surplus-row');
-  if(rows.length>1){btn.parentElement.remove();calcTotal();}
-}
-function selectForfait(card,name){
-  var cards=document.querySelectorAll('.forfait-card[data-group="'+name+'"]');
-  for(var i=0;i<cards.length;i++){cards[i].classList.remove('selected');}
-  card.classList.add('selected');
+  var rows = document.querySelectorAll('#surplus-container .surplus-row');
+  if(rows.length > 1){ btn.parentElement.remove(); calcTotal(); }
 }
 
-
-function calcTotal(){
-  var heures=parseFloat(document.getElementById('bh-heures').value)||0;
-  var taux=parseFloat(document.getElementById('bh-taux').value)||0;
-  var surplus=getSurplus();
-  var ht=heures*taux+surplus;
-  var tps=document.getElementById('tps-check').checked?ht*0.05:0;
-  var tvq=document.getElementById('tvq-check').checked?ht*0.09975:0;
-  var total=ht+tps+tvq;
-  document.getElementById('calc-ht').textContent=fmt(ht);
-  document.getElementById('calc-tps').textContent=fmt(tps);
-  document.getElementById('calc-tvq').textContent=fmt(tvq);
-  document.getElementById('calc-total').textContent=fmt(total);
-  document.getElementById('calc-versement').textContent=fmt(total);
-  document.getElementById('calc-solde').textContent='Banque activée dès paiement reçu';
-  document.getElementById('row-tps').style.opacity=document.getElementById('tps-check').checked?'1':'0.3';
-  document.getElementById('row-tvq').style.opacity=document.getElementById('tvq-check').checked?'1':'0.3';
-}
-function selectForfaitBH(el,heures,taux,prix){
-  var cards=document.querySelectorAll('.forfait-card[data-group="bh"]');
-  for(var i=0;i<cards.length;i++){cards[i].classList.remove('selected');}
-  el.classList.add('selected');
-  document.getElementById('bh-heures').value=heures;
-  document.getElementById('bh-taux').value=taux;
-  var si=document.getElementById('solde-initial');
-  if(si)si.textContent=heures+' h';
-  calcTotal();
-}
+/* ─── REGISTRE ─── */
 function ajouterLigneRegistre(){
-  var tbody=document.getElementById('registre-body');
-  var tr=document.createElement('tr');
-  tr.style.borderBottom='1px solid #f0f0f0';
-  tr.innerHTML='<td style="padding:6px 8px;"><input type="date" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:130px;"></td>'+
+  var tbody = document.getElementById('registre-body');
+  var tr = document.createElement('tr');
+  tr.style.borderBottom = '1px solid #f0f0f0';
+  tr.innerHTML =
+    '<td style="padding:6px 8px;"><input type="date" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:130px;"></td>'+
     '<td style="padding:6px 8px;"><input type="text" placeholder="Livrable..." style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:100%;"></td>'+
     '<td style="padding:6px 8px;text-align:center;"><input type="number" min="0" step="0.5" placeholder="0" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>'+
     '<td style="padding:6px 8px;text-align:center;"><input type="number" min="0" step="0.5" placeholder="0" style="border:1px solid #e0e0e0;border-radius:6px;padding:5px 8px;font-size:12px;font-family:Montserrat,sans-serif;width:60px;text-align:center;"></td>'+
@@ -508,32 +585,39 @@ function ajouterLigneRegistre(){
   tbody.appendChild(tr);
 }
 
+/* ─── SUBMIT / PDF ─── */
 function soumettreContrat(){
-  var btn=document.getElementById('btn-soumettre');
-  var btnText=document.getElementById('btn-text');
-  btn.disabled=true;
-  btnText.textContent='Génération en cours...';
+  var btn = document.getElementById('btn-soumettre');
+  var btnText = document.getElementById('btn-text');
+  btn.disabled = true;
+  btnText.textContent = 'Génération en cours...';
   try{
-    var element=document.getElementById('contrat-wrap');
-    var opt={margin:0.4,filename:'Contrat-BH-MediaMauricie.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2},jsPDF:{unit:'in',format:'letter',orientation:'portrait'}};
+    var element = document.getElementById('contrat-wrap');
+    var opt = {
+      margin: 0.4,
+      filename: 'Contrat-BH-MediaMauricie.pdf',
+      image: {type:'jpeg',quality:0.98},
+      html2canvas: {scale:2},
+      jsPDF: {unit:'in',format:'letter',orientation:'portrait'}
+    };
     html2pdf().set(opt).from(element).save().then(function(){
-      document.getElementById('submit-confirm').style.display='block';
-      document.getElementById('submit-error').style.display='none';
-      var cli=document.getElementById('submit-cli').value||'';
-      var email=document.getElementById('submit-email').value||'';
-      document.getElementById('confirm-details').textContent=(cli?'Client: '+cli:'')+(email?' · '+email:'');
-      btnText.textContent='✅ PDF généré';
+      document.getElementById('submit-confirm').style.display = 'block';
+      document.getElementById('submit-error').style.display = 'none';
+      var cli   = document.getElementById('submit-cli').value||'';
+      var email = document.getElementById('submit-email').value||'';
+      document.getElementById('confirm-details').textContent = (cli?'Client: '+cli:'')+(email?' · '+email:'');
+      btnText.textContent = '✅ PDF généré';
     });
-  }catch(e){
-    document.getElementById('submit-error').style.display='block';
-    document.getElementById('submit-error-text').textContent='Erreur: '+e.message;
-    btn.disabled=false;
-    btnText.textContent='⚡ Soumettre le contrat';
+  } catch(e){
+    document.getElementById('submit-error').style.display = 'block';
+    document.getElementById('submit-error-text').textContent = 'Erreur: '+e.message;
+    btn.disabled = false;
+    btnText.textContent = '⚡ Soumettre le contrat';
   }
 }
 
-window.addEventListener('load', calcTotal);
-
+/* ─── INIT ─── */
+window.addEventListener('load', function(){ calcTotal(); });
 </script>
 </body>
 </html>
