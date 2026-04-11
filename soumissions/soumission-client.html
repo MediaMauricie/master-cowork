@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soumission — Média Mauricie</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+  import { getFirestore, doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+  const app = initializeApp({
+    apiKey:"AIzaSyAcX97Y05Z1-e6BFr681TeR9Z3VP4iMskE",
+    authDomain:"media-mauricie.firebaseapp.com",
+    projectId:"media-mauricie",
+    storageBucket:"media-mauricie.firebasestorage.app",
+    messagingSenderId:"679828101117",
+    appId:"1:679828101117:web:950c83dc6f94e17cd86b94"
+  });
+  const db=getFirestore(app);
+  window._db=db;
+  window._doc=doc;
+  window._getDoc=getDoc;
+  window._updateDoc=updateDoc;
+  window._serverTimestamp=serverTimestamp;
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;font-size:14px;}
+.wrap{max-width:860px;margin:0 auto;padding:40px 24px 80px;}
+.loading{text-align:center;padding:80px 20px;font-size:14px;font-weight:600;color:#888;}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:36px;padding-bottom:24px;border-bottom:3px solid #2d2d2d;}
+.doc-type{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#c0392b;margin-bottom:6px;}
+.sec{margin-bottom:20px;}
+.sec-head{background:#2d2d2d;border-radius:10px 10px 0 0;padding:12px 20px;display:flex;align-items:center;gap:12px;}
+.sec-num{font-size:11px;font-weight:800;letter-spacing:2px;color:rgba(255,255,255,0.35);}
+.sec-title{font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#fff;}
+.sec-body{background:#fff;border:2px solid #e0e0e0;border-top:none;border-radius:0 0 10px 10px;padding:20px 24px;}
+.parties{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.partie{border:2px solid #e0e0e0;border-radius:10px;padding:16px 18px;}
+.partie-label{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#c0392b;margin-bottom:12px;}
+.partie-name{font-size:16px;font-weight:800;color:#2d2d2d;margin-bottom:10px;}
+.fr{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;}
+.fk{font-size:11px;font-weight:700;color:#888;min-width:95px;flex-shrink:0;padding-top:3px;}
+.fv{font-size:13px;font-weight:600;color:#2d2d2d;flex:1;line-height:1.4;}
+.bank-strip{background:#f8f8f8;border:1.5px solid #e0e0e0;border-radius:8px;padding:12px 14px;margin-top:12px;}
+.bank-label{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#aaa;margin-bottom:8px;}
+.bank-row{display:flex;gap:20px;flex-wrap:wrap;}
+.bank-item-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#bbb;margin-bottom:3px;}
+.bank-item-val{font-size:13px;font-weight:800;color:#2d2d2d;letter-spacing:1px;}
+.info-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:13px;}
+.info-row:last-child{border-bottom:none;}
+.info-label{font-weight:700;color:#888;}
+.info-val{font-weight:700;color:#2d2d2d;}
+.livrable-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f5f5f5;}
+.livrable-row:last-child{border-bottom:none;}
+.livrable-desc{font-size:13px;font-weight:600;color:#2d2d2d;flex:1;}
+.livrable-qty{font-size:12px;color:#aaa;margin:0 16px;}
+.livrable-prix{font-size:13px;font-weight:800;color:#2d2d2d;min-width:80px;text-align:right;}
+.calc-block{background:#2d2d2d;border-radius:12px;padding:20px 24px;margin-top:16px;}
+.calc-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.08);}
+.calc-label{font-size:12px;font-weight:600;color:rgba(255,255,255,0.6);}
+.calc-val{font-size:14px;font-weight:800;color:#fff;}
+.calc-total{display:flex;justify-content:space-between;align-items:center;padding:14px 0 6px;border-top:2px solid rgba(255,255,255,0.2);margin-top:8px;}
+.calc-total-label{font-size:14px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:1px;}
+.calc-total-val{font-size:26px;font-weight:900;color:#fff;}
+.badge-som{display:inline-block;background:#fff3cd;border:1.5px solid #ffc107;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;color:#856404;text-transform:uppercase;}
+.badge-ok{display:inline-block;background:#d4edda;border:1.5px solid #27ae60;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;color:#155724;text-transform:uppercase;}
+.accept-zone{background:#fff;border:2px solid #e0e0e0;border-radius:12px;padding:24px;margin-top:8px;}
+.accept-title{font-size:16px;font-weight:800;color:#2d2d2d;margin-bottom:6px;}
+.accept-sub{font-size:13px;font-weight:500;color:#888;line-height:1.7;margin-bottom:20px;}
+.accept-field{margin-bottom:16px;}
+.accept-field label{display:block;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:6px;}
+.accept-field input{width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:12px 14px;font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#2d2d2d;outline:none;transition:border-color 0.2s;}
+.accept-field input:focus{border-color:#2d2d2d;}
+.btn-accept{background:#27ae60;color:#fff;border:none;border-radius:10px;padding:18px 32px;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;width:100%;transition:all 0.2s;margin-bottom:8px;}
+.btn-accept:hover{background:#219a52;}
+.btn-accept:disabled{background:#ccc;cursor:not-allowed;}
+.accepted-block{display:none;background:#f0faf4;border:2px solid #b7e4c7;border-radius:10px;padding:24px;text-align:center;}
+.accepted-icon{font-size:40px;margin-bottom:12px;}
+.accepted-title{font-size:18px;font-weight:800;color:#27ae60;margin-bottom:8px;}
+.accepted-text{font-size:13px;font-weight:500;color:#2d4a35;line-height:1.75;}
+.already-accepted{background:#f0faf4;border:2px solid #b7e4c7;border-radius:10px;padding:20px;text-align:center;margin-top:8px;}
+.error-block{background:#fdf4f4;border:2px solid #f0d0d0;border-radius:10px;padding:20px;text-align:center;margin:40px auto;max-width:500px;}
+.progress-steps{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.step{font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;background:#f0f0f0;color:#888;}
+.step.active{background:#fff3cd;color:#856404;}
+.step.done{background:#d4edda;color:#155724;}
+.footer{margin-top:24px;padding-top:18px;border-top:2px solid #ddd;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;}
+.footer-legal{font-size:11px;font-weight:500;color:#aaa;line-height:1.8;text-align:right;}
+.footer-legal strong{color:#888;}
+@media(max-width:640px){
+  .parties{grid-template-columns:1fr;}
+  .header{flex-direction:column;gap:12px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap" id="page-wrap">
+  <div class="loading" id="loading">Chargement de votre soumission...</div>
+  <div id="content" style="display:none;"></div>
+</div>
+
+<script>
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyXr3QIdgA2ZgeXGZlcT3j_1COJ_S1d24CndNGrJfqCXmChxlvkC6A0UJw6oXXQ5SI/exec';
+var _somData = null;
+var _somId   = null;
+
+function fmt(n){
+  if(!n&&n!==0) return '—';
+  return n.toLocaleString('fr-CA',{minimumFractionDigits:2,maximumFractionDigits:2})+' $';
+}
+
+async function chargerSoumission(){
+  var params=new URLSearchParams(window.location.search);
+  var id=params.get('id');
+  if(!id){ afficherErreur('Lien invalide.'); return; }
+  _somId=id;
+  try{
+    var docRef=window._doc(window._db,'soumissions',id);
+    var snap=await window._getDoc(docRef);
+    if(!snap.exists()){ afficherErreur('Soumission introuvable.'); return; }
+    _somData=snap.data();
+    _somData._id=id;
+    afficherSoumission(id,_somData);
+  }catch(e){ afficherErreur('Erreur: '+e.message); }
+}
+
+function afficherErreur(msg){
+  document.getElementById('loading').style.display='none';
+  document.getElementById('content').style.display='block';
+  document.getElementById('content').innerHTML=
+    '<div class="error-block">'+
+    '<div style="font-size:32px;margin-bottom:12px;">⚠️</div>'+
+    '<div style="font-size:15px;font-weight:700;color:#c0392b;margin-bottom:8px;">Oups!</div>'+
+    '<div style="font-size:13px;color:#555;">'+msg+'</div>'+
+    '</div>';
+}
+
+function afficherSoumission(id,d){
+  document.getElementById('loading').style.display='none';
+  var deja=d.statut==='acceptee';
+  var f=d.facturation||{};
+  var livrables=d.livrables||[];
+  var cli=d.client||{};
+
+  var html=
+    '<div class="header">'+
+      '<img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_M-coul.png" '+
+        'alt="Média Mauricie" style="height:52px;width:auto;" onerror="this.style.display=\'none\'">'+
+      '<div style="text-align:right;">'+
+        '<div class="doc-type">Soumission</div>'+
+        '<div style="font-size:22px;font-weight:900;color:#2d2d2d;">Proposition de services</div>'+
+        '<div style="font-size:13px;font-weight:600;color:#888;margin-top:6px;">'+
+          (d.noSoumission||'—')+' · '+
+          '<span class="'+(deja?'badge-ok':'badge-som')+'">'+
+          (deja?'Acceptée ✓':'En attente d\'approbation')+'</span>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+
+    '<div class="sec">'+
+      '<div class="sec-head"><span class="sec-num">01</span><span class="sec-title">Parties</span></div>'+
+      '<div class="sec-body"><div class="parties">'+
+        '<div class="partie">'+
+          '<div class="partie-label">Prestataire</div>'+
+          '<div class="partie-name">Média Mauricie Inc.</div>'+
+          '<div class="fr"><span class="fk">Représentante</span><span class="fv">Victoria J. Polsoni, Présidente</span></div>'+
+          '<div class="fr"><span class="fk">Adresse</span><span class="fv">2750 Rang des Chutes, Sainte-Ursule, QC G0X 3B0</span></div>'+
+          '<div class="fr"><span class="fk">Téléphone</span><span class="fv">(819) 852-0851</span></div>'+
+          '<div class="fr"><span class="fk">Courriel</span><span class="fv">info@mediamauricie.com</span></div>'+
+          '<div class="fr"><span class="fk">TPS</span><span class="fv">71110 6229 RT 0001</span></div>'+
+          '<div class="fr"><span class="fk">TVQ</span><span class="fv">12 3255 2049 TQ 0001</span></div>'+
+          '<div class="fr"><span class="fk">NEQ</span><span class="fv">1180690985</span></div>'+
+          '<div class="bank-strip">'+
+            '<div class="bank-label">Virement — TD Canada Trust</div>'+
+            '<div class="bank-row">'+
+              '<div><div class="bank-item-label">Transit</div><div class="bank-item-val">49361</div></div>'+
+              '<div><div class="bank-item-label">Institution</div><div class="bank-item-val">004</div></div>'+
+              '<div><div class="bank-item-label">Compte</div><div class="bank-item-val">5213392</div></div>'+
+            '</div>'+
+            '<div style="font-size:11px;color:#aaa;margin-top:8px;">Interac : info@mediamauricie.com</div>'+
+          '</div>'+
+        '</div>'+
+        '<div class="partie">'+
+          '<div class="partie-label">Client</div>'+
+          '<div class="partie-name">'+(cli.entreprise||'—')+'</div>'+
+          (cli.representant?'<div class="fr"><span class="fk">Représentant</span><span class="fv">'+cli.representant+'</span></div>':'')+
+          (cli.titre?'<div class="fr"><span class="fk">Titre</span><span class="fv">'+cli.titre+'</span></div>':'')+
+          (cli.adresse?'<div class="fr"><span class="fk">Adresse</span><span class="fv">'+cli.adresse+'</span></div>':'')+
+          (cli.courriel?'<div class="fr"><span class="fk">Courriel</span><span class="fv">'+cli.courriel+'</span></div>':'')+
+          (cli.telephone?'<div class="fr"><span class="fk">Téléphone</span><span class="fv">'+cli.telephone+'</span></div>':'')+
+        '</div>'+
+      '</div></div>'+
+    '</div>'+
+
+    '<div class="sec">'+
+      '<div class="sec-head"><span class="sec-num">02</span><span class="sec-title">Détails du projet</span></div>'+
+      '<div class="sec-body">'+
+        '<div class="info-row"><span class="info-label">Service</span><span class="info-val">'+(d.serviceNom||'—')+'</span></div>'+
+        (d.mandat&&d.mandat.description?'<div class="info-row"><span class="info-label">Mandat</span><span class="info-val" style="max-width:480px;text-align:right;line-height:1.5;">'+d.mandat.description+'</span></div>':'')+
+        (d.mandat&&d.mandat.lieu?'<div class="info-row"><span class="info-label">Lieu</span><span class="info-val">'+d.mandat.lieu+'</span></div>':'')+
+        '<div class="info-row"><span class="info-label">Valide jusqu\'au</span><span class="info-val">'+(d.dateExpiration||'—')+'</span></div>'+
+      '</div>'+
+    '</div>'+
+
+    '<div class="sec">'+
+      '<div class="sec-head"><span class="sec-num">03</span><span class="sec-title">Livrables proposés</span></div>'+
+      '<div class="sec-body">'+
+        livrables.filter(function(l){return l.description;}).map(function(l){
+          var total=l.qty*l.prix;
+          return '<div class="livrable-row">'+
+            '<span class="livrable-desc">'+l.description+'</span>'+
+            (l.qty&&l.qty!==1?'<span class="livrable-qty">×'+l.qty+'</span>':'')+
+            '<span class="livrable-prix">'+(l.prix>0?fmt(total):'Inclus')+'</span>'+
+          '</div>';
+        }).join('')+
+        (d.notes?'<div style="margin-top:14px;padding:12px 14px;background:#f8f8f8;border-radius:8px;font-size:12px;color:#555;line-height:1.7;">'+d.notes+'</div>':'')+
+        '<div class="calc-block">'+
+          (f.sousTotal?'<div class="calc-row"><span class="calc-label">Sous-total HT</span><span class="calc-val">'+fmt(f.sousTotal)+'</span></div>':'')+
+          (f.tps?'<div class="calc-row"><span class="calc-label">TPS 5%</span><span class="calc-val">'+fmt(f.tps)+'</span></div>':'')+
+          (f.tvq?'<div class="calc-row"><span class="calc-label">TVQ 9,975%</span><span class="calc-val">'+fmt(f.tvq)+'</span></div>':'')+
+          '<div class="calc-total"><span class="calc-total-label">Total TTC</span><span class="calc-total-val">'+fmt(f.totalTTC||0)+'</span></div>'+
+          '<div style="display:flex;justify-content:space-between;padding:10px 0 4px;border-top:1px solid rgba(255,255,255,0.1);margin-top:6px;">'+
+            '<span style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.5);">Acompte à la signature ('+(f.acomptePct||50)+'%)</span>'+
+            '<span style="font-size:18px;font-weight:900;color:#e74c3c;">'+fmt(f.acompte||0)+'</span>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+
+    '<div class="sec">'+
+      '<div class="sec-head"><span class="sec-num">04</span><span class="sec-title">Approbation</span></div>'+
+      '<div class="sec-body">'+
+        (deja ? acceptedHTML(d) : acceptFormHTML(id))+
+      '</div>'+
+    '</div>'+
+
+    '<div class="footer">'+
+      '<img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_coul.png" '+
+        'alt="MM" style="height:36px;width:auto;" onerror="this.style.display=\'none\'">'+
+      '<div class="footer-legal">'+
+        '<strong>Média Mauricie Inc.</strong> · 2750 Rang des Chutes, Sainte-Ursule, QC G0X 3B0<br>'+
+        '(819) 852-0851 · info@mediamauricie.com · NEQ 1180690985'+
+      '</div>'+
+    '</div>';
+
+  document.getElementById('content').innerHTML=html;
+  document.getElementById('content').style.display='block';
+}
+
+function acceptFormHTML(id){
+  return '<p style="font-size:13px;font-weight:500;color:#555;margin-bottom:20px;line-height:1.8;">'+
+    'En tapant votre nom ci-dessous, vous confirmez avoir lu et accepté les termes de cette proposition. '+
+    'Le contrat officiel vous sera transmis séparément via <strong>Zoho Sign</strong> pour signature électronique.</p>'+
+    '<div class="accept-zone">'+
+      '<div class="accept-title">Approuver cette soumission</div>'+
+      '<div class="accept-sub">Votre nom tapé constitue votre approbation. Un contrat officiel vous sera envoyé pour signature électronique via Zoho Sign.</div>'+
+      '<div id="progress-steps" class="progress-steps">'+
+        '<span class="step active" id="step-1">① Signer</span>'+
+        '<span class="step" id="step-2">② Création dossier</span>'+
+        '<span class="step" id="step-3">③ Confirmation</span>'+
+      '</div>'+
+      '<div class="accept-field"><label>Votre nom complet</label>'+
+        '<input type="text" id="accept-nom" placeholder="Prénom Nom" autocomplete="name"></div>'+
+      '<div class="accept-field"><label>Votre titre / fonction</label>'+
+        '<input type="text" id="accept-titre" placeholder="Directeur, Propriétaire..."></div>'+
+      '<button class="btn-accept" id="btn-accept" onclick="accepterSoumission(\''+id+'\')">'+
+        '✓ J\'approuve cette soumission</button>'+
+      '<div style="font-size:11px;color:#aaa;text-align:center;line-height:1.6;">'+
+        'En cliquant, vous acceptez les termes de la proposition. Le contrat signé via Zoho Sign sera le document légal officiel.</div>'+
+      '<div class="accepted-block" id="accepted-block">'+
+        '<div class="accepted-icon">✅</div>'+
+        '<div class="accepted-title">Soumission approuvée!</div>'+
+        '<div class="accepted-text">'+
+          'Merci! Notre équipe prépare votre dossier et vous enverra le contrat via Zoho Sign sous peu.<br><br>'+
+          'Des questions? <a href="mailto:info@mediamauricie.com" style="color:#c0392b;font-weight:700;">info@mediamauricie.com</a>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+}
+
+function acceptedHTML(d){
+  return '<div class="already-accepted">'+
+    '<div style="font-size:32px;margin-bottom:10px;">✅</div>'+
+    '<div style="font-size:16px;font-weight:800;color:#27ae60;margin-bottom:8px;">Soumission approuvée</div>'+
+    '<div style="font-size:13px;color:#555;line-height:1.7;">'+
+      'Approuvée par <strong>'+(d.accepteePar||'—')+'</strong>.<br>'+
+      'Le contrat officiel sera transmis via <strong>Zoho Sign</strong>.'+
+    '</div>'+
+  '</div>';
+}
+
+async function accepterSoumission(id){
+  var nom   = document.getElementById('accept-nom').value.trim();
+  var titre = document.getElementById('accept-titre').value.trim();
+  if(!nom){ alert('Veuillez entrer votre nom complet.'); return; }
+
+  var btn=document.getElementById('btn-accept');
+  btn.disabled=true;
+  btn.textContent='⏳ Traitement en cours...';
+
+  // Étape 1 — Firebase update
+  setStep(1);
+  try{
+    var docRef=window._doc(window._db,'soumissions',id);
+    await window._updateDoc(docRef,{
+      statut:      'acceptee',
+      accepteePar: nom,
+      accepteeTitre: titre,
+      accepteeAt:  window._serverTimestamp()
+    });
+  }catch(e){
+    btn.disabled=false;
+    btn.textContent='✓ J\'approuve cette soumission';
+    alert('Erreur de connexion: '+e.message+'. Veuillez réessayer.');
+    return;
+  }
+
+  // Étape 2 — Générer PDF + appeler Apps Script
+  setStep(2);
+  btn.textContent='⏳ Création de votre dossier...';
+
+  try{
+    // Générer le PDF de la soumission
+    var pdfBase64='';
+    var nomFichier='';
+    if(_somData && window.html2pdf){
+      try{
+        var element=document.getElementById('page-wrap');
+        var opt={
+          margin:[10,10,10,10],
+          filename:'temp.pdf',
+          image:{type:'jpeg',quality:0.92},
+          html2canvas:{scale:1.5,useCORS:true,allowTaint:true,logging:false,imageTimeout:10000},
+          jsPDF:{unit:'mm',format:'letter',orientation:'portrait'}
+        };
+        var pdfBlob=await html2pdf().set(opt).from(element).outputPdf('blob');
+        var reader=new FileReader();
+        pdfBase64=await new Promise(function(res){
+          reader.onloadend=function(){res(reader.result.split(',')[1]);};
+          reader.readAsDataURL(pdfBlob);
+        });
+        var cli=(_somData.client&&_somData.client.entreprise)||'client';
+        nomFichier='Soumission-'+(_somData.noSoumission||id)+'-'+cli.replace(/\s+/g,'_')+'.pdf';
+      }catch(e){ Logger && Logger.log('PDF gen error: '+e.message); }
+    }
+
+    // Appeler Apps Script
+    var payload={
+      action:       'accepterSoumission',
+      token:        'MauricieMau20',
+      leadId:       (_somData&&_somData.leadId)||'',
+      clientNom:    (_somData&&_somData.client&&(_somData.client.entreprise||_somData.client.representant))||nom,
+      clientEmail:  (_somData&&_somData.client&&_somData.client.courriel)||'',
+      serviceNom:   (_somData&&_somData.serviceNom)||'',
+      noSom:        (_somData&&_somData.noSoumission)||id,
+      totalTTC:     (_somData&&_somData.facturation&&_somData.facturation.totalTTC)||0,
+      acompte:      (_somData&&_somData.facturation&&_somData.facturation.acompte)||0,
+      accepteePar:  nom+' ('+(titre||'—')+')',
+      pdfBase64:    pdfBase64,
+      nomFichier:   nomFichier
+    };
+
+    await fetch(SCRIPT_URL,{
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
+    });
+  }catch(e){
+    console.warn('Apps Script call error (non-bloquant):', e.message);
+  }
+
+  // Étape 3 — Confirmer
+  setStep(3);
+  document.getElementById('accepted-block').style.display='block';
+  btn.style.display='none';
+  document.getElementById('accept-nom').disabled=true;
+  document.getElementById('accept-titre').disabled=true;
+
+  // Télécharger le PDF pour le client aussi
+  if(_somData){
+    try{
+      var cli2=(_somData.client&&_somData.client.entreprise)||'client';
+      var fname='Soumission-'+(_somData.noSoumission||id)+'-'+cli2.replace(/\s+/g,'_')+'.pdf';
+      html2pdf().set({
+        margin:[10,10,10,10],
+        filename:fname,
+        image:{type:'jpeg',quality:0.92},
+        html2canvas:{scale:1.5,useCORS:true,allowTaint:true,logging:false,imageTimeout:10000,
+          onclone:function(doc){
+            var az=doc.getElementById('accepted-block');
+            if(az) az.style.display='block';
+          }
+        },
+        jsPDF:{unit:'mm',format:'letter',orientation:'portrait'}
+      }).from(document.getElementById('page-wrap')).save();
+    }catch(e){}
+  }
+}
+
+function setStep(n){
+  for(var i=1;i<=3;i++){
+    var el=document.getElementById('step-'+i);
+    if(!el) continue;
+    if(i<n) el.className='step done';
+    else if(i===n) el.className='step active';
+    else el.className='step';
+  }
+}
+
+window.addEventListener('load',function(){
+  setTimeout(chargerSoumission,300);
+});
+</script>
+</body>
+</html>
