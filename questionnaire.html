@@ -167,11 +167,6 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--dark);
         <div class="svc-name">Séance photo</div>
         <div class="svc-desc">Portraits · équipe · événement · drone inclus</div>
       </div>
-      <div class="svc-card" data-service="MM-DOC" onclick="selectService(this)">
-        <div class="svc-icon">🎦</div>
-        <div class="svc-name">Documentaire</div>
-        <div class="svc-desc">Court ou long format · sur soumission</div>
-      </div>
     </div>
     <div id="svc-error" style="font-size:11px;color:var(--red);font-weight:600;display:none;margin-bottom:12px;">Veuillez sélectionner un service.</div>
 
@@ -179,23 +174,8 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--dark);
     <div id="contact-section">
       <div style="height:1px;background:var(--border);margin:4px 0 28px;"></div>
       <div class="step-eyebrow" style="margin-bottom:16px;">Vos coordonnées</div>
-      <div class="field-row">
-        <div class="field"><label>Prénom <span class="req">*</span></label><input type="text" id="prenom" placeholder="Marie"></div>
-        <div class="field"><label>Nom <span class="req">*</span></label><input type="text" id="nom" placeholder="Tremblay"></div>
-      </div>
-      <div class="field"><label>Organisation / Entreprise</label><input type="text" id="org" placeholder="(si applicable)"></div>
-      <div class="field-row">
-        <div class="field"><label>Courriel <span class="req">*</span></label><input type="email" id="email" placeholder="vous@exemple.com"></div>
-        <div class="field"><label>Téléphone</label><input type="tel" id="tel" placeholder="(819) 000-0000"></div>
-      </div>
-      <div class="field">
-        <label>Comment nous avez-vous trouvé?</label>
-        <select id="source">
-          <option value="">Sélectionner...</option>
-          <option>Instagram</option><option>Facebook</option><option>Référence</option>
-          <option>Google</option><option>Événement / rencontre</option><option>Autre</option>
-        </select>
-      </div>
+      <div class="field"><label>Nom complet <span class="req">*</span></label><input type="text" id="nom" placeholder="Marie Tremblay"></div>
+      <div class="field"><label>Courriel <span class="req">*</span></label><input type="email" id="email" placeholder="vous@exemple.com"></div>
     </div>
 
     <div class="nav">
@@ -317,12 +297,13 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--dark);
     <!-- VID -->
     <div data-show="MM-VID" id="q-VID">
       <div class="field"><label>Type de production</label><div class="pills">
-        <div class="pill" onclick="togglePill(this,'type_vid')">Vidéo corporative</div>
-        <div class="pill" onclick="togglePill(this,'type_vid')">Témoignages / voxpop</div>
-        <div class="pill" onclick="togglePill(this,'type_vid')">Reels / contenu réseaux</div>
-        <div class="pill" onclick="togglePill(this,'type_vid')">Capsule éducative</div>
-        <div class="pill" onclick="togglePill(this,'type_vid')">Teaser / publicité</div>
-        <div class="pill" onclick="togglePill(this,'type_vid')">Mini-documentaire</div>
+        <div class="pill" onclick="togglePill(this,'type_vid');toggleDocFields(this)">Vidéo corporative</div>
+        <div class="pill" onclick="togglePill(this,'type_vid');toggleDocFields(this)">Témoignages / voxpop</div>
+        <div class="pill" onclick="togglePill(this,'type_vid');toggleDocFields(this)">Reels / contenu réseaux</div>
+        <div class="pill" onclick="togglePill(this,'type_vid');toggleDocFields(this)">Capsule éducative</div>
+        <div class="pill" onclick="togglePill(this,'type_vid');toggleDocFields(this)">Teaser / publicité</div>
+        <div class="pill" onclick="togglePill(this,'type_vid');toggleDocFields(this)">Mini-documentaire</div>
+        <div class="pill" onclick="togglePill(this,'type_vid');toggleDocFields(this)">Documentaire long format</div>
       </div></div>
       <div class="field"><label>Format de livraison</label><div class="pills">
         <div class="pill" onclick="togglePill(this,'format_vid')">9:16 vertical (réseaux)</div>
@@ -347,6 +328,26 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--dark);
         <div class="pill" onclick="togglePill(this,'budget_vid',true)">Je préfère recevoir une soumission d'abord</div>
       </div></div>
       <div class="field"><label>Décrivez votre projet</label><textarea id="desc_vid" placeholder="Contexte, objectifs, public cible..."></textarea></div>
+
+      <!-- Extra fields shown when documentaire selected -->
+      <div id="doc-extra" style="display:none;">
+        <div style="height:1px;background:var(--border);margin:4px 0 20px;"></div>
+        <div class="step-eyebrow" style="margin-bottom:16px;color:#6b5ea8;">Options documentaire</div>
+        <div class="field"><label>Durée visée du film final</label><div class="pills">
+          <div class="pill" onclick="togglePill(this,'duree_doc',true)">3–5 min</div>
+          <div class="pill" onclick="togglePill(this,'duree_doc',true)">5–15 min</div>
+          <div class="pill" onclick="togglePill(this,'duree_doc',true)">15–30 min</div>
+          <div class="pill" onclick="togglePill(this,'duree_doc',true)">30 min+</div>
+          <div class="pill" onclick="togglePill(this,'duree_doc',true)">À définir</div>
+        </div></div>
+        <div class="field"><label>Diffusion prévue</label><div class="pills">
+          <div class="pill" onclick="togglePill(this,'diff_doc')">Réseaux sociaux</div>
+          <div class="pill" onclick="togglePill(this,'diff_doc')">Site web</div>
+          <div class="pill" onclick="togglePill(this,'diff_doc')">Événement / projection</div>
+          <div class="pill" onclick="togglePill(this,'diff_doc')">Télévision / diffuseur</div>
+          <div class="pill" onclick="togglePill(this,'diff_doc')">Festival</div>
+        </div></div>
+      </div>
     </div>
 
     <!-- BH -->
@@ -414,40 +415,6 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--dark);
       <div class="field"><label>Informations supplémentaires</label><textarea id="desc_pho" placeholder="Style, contexte, utilisation des photos..."></textarea></div>
     </div>
 
-    <!-- DOC -->
-    <div data-show="MM-DOC" id="q-DOC">
-      <div class="field"><label>Type de documentaire</label><div class="pills">
-        <div class="pill" onclick="togglePill(this,'type_doc')">Portrait de personne</div>
-        <div class="pill" onclick="togglePill(this,'type_doc')">Portrait d'entreprise</div>
-        <div class="pill" onclick="togglePill(this,'type_doc')">Documentaire institutionnel</div>
-        <div class="pill" onclick="togglePill(this,'type_doc')">Social / communautaire</div>
-        <div class="pill" onclick="togglePill(this,'type_doc')">Mini-doc (5–15 min)</div>
-        <div class="pill" onclick="togglePill(this,'type_doc')">Long format (30 min+)</div>
-      </div></div>
-      <div class="field"><label>Durée du film final</label><div class="pills">
-        <div class="pill" onclick="togglePill(this,'duree_doc',true)">3–5 min</div>
-        <div class="pill" onclick="togglePill(this,'duree_doc',true)">5–15 min</div>
-        <div class="pill" onclick="togglePill(this,'duree_doc',true)">15–30 min</div>
-        <div class="pill" onclick="togglePill(this,'duree_doc',true)">30 min+</div>
-        <div class="pill" onclick="togglePill(this,'duree_doc',true)">À définir</div>
-      </div></div>
-      <div class="field"><label>Diffusion prévue</label><div class="pills">
-        <div class="pill" onclick="togglePill(this,'diff_doc')">Réseaux sociaux</div>
-        <div class="pill" onclick="togglePill(this,'diff_doc')">Site web</div>
-        <div class="pill" onclick="togglePill(this,'diff_doc')">Événement / projection</div>
-        <div class="pill" onclick="togglePill(this,'diff_doc')">Télévision / diffuseur</div>
-        <div class="pill" onclick="togglePill(this,'diff_doc')">Festival</div>
-      </div></div>
-      <div class="field"><label>Échéancier</label><input type="text" id="date_doc" placeholder="ex: automne 2026, flexible..."></div>
-      <div class="field"><label>Budget approximatif</label><div class="pills">
-        <div class="pill" onclick="togglePill(this,'budget_doc',true)">Moins de 5 000$</div>
-        <div class="pill" onclick="togglePill(this,'budget_doc',true)">5 000$ – 15 000$</div>
-        <div class="pill" onclick="togglePill(this,'budget_doc',true)">15 000$+</div>
-        <div class="pill" onclick="togglePill(this,'budget_doc',true)">Je préfère recevoir une soumission</div>
-      </div></div>
-      <div class="field"><label>Décrivez votre projet</label><textarea id="desc_doc" placeholder="Qui ou quoi voulez-vous documenter? Message central?"></textarea></div>
-    </div>
-
     <div class="nav">
       <button type="button" class="btn-next" onclick="step2Next()">Continuer →</button>
       <button type="button" class="btn-back" onclick="goToStep(1)">← Retour</button>
@@ -458,7 +425,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--dark);
   <div class="step" id="step-3">
     <div class="step-eyebrow">Presque terminé</div>
     <div class="step-title">Vérifiez et envoyez.</div>
-    <div class="step-sub">Réponse de Victoria sous 24h ouvrables.</div>
+    <div class="step-sub">Notre équipe vous contactera sous peu.</div>
     <div style="background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:20px;" id="summary"></div>
     <div class="field"><label>Message ou précision finale (optionnel)</label><textarea id="message_final" placeholder="Quelque chose d'important à ajouter?"></textarea></div>
     <div class="field"><label>Comment préférez-vous être contacté?</label><div class="pills">
@@ -482,8 +449,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--dark);
       <div class="success-icon">✅</div>
       <div class="success-title">Demande reçue!</div>
       <div class="success-sub">
-        Merci <strong id="success-name"></strong> — votre demande a été transmise à Victoria.<br><br>
-        Vous recevrez une réponse à <strong id="success-email"></strong> sous <strong>24h ouvrables</strong>.<br><br>
+        Merci <strong id="success-name"></strong> — notre équipe vous contactera sous peu.<br><br>
         <a href="https://www.mediamauricie.com" style="color:var(--red);font-weight:700;">mediamauricie.com →</a>
       </div>
     </div>
@@ -518,8 +484,7 @@ const serviceNames = {
   'MM-EVT':  'Couverture événementielle',
   'MM-VID':  'Production vidéo',
   'MM-BH':   'Heures de montage',
-  'MM-PHO':  'Séance & événement photo',
-  'MM-DOC':  'Documentaire'
+  'MM-PHO':  'Séance & événement photo'
 };
 
 // ════════════════════════════════════════
@@ -594,11 +559,10 @@ function step1Next() {
 
   // Only validate contact fields if they're showing
   if (!hasLead) {
-    const prenom = (document.getElementById('prenom')?.value || '').trim();
-    const nom    = (document.getElementById('nom')?.value    || '').trim();
-    const email  = (document.getElementById('email')?.value  || '').trim();
-    if (!prenom || !nom || !email) {
-      alert('Veuillez remplir prénom, nom et courriel.');
+    const nom   = (document.getElementById('nom')?.value   || '').trim();
+    const email = (document.getElementById('email')?.value || '').trim();
+    if (!nom || !email) {
+      alert('Veuillez remplir votre nom et courriel.');
       return;
     }
   }
@@ -627,8 +591,7 @@ function selectService(el) {
     'MM-EVT':  ['Couverture événementielle', 'Votre événement en détail.'],
     'MM-VID':  ['Production vidéo', 'Votre vision. Notre expertise.'],
     'MM-BH':   ['Heures de montage', 'Vos besoins en montage.'],
-    'MM-PHO':  ['Séance photo', 'Votre séance, vos besoins.'],
-    'MM-DOC':  ['Documentaire', 'Votre histoire. Notre regard.']
+    'MM-PHO':  ['Séance photo', 'Votre séance, vos besoins.']
   };
   const t = titles[selectedService];
   if (t) {
@@ -672,7 +635,7 @@ function selectPkg(el, group) {
 function buildSummary() {
   const name   = hasLead
     ? (leadData.org || [leadData.prenom, leadData.nom].filter(Boolean).join(' ') || leadData.client || leadId)
-    : ([document.getElementById('prenom')?.value, document.getElementById('nom')?.value].filter(Boolean).join(' '));
+    : (document.getElementById('nom')?.value || '');
   const email  = hasLead
     ? (leadData.cliEmail || '')
     : (document.getElementById('email')?.value || '');
@@ -704,12 +667,12 @@ function srow(label, val, red, color) {
 // SUBMIT
 // ════════════════════════════════════════
 async function submitForm() {
-  const prenom = hasLead ? (leadData.prenom || '') : (document.getElementById('prenom')?.value.trim() || '');
+  const prenom = hasLead ? (leadData.prenom || '') : '';
   const nom    = hasLead ? (leadData.nom    || '') : (document.getElementById('nom')?.value.trim()    || '');
-  const org    = hasLead ? (leadData.org    || '') : (document.getElementById('org')?.value.trim()    || '');
+  const org    = hasLead ? (leadData.org    || '') : '';
   const email  = hasLead ? (leadData.cliEmail||'') : (document.getElementById('email')?.value.trim()  || '');
-  const tel    = hasLead ? (leadData.cliTel  ||'') : (document.getElementById('tel')?.value.trim()    || '');
-  const source = hasLead ? 'Questionnaire — courriel lead' : (document.getElementById('source')?.value || '');
+  const tel    = hasLead ? (leadData.cliTel  ||'') : '';
+  const source = hasLead ? 'Questionnaire — courriel lead' : 'Formulaire web';
 
   const payload = {
     leadId,
@@ -742,10 +705,22 @@ async function submitForm() {
 
   document.getElementById('step-3').classList.remove('active');
   document.getElementById('step-success').classList.add('active');
-  document.getElementById('success-name').textContent  = prenom || 'vous';
-  document.getElementById('success-email').textContent = email  || 'votre courriel';
+  document.getElementById('success-name').textContent  = hasLead ? (leadData.prenom || nom || 'vous') : nom || 'vous';
   document.getElementById('progress').style.width = '100%';
   window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function toggleDocFields(el) {
+  const isDoc = el && (el.textContent.includes('Mini-documentaire') || el.textContent.includes('Documentaire long'));
+  const extra  = document.getElementById('doc-extra');
+  if (!extra) return;
+  // Show if any doc pill is selected
+  const docPills = document.querySelectorAll('#q-VID .pill');
+  let showDoc = false;
+  docPills.forEach(p => {
+    if (p.classList.contains('selected') && (p.textContent.includes('Mini-documentaire') || p.textContent.includes('Documentaire long'))) showDoc = true;
+  });
+  extra.style.display = showDoc ? 'block' : 'none';
 }
 
 function getVal(map) {
