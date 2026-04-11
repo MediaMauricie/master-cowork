@@ -1,626 +1,759 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Soumission · Média Mauricie</title>
+<title>Soumission — Média Mauricie</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+  const firebaseConfig = {
+    apiKey:            "VOTRE_API_KEY",
+    authDomain:        "VOTRE_PROJECT.firebaseapp.com",
+    projectId:         "VOTRE_PROJECT_ID",
+    storageBucket:     "VOTRE_PROJECT.appspot.com",
+    messagingSenderId: "VOTRE_SENDER_ID",
+    appId:             "VOTRE_APP_ID"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+  window._db = db;
+  window._addDoc = addDoc;
+  window._collection = collection;
+  window._serverTimestamp = serverTimestamp;
+</script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-:root{
-  --red:#c0392b;--dark:#2d2d2d;--mid:#555;--light:#888;
-  --border:#e4e4e4;--bg:#f2f2f0;--white:#fff;
-  --green:#2d7a57;--green-l:#edf7f2;
-  --gold:#f5a623;--gold-l:#fef9ee;
-  --blue:#3d6e9e;--blue-l:#eef4fb;
-}
-body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--dark);font-size:13px;}
+body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;min-height:100vh;font-size:14px;}
+.wrap{max-width:900px;margin:0 auto;padding:40px 24px 80px;}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:36px;padding-bottom:24px;border-bottom:3px solid #2d2d2d;}
+.header-right{text-align:right;}
+.doc-type{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#c0392b;margin-bottom:6px;}
+.doc-title{font-size:26px;font-weight:900;color:#2d2d2d;letter-spacing:-0.5px;line-height:1.1;}
+.doc-sub{font-size:13px;font-weight:600;color:#888;margin-top:6px;}
+.notice{background:#2d2d2d;border-radius:10px;padding:14px 20px;margin-bottom:24px;display:flex;align-items:center;gap:14px;}
+.notice-text{font-size:12px;font-weight:500;color:rgba(255,255,255,0.75);line-height:1.6;}
+.notice-text strong{color:#fff;}
+.sec{margin-bottom:20px;}
+.sec-head{background:#2d2d2d;border-radius:10px 10px 0 0;padding:12px 20px;display:flex;align-items:center;gap:12px;}
+.sec-num{font-size:11px;font-weight:800;letter-spacing:2px;color:rgba(255,255,255,0.35);}
+.sec-title{font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#fff;}
+.sec-body{background:#fff;border:2px solid #e0e0e0;border-top:none;border-radius:0 0 10px 10px;padding:20px 24px;}
+.partie{border:2px solid #e0e0e0;border-radius:10px;padding:16px 18px;}
+.partie-label{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#c0392b;margin-bottom:12px;}
+.partie-name{font-size:16px;font-weight:800;color:#2d2d2d;margin-bottom:10px;}
+.fr{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;}
+.fk{font-size:11px;font-weight:700;color:#888;min-width:95px;flex-shrink:0;padding-top:3px;}
+.fv{font-size:13px;font-weight:600;color:#2d2d2d;flex:1;line-height:1.4;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:6px;}
+.field input[type=text],.field input[type=number],.field input[type=date],.field input[type=email],.field textarea,.field select{width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:10px 14px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:#2d2d2d;background:#fff;outline:none;transition:border-color 0.2s;}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:#2d2d2d;}
+.field textarea{min-height:60px;resize:vertical;line-height:1.6;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.field-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
 
-/* TOOLBAR */
-.toolbar{background:var(--dark);padding:12px 28px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;}
-.toolbar-badge{background:var(--red);color:#fff;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:20px;}
-.toolbar-ref{font-size:13px;font-weight:800;color:#fff;}
-.toolbar-right{margin-left:auto;display:flex;gap:10px;}
-.btn{border:none;border-radius:8px;padding:9px 18px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px;}
-.btn-white{background:#fff;color:var(--dark);}
-.btn-green{background:var(--green);color:#fff;}
-.btn-red{background:var(--red);color:#fff;}
-.btn-ghost{background:rgba(255,255,255,.1);color:#fff;border:1.5px solid rgba(255,255,255,.2);}
-.btn:hover{opacity:.88;}
+/* ── SERVICE CARDS ── */
+.service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.scard{border:2px solid #e0e0e0;border-radius:10px;padding:14px;cursor:pointer;transition:all 0.2s;text-align:center;}
+.scard:hover{border-color:#2d2d2d;}
+.scard.selected{border-color:#c0392b;background:#fdf9f9;}
+.scard-radio{width:16px;height:16px;border:2px solid #ddd;border-radius:50%;display:block;margin:0 auto 10px;transition:all 0.2s;}
+.scard.selected .scard-radio{background:#c0392b;border-color:#c0392b;}
+.scard-code{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#c0392b;margin-bottom:4px;}
+.scard-name{font-size:13px;font-weight:800;color:#2d2d2d;}
 
-/* SHEET */
-.sheet-wrap{max-width:820px;margin:32px auto;padding:0 20px 80px;}
-.sheet{background:var(--white);border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.1);}
+/* ── LIVRABLES TABLE ── */
+.livrable-table{width:100%;border-collapse:collapse;margin-bottom:14px;}
+.livrable-table thead tr{background:#f8f8f8;border-bottom:2px solid #e0e0e0;}
+.livrable-table th{padding:10px 12px;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#aaa;text-align:left;}
+.livrable-table th.right{text-align:right;}
+.livrable-table td{padding:8px 10px;border-bottom:1px solid #f0f0f0;vertical-align:middle;}
+.livrable-table td input[type=text]{border:none;border-bottom:1.5px solid #e0e0e0;border-radius:0;padding:4px 6px;font-size:13px;font-weight:600;width:100%;outline:none;font-family:'Montserrat',sans-serif;background:transparent;}
+.livrable-table td input[type=text]:focus{border-bottom-color:#2d2d2d;}
+.livrable-table td input[type=number]{border:none;border-bottom:1.5px solid #e0e0e0;border-radius:0;padding:4px 6px;font-size:13px;font-weight:700;width:90px;text-align:right;outline:none;font-family:'Montserrat',sans-serif;background:transparent;}
+.livrable-table td input[type=number]:focus{border-bottom-color:#2d2d2d;}
+.livrable-table .qty-input{width:50px;text-align:center;}
+.livrable-table .unit-price{color:#2d2d2d;}
+.livrable-table .row-total{font-size:13px;font-weight:800;color:#2d2d2d;text-align:right;white-space:nowrap;}
 
-/* HEADER */
-.sh-header{padding:36px 48px 24px;border-bottom:3px solid var(--dark);}
-.sh-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
-.sh-label{font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:6px;}
-.sh-ref{font-size:22px;font-weight:900;color:var(--dark);letter-spacing:-.5px;}
-.sh-ref-sub{font-size:11px;color:var(--light);font-weight:500;margin-top:4px;}
-.sh-dates{text-align:right;}
-.sh-date-row{display:flex;gap:20px;justify-content:flex-end;margin-bottom:8px;}
-.sh-date-item{text-align:right;}
-.sh-date-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);margin-bottom:3px;}
-.sh-date-val{font-size:12px;font-weight:700;color:var(--dark);}
-.sh-date-input{border:none;border-bottom:2px solid var(--border);font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;color:var(--dark);outline:none;text-align:right;width:110px;background:transparent;}
-.sh-date-input:focus{border-color:var(--dark);}
-.sh-validite{background:var(--gold-l);border:1.5px solid #ffe082;border-radius:8px;padding:5px 12px;font-size:10px;font-weight:700;color:#c07840;display:inline-block;}
+.sec-div{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#aaa;margin:20px 0 12px;display:flex;align-items:center;gap:12px;}
+.sec-div::after{content:'';flex:1;height:1px;background:#e0e0e0;}
+.btn-add{background:#f8f8f8;border:2px dashed #e0e0e0;border-radius:8px;padding:10px 20px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;color:#888;cursor:pointer;width:100%;text-align:center;transition:all 0.2s;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;}
+.btn-add:hover{border-color:#2d2d2d;color:#2d2d2d;background:#fff;}
+.btn-remove{background:none;border:none;cursor:pointer;font-size:18px;color:#ccc;font-family:'Montserrat',sans-serif;padding:0 4px;transition:color 0.2s;}
+.btn-remove:hover{color:#c0392b;}
 
-/* PARTIES */
-.sh-parties{display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:2px solid var(--border);}
-.sh-partie{padding:22px 48px;}
-.sh-partie:first-child{border-right:2px solid var(--border);}
-.sh-partie-label{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
-.sh-partie-name{font-size:14px;font-weight:800;color:var(--dark);margin-bottom:6px;}
-.sh-info{font-size:11px;font-weight:500;color:var(--mid);line-height:1.9;}
-.sh-info strong{color:var(--dark);font-weight:700;}
-.edit-field{border:none;border-bottom:2px solid var(--border);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;color:var(--mid);outline:none;width:100%;padding:2px 0;background:transparent;margin-bottom:4px;}
-.edit-field.name{font-size:14px;font-weight:800;color:var(--dark);}
-.edit-field:focus{border-color:var(--dark);}
+/* ── CALC ── */
+.calc-block{background:#2d2d2d;border-radius:12px;padding:20px 24px;margin-top:16px;}
+.calc-title{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:16px;}
+.calc-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.08);}
+.calc-label{font-size:12px;font-weight:600;color:rgba(255,255,255,0.6);}
+.calc-val{font-size:14px;font-weight:800;color:#fff;}
+.calc-total{display:flex;justify-content:space-between;align-items:center;padding:14px 0 6px;border-top:2px solid rgba(255,255,255,0.2);margin-top:8px;}
+.calc-total-label{font-size:14px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:1px;}
+.calc-total-val{font-size:26px;font-weight:900;color:#fff;}
+.calc-acompte{display:flex;justify-content:space-between;align-items:center;padding:8px 0;}
+.calc-acompte-label{font-size:12px;font-weight:700;color:rgba(255,255,255,0.5);}
+.calc-acompte-val{font-size:17px;font-weight:800;color:#e74c3c;}
+.tax-toggle{display:flex;gap:16px;margin-bottom:12px;}
+.tax-toggle label{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);cursor:pointer;}
+.tax-toggle input{width:16px;height:16px;accent-color:#c0392b;}
 
-/* SERVICE */
-.sh-service{padding:16px 48px;background:var(--bg);border-bottom:2px solid var(--border);}
-.sh-service-label{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--light);margin-bottom:5px;}
-.sh-service-val{font-size:14px;font-weight:800;color:var(--dark);}
-.sh-service-detail{font-size:11px;color:var(--light);font-weight:500;margin-top:3px;}
+/* ── VALIDITÉ ── */
+.validite-strip{background:#f8f8f8;border:2px solid #e0e0e0;border-radius:10px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.validite-strip-label{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#aaa;}
+.validite-strip-val{font-size:14px;font-weight:800;color:#2d2d2d;}
+.badge-som{display:inline-block;background:#fff3cd;border:1.5px solid #ffc107;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;color:#856404;text-transform:uppercase;}
+.badge-acceptee{display:inline-block;background:#d4edda;border:1.5px solid #27ae60;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:800;letter-spacing:1px;color:#155724;text-transform:uppercase;}
 
-/* LIGNES */
-.sh-lignes{padding:0 48px;}
-.sh-lignes-head{display:grid;grid-template-columns:1fr 130px;gap:8px;padding:10px 0;border-bottom:2px solid var(--dark);margin-top:20px;}
-.sh-lignes-head span{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);}
-.sh-lignes-head span:last-child{text-align:right;}
-.sh-ligne{display:grid;grid-template-columns:1fr 130px;gap:8px;padding:12px 0;border-bottom:1px solid var(--border);align-items:start;}
-.ligne-desc-wrap{}
-.ligne-desc{border:none;border-bottom:2px solid var(--border);font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:var(--dark);outline:none;width:100%;padding:2px 4px;background:transparent;}
-.ligne-desc:focus{border-color:var(--dark);}
-.ligne-sub{border:none;border-bottom:1px solid transparent;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:500;color:var(--light);outline:none;width:100%;padding:2px 4px;background:transparent;margin-top:4px;}
-.ligne-sub:focus{border-bottom-color:var(--border);}
-.ligne-sub::placeholder{color:#ddd;}
-.ligne-mnt{display:flex;align-items:center;justify-content:flex-end;gap:4px;}
-.ligne-mnt input{border:none;border-bottom:2px solid var(--border);font-family:'Montserrat',sans-serif;font-size:14px;font-weight:800;color:var(--dark);outline:none;width:85px;text-align:right;padding:2px 4px;background:transparent;}
-.ligne-mnt input:focus{border-color:var(--dark);}
-.ligne-mnt.cmd input{color:var(--green);}
-.ligne-mnt-sym{font-size:10px;color:var(--light);font-weight:500;flex-shrink:0;}
-.btn-rm{background:none;border:none;cursor:pointer;color:#ddd;font-size:16px;padding:0 2px;transition:color .15s;flex-shrink:0;}
-.btn-rm:hover{color:var(--red);}
-.btn-add{background:none;border:2px dashed var(--border);border-radius:8px;padding:10px;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--light);cursor:pointer;width:100%;text-align:center;margin:12px 0;transition:all .15s;}
-.btn-add:hover{border-color:var(--dark);color:var(--dark);}
-
-/* TOTAUX */
-.sh-totaux{padding:16px 48px 24px;display:flex;justify-content:flex-end;}
-.tot-table{width:280px;}
-.tot-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);}
-.tot-row:last-child{border-bottom:none;}
-.tot-label{font-size:11px;font-weight:600;color:var(--mid);display:flex;align-items:center;gap:6px;}
-.tot-val{font-size:12px;font-weight:800;color:var(--dark);}
-.tot-row.total-row{padding:12px 0;border-top:2px solid var(--dark);margin-top:4px;}
-.tot-row.total-row .tot-label{font-size:13px;font-weight:900;color:var(--dark);}
-.tot-row.total-row .tot-val{font-size:20px;font-weight:900;color:var(--dark);}
-.tot-row.acompte-row .tot-label{color:var(--dark);font-weight:700;}
-.tot-row.acompte-row .tot-val{color:var(--red);font-weight:900;}
-.acompte-pct-wrap{display:flex;align-items:center;gap:4px;}
-.acompte-pct{border:none;border-bottom:2px solid var(--border);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:var(--red);outline:none;width:36px;text-align:right;background:transparent;padding:1px 2px;}
-.acompte-pct:focus{border-color:var(--red);}
-.tax-toggle{width:13px;height:13px;accent-color:var(--red);cursor:pointer;}
-
-/* CONDITIONS */
-.sh-conditions{padding:0 48px 20px;}
-.cond-title{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--light);margin-bottom:8px;}
-.cond-text{font-size:10.5px;font-weight:500;color:var(--mid);line-height:1.8;}
-
-/* RÉPONSE CLIENT */
-.sh-reponse{margin:0 48px 28px;border-radius:12px;overflow:hidden;border:2px solid var(--border);}
-.rep-header{background:var(--bg);padding:12px 20px;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--light);}
-.rep-body{padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.rep-btn{border:2px solid;border-radius:10px;padding:14px 16px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:10px;background:transparent;}
-.rep-btn.accept{border-color:#b7e4c7;color:var(--green);}
-.rep-btn.accept:hover{background:var(--green);color:#fff;border-color:var(--green);}
-.rep-btn.refuse{border-color:#f0d0cc;color:var(--red);}
-.rep-btn.refuse:hover{background:var(--red);color:#fff;border-color:var(--red);}
-.rep-btn-sub{font-size:9px;font-weight:500;opacity:.7;margin-top:2px;}
-
-/* FOOTER */
-.sh-footer{background:var(--bg);border-top:2px solid var(--border);padding:14px 48px;display:flex;justify-content:space-between;align-items:center;}
-.sh-footer-right{font-size:10px;font-weight:500;color:var(--light);text-align:right;line-height:1.8;}
-
-/* MODAL */
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center;}
-.modal-bg.open{display:flex;}
-.modal{background:#fff;border-radius:14px;padding:28px 32px;width:460px;max-width:95vw;}
-.modal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
-.modal-title{font-size:15px;font-weight:900;color:var(--dark);}
-.modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--light);}
-.modal p{font-size:12px;color:var(--mid);line-height:1.7;margin-bottom:16px;}
-.field label{display:block;font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);margin-bottom:5px;}
-.field textarea{width:100%;border:2px solid var(--border);border-radius:8px;padding:10px 12px;font-family:'Montserrat',sans-serif;font-size:12px;color:var(--dark);outline:none;min-height:70px;resize:vertical;margin-bottom:14px;}
-.confirm-msg{display:none;border-radius:9px;padding:13px 16px;margin-top:12px;font-size:12px;font-weight:700;text-align:center;}
-.confirm-msg.green{background:var(--green-l);color:var(--green);}
-.confirm-msg.red{background:#fdf4f3;color:var(--red);}
-
-/* LOADING */
-.loading{display:flex;align-items:center;justify-content:center;gap:12px;padding:60px;color:var(--light);font-size:12px;font-weight:600;}
-.spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-/* PRINT */
+/* ── SIGNATURES / SUBMIT ── */
+.sigs{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.sig{border:2px solid #e0e0e0;border-radius:10px;padding:20px;}
+.sig-label{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#aaa;margin-bottom:10px;}
+.sig-name{font-size:15px;font-weight:800;color:#2d2d2d;margin-bottom:3px;}
+.sig-role{font-size:12px;font-weight:600;color:#888;margin-bottom:18px;}
+.sig-line{border-bottom:2px solid #2d2d2d;height:40px;margin-bottom:8px;}
+.sig-lbl{font-size:11px;font-weight:600;color:#bbb;}
+.sig-dates{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;}
+.sig-field{border-bottom:2px solid #e0e0e0;height:36px;margin-bottom:6px;}
+.btn-submit{background:#2d2d2d;color:#fff;border:none;border-radius:10px;padding:16px 32px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;transition:all 0.2s;}
+.btn-submit:hover{background:#1a1a1a;}
+.btn-submit:disabled{background:#ccc;cursor:not-allowed;}
+.btn-submit-secondary{background:#fff;color:#2d2d2d;border:2px solid #2d2d2d;border-radius:10px;padding:14px 32px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;width:100%;margin-bottom:10px;transition:all 0.2s;}
+.btn-submit-secondary:hover{background:#f5f5f5;}
+.btn-convert{background:#c0392b;color:#fff;border:none;border-radius:10px;padding:16px 32px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;transition:all 0.2s;}
+.btn-convert:hover{background:#a93226;}
+.submit-confirm{display:none;background:#f0faf4;border:2px solid #b7e4c7;border-radius:10px;padding:20px 22px;margin-top:16px;}
+.submit-confirm-title{font-size:16px;font-weight:800;color:#27ae60;margin-bottom:6px;}
+.submit-confirm-text{font-size:13px;font-weight:500;color:#2d4a35;line-height:1.75;}
+.submit-error{display:none;background:#fdf4f4;border:2px solid #f0d0d0;border-radius:10px;padding:16px 20px;margin-top:14px;}
+.submit-error-text{font-size:13px;font-weight:600;color:#c0392b;line-height:1.6;}
+.submit-field{margin-bottom:14px;}
+.submit-field label{display:block;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:6px;}
+.submit-field input{width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:10px 14px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:#2d2d2d;outline:none;}
+.footer{margin-top:24px;padding-top:18px;border-top:2px solid #ddd;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;}
+.footer-legal{font-size:11px;font-weight:500;color:#aaa;line-height:1.8;text-align:right;}
+.footer-legal strong{color:#888;}
+.no-print{}
 @media print{
-  .toolbar,.no-print{display:none!important;}
   body{background:#fff;}
-  .sheet-wrap{margin:0;padding:0;max-width:100%;}
-  .sheet{border-radius:0;box-shadow:none;}
-  .sh-reponse{display:none!important;}
-  .btn-add,.btn-rm{display:none!important;}
-  input,textarea{border-bottom:1px solid #ccc!important;}
+  .wrap{padding:20px;}
+  .notice,.no-print{display:none!important;}
+  .btn-add,.btn-remove{display:none;}
+  input,select,textarea{border:none!important;border-bottom:1px solid #ccc!important;border-radius:0!important;padding:2px 4px!important;}
+}
+@media(max-width:640px){
+  .service-grid{grid-template-columns:1fr 1fr;}
+  .sigs,.field-row,.field-row-3{grid-template-columns:1fr;}
+  .header{flex-direction:column;gap:12px;}
 }
 </style>
 </head>
 <body>
+<div class="wrap" id="som-wrap">
 
-<!-- TOOLBAR -->
-<div class="toolbar no-print">
-  <img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_M-coul.png" height="26" alt="MM">
-  <span class="toolbar-badge">Soumission</span>
-  <span class="toolbar-ref" id="toolbar-ref">—</span>
-  <div class="toolbar-right">
-    <button class="btn btn-ghost" onclick="window.print()">🖨️ Imprimer / PDF</button>
-    <button class="btn btn-green" onclick="sauverDansSheet()" id="btn-sauver">💾 Sauver dans Sheet</button>
+<!-- HEADER -->
+<div class="header">
+  <img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_M-coul.png" alt="Média Mauricie" style="height:52px;width:auto;">
+  <div class="header-right">
+    <div class="doc-type">Soumission</div>
+    <div class="doc-title">Proposition de services</div>
+    <div class="doc-sub">Valide <strong id="header-validite">30 jours</strong> · <span class="badge-som" id="header-statut">En préparation</span></div>
   </div>
 </div>
 
-<!-- LOADING -->
-<div id="loading" class="loading">
-  <div class="spinner"></div>Chargement des données...
+<div class="notice no-print">
+  <span style="font-size:18px;flex-shrink:0;">📋</span>
+  <div class="notice-text"><strong>Outil interne</strong> — Remplis la soumission, sauvegarde dans le portail, génère le PDF pour le client. Une fois acceptée, clique sur "Convertir en contrat".</div>
 </div>
 
-<!-- SOUMISSION -->
-<div class="sheet-wrap" id="soumission-wrap" style="display:none;">
-<div class="sheet">
-
-  <!-- HEADER -->
-  <div class="sh-header">
-    <div class="sh-top">
-      <div>
-        <div class="sh-label">Soumission</div>
-        <div class="sh-ref" id="display-ref">—</div>
-        <div class="sh-ref-sub" id="display-ref-sub"></div>
+<!-- SECTION 01 — INFO SOUMISSION -->
+<div class="sec">
+  <div class="sec-head"><span class="sec-num">01</span><span class="sec-title">Informations de la soumission</span></div>
+  <div class="sec-body">
+    <div class="field-row" style="margin-bottom:14px;">
+      <div class="field" style="margin-bottom:0;">
+        <label>No. soumission</label>
+        <input type="text" id="no-som" placeholder="MM-SOM-2026-001" oninput="updateHeader()">
       </div>
-      <div class="sh-dates">
-        <div class="sh-date-row">
-          <div class="sh-date-item">
-            <div class="sh-date-label">Date</div>
-            <div class="sh-date-val" id="display-date">—</div>
-          </div>
-          <div class="sh-date-item">
-            <div class="sh-date-label">Valide jusqu'au</div>
-            <input type="date" class="sh-date-input" id="input-expiry" onchange="updateExpiry()">
-          </div>
-        </div>
+      <div class="field" style="margin-bottom:0;">
+        <label>No. client (CLI-XXX)</label>
+        <input type="text" id="code-client" placeholder="CLI-001">
       </div>
     </div>
-  </div>
-
-  <!-- PARTIES -->
-  <div class="sh-parties">
-    <div class="sh-partie">
-      <div class="sh-partie-label">Prestataire</div>
-      <div class="sh-partie-name">Média Mauricie Inc.</div>
-      <div class="sh-info">
-        2750 Rang des Chutes<br>
-        Sainte-Ursule, QC G0X 3B0<br>
-        <strong>(819) 852-0851</strong><br>
-        info@mediamauricie.com<br>
-        <strong>NEQ</strong> 1180690985
+    <div class="field-row">
+      <div class="field" style="margin-bottom:0;">
+        <label>Date de soumission</label>
+        <input type="date" id="date-som" onchange="calcValidite()">
+      </div>
+      <div class="field" style="margin-bottom:0;">
+        <label>Valide jusqu'au (auto — 30 jours)</label>
+        <input type="date" id="date-validite" readonly style="background:#f0f0f0;color:#555;">
       </div>
     </div>
-    <div class="sh-partie">
-      <div class="sh-partie-label">Client</div>
-      <div id="cli-block">
-        <input class="edit-field name" id="cli-nom" placeholder="Nom du client / organisation">
-        <input class="edit-field" id="cli-email" placeholder="Courriel" type="email">
-        <input class="edit-field" id="cli-tel" placeholder="Téléphone">
-        <input class="edit-field" id="cli-id" placeholder="ID Client (ex: CLI-004)" style="font-size:10px;color:#bbb;">
-      </div>
-    </div>
-  </div>
-
-  <!-- SERVICE -->
-  <div class="sh-service">
-    <div class="sh-service-label">Service</div>
-    <input class="edit-field" id="service-nom" placeholder="Service (ex: MM-EVT — Couverture événementielle)" style="font-size:14px;font-weight:800;color:var(--dark);">
-    <input class="edit-field" id="service-detail" placeholder="Détails (date, lieu, durée, options...)" style="font-size:11px;color:var(--light);">
-  </div>
-
-  <!-- LIGNES -->
-  <div class="sh-lignes">
-    <div class="sh-lignes-head">
-      <span>Description des services</span>
-      <span>Montant HT</span>
-    </div>
-    <div id="lignes-container"></div>
-    <button class="btn-add no-print" onclick="ajouterLigne()">+ Ajouter une ligne</button>
-  </div>
-
-  <!-- TOTAUX -->
-  <div class="sh-totaux">
-    <div class="tot-table">
-      <div class="tot-row">
-        <span class="tot-label">Sous-total HT</span>
-        <span class="tot-val" id="tot-ht">0,00 $</span>
-      </div>
-      <div class="tot-row">
-        <label class="tot-label no-print" style="cursor:pointer;">
-          <input type="checkbox" class="tax-toggle" id="tps-on" checked onchange="calcTotaux()">TPS 5%
-        </label>
-        <span class="tot-label print-only">TPS 5%</span>
-        <span class="tot-val" id="tot-tps">0,00 $</span>
-      </div>
-      <div class="tot-row">
-        <label class="tot-label no-print" style="cursor:pointer;">
-          <input type="checkbox" class="tax-toggle" id="tvq-on" checked onchange="calcTotaux()">TVQ 9,975%
-        </label>
-        <span class="tot-label print-only">TVQ 9,975%</span>
-        <span class="tot-val" id="tot-tvq">0,00 $</span>
-      </div>
-      <div class="tot-row total-row">
-        <span class="tot-label">Total estimé TTC</span>
-        <span class="tot-val" id="tot-ttc">0,00 $</span>
-      </div>
-      <div class="tot-row acompte-row">
-        <span class="tot-label">
-          Acompte
-          <span class="no-print">
-            <input type="number" class="acompte-pct" id="acompte-pct" value="50" min="0" max="100" onchange="calcTotaux()">%
-          </span>
-          <span class="print-only" id="acompte-pct-print">50%</span>
-          à la signature
-        </span>
-        <span class="tot-val" id="tot-acompte">0,00 $</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- CONDITIONS -->
-  <div class="sh-conditions">
-    <div class="cond-title">Conditions de cette soumission</div>
-    <div class="cond-text">
-      Cette soumission est valide jusqu'à la date indiquée ci-dessus. Les prix sont en dollars canadiens, taxes en sus selon le régime fiscal applicable.
-      L'acompte indiqué est requis à la signature du contrat pour confirmer la réservation. Le solde est dû à la livraison des fichiers finaux, sauf entente contraire.
-      Toute modification substantielle au mandat pourrait entraîner un ajustement tarifaire, confirmé par écrit avant exécution.
-      Média Mauricie Inc. se réserve le droit d'utiliser les contenus produits à des fins promotionnelles, sauf entente contraire spécifiée au contrat.
-    </div>
-  </div>
-
-  <!-- RÉPONSE CLIENT -->
-  <div class="sh-reponse" id="reponse-section">
-    <div class="rep-header">Votre réponse</div>
-    <div class="rep-body">
-      <button class="rep-btn accept" onclick="ouvrirModal('modal-accept')">
-        <span style="font-size:20px;">✅</span>
-        <div>
-          <div>J'accepte cette soumission</div>
-          <div class="rep-btn-sub">Vous recevrez le contrat sous peu</div>
-        </div>
-      </button>
-      <button class="rep-btn refuse" onclick="ouvrirModal('modal-refus')">
-        <span style="font-size:20px;">❌</span>
-        <div>
-          <div>Je refuse / j'ai des questions</div>
-          <div class="rep-btn-sub">Notre équipe vous contactera</div>
-        </div>
-      </button>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <div class="sh-footer">
-    <img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_coul.png" alt="MM" style="height:26px;">
-    <div class="sh-footer-right">
-      <strong>Média Mauricie Inc.</strong> · 2750 Rang des Chutes, Sainte-Ursule, QC G0X 3B0<br>
-      (819) 852-0851 · info@mediamauricie.com · mediamauricie.com · NEQ 1180690985
-    </div>
-  </div>
-
-</div>
-</div>
-
-<!-- MODAL ACCEPTATION -->
-<div class="modal-bg" id="modal-accept">
-  <div class="modal">
-    <div class="modal-hdr">
-      <div class="modal-title">✅ Confirmer votre acceptation</div>
-      <button class="modal-close" onclick="fermerModal('modal-accept')">×</button>
-    </div>
-    <p>En acceptant cette soumission, vous confirmez votre intérêt pour ce projet et autorisez notre équipe à préparer le contrat officiel.<br><br><strong>Aucun engagement financier n'est pris à cette étape.</strong></p>
-    <div style="display:flex;gap:10px;">
-      <button class="btn btn-green" style="flex:1;" onclick="confirmerAcceptation()"><span id="btn-accept-txt">✅ Confirmer</span></button>
-      <button class="btn" style="background:#f0f0f0;color:var(--dark);" onclick="fermerModal('modal-accept')">Annuler</button>
-    </div>
-    <div class="confirm-msg green" id="accept-confirm"></div>
   </div>
 </div>
 
-<!-- MODAL REFUS -->
-<div class="modal-bg" id="modal-refus">
-  <div class="modal">
-    <div class="modal-hdr">
-      <div class="modal-title">❌ Refus ou questions</div>
-      <button class="modal-close" onclick="fermerModal('modal-refus')">×</button>
+<!-- SECTION 02 — CLIENT -->
+<div class="sec">
+  <div class="sec-head"><span class="sec-num">02</span><span class="sec-title">Client</span></div>
+  <div class="sec-body">
+    <div class="partie">
+      <div class="partie-label">Coordonnées</div>
+      <div class="field-row">
+        <div class="field"><label>Entreprise / Organisation</label><input type="text" id="cli-entreprise" placeholder="Nom de l'entreprise"></div>
+        <div class="field"><label>Représentant</label><input type="text" id="cli-rep" placeholder="Prénom Nom"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Courriel</label><input type="email" id="cli-courriel" placeholder="courriel@exemple.com"></div>
+        <div class="field"><label>Téléphone</label><input type="text" id="cli-tel" placeholder="(819) 000-0000"></div>
+      </div>
+      <div class="field-row">
+        <div class="field" style="margin-bottom:0;"><label>Adresse</label><input type="text" id="cli-adresse" placeholder="Adresse complète"></div>
+        <div class="field" style="margin-bottom:0;"><label>Titre / Poste</label><input type="text" id="cli-titre" placeholder="Directeur, coordonnateur..."></div>
+      </div>
     </div>
+  </div>
+</div>
+
+<!-- SECTION 03 — SERVICE -->
+<div class="sec">
+  <div class="sec-head"><span class="sec-num">03</span><span class="sec-title">Service proposé</span></div>
+  <div class="sec-body">
+    <p style="font-size:13px;font-weight:500;color:#888;margin-bottom:16px;line-height:1.7;">Sélectionne le service — les livrables et prix de base se chargent automatiquement.</p>
+
+    <div class="service-grid">
+      <div class="scard" id="scard-BH" onclick="selectService('BH')">
+        <span class="scard-radio"></span>
+        <div class="scard-code">MM-BH</div>
+        <div class="scard-name">Banque d'heures montage</div>
+      </div>
+      <div class="scard" id="scard-BIMG" onclick="selectService('BIMG')">
+        <span class="scard-radio"></span>
+        <div class="scard-code">MM-BIMG</div>
+        <div class="scard-name">Banque d'images mensuelle</div>
+      </div>
+      <div class="scard" id="scard-EVT" onclick="selectService('EVT')">
+        <span class="scard-radio"></span>
+        <div class="scard-code">MM-EVT</div>
+        <div class="scard-name">Couverture événementielle</div>
+      </div>
+      <div class="scard" id="scard-PHO" onclick="selectService('PHO')">
+        <span class="scard-radio"></span>
+        <div class="scard-code">MM-PHO</div>
+        <div class="scard-name">Photographie corporate</div>
+      </div>
+      <div class="scard" id="scard-VID" onclick="selectService('VID')">
+        <span class="scard-radio"></span>
+        <div class="scard-code">MM-VID</div>
+        <div class="scard-name">Production vidéo</div>
+      </div>
+      <div class="scard" id="scard-FCM" onclick="selectService('FCM')">
+        <span class="scard-radio"></span>
+        <div class="scard-code">MM-FCM</div>
+        <div class="scard-name">Forfait contenu mensuel</div>
+      </div>
+    </div>
+
     <div class="field">
-      <label>Votre message (optionnel)</label>
-      <textarea id="refus-note" placeholder="Dites-nous pourquoi ou quelle question vous avez..."></textarea>
+      <label>Description du mandat</label>
+      <textarea id="description-mandat" placeholder="Décris le projet, le contexte, les besoins spécifiques du client..." style="min-height:80px;"></textarea>
     </div>
-    <div style="display:flex;gap:10px;">
-      <button class="btn btn-red" style="flex:1;" onclick="confirmerRefus()"><span id="btn-refus-txt">Envoyer</span></button>
-      <button class="btn" style="background:#f0f0f0;color:var(--dark);" onclick="fermerModal('modal-refus')">Annuler</button>
+    <div class="field-row">
+      <div class="field" style="margin-bottom:0;"><label>Date de tournage / livraison prévue</label><input type="date" id="date-livraison"></div>
+      <div class="field" style="margin-bottom:0;"><label>Lieu / Adresse du mandat</label><input type="text" id="lieu-mandat" placeholder="Ville, adresse..."></div>
     </div>
-    <div class="confirm-msg red" id="refus-confirm"></div>
   </div>
 </div>
+
+<!-- SECTION 04 — LIVRABLES -->
+<div class="sec">
+  <div class="sec-head"><span class="sec-num">04</span><span class="sec-title">Livrables &amp; tarification</span></div>
+  <div class="sec-body">
+
+    <div id="service-hint" style="background:#f8f8f8;border:2px dashed #e0e0e0;border-radius:8px;padding:16px;text-align:center;color:#aaa;font-size:13px;font-weight:600;margin-bottom:14px;">
+      Sélectionne un service à la section 03 pour charger les livrables
+    </div>
+
+    <div id="livrables-wrap" style="display:none;">
+      <table class="livrable-table" id="livrables-table">
+        <thead><tr>
+          <th style="width:40%;">Livrable / Description</th>
+          <th style="width:12%;text-align:center;">Qté</th>
+          <th style="width:18%;text-align:right;">Prix unit. ($)</th>
+          <th style="width:18%;text-align:right;">Total ($)</th>
+          <th style="width:7%;"></th>
+        </tr></thead>
+        <tbody id="livrables-body"></tbody>
+      </table>
+      <button class="btn-add" onclick="ajouterLivrable('','1','0')">+ Ajouter un livrable</button>
+    </div>
+
+    <div class="sec-div">Notes &amp; conditions particulières</div>
+    <div class="field">
+      <textarea id="notes-som" placeholder="Conditions spéciales, exclusions, délais, révisions incluses..." style="min-height:70px;"></textarea>
+    </div>
+
+    <div class="calc-block">
+      <div class="calc-title">Calcul automatique</div>
+      <div class="tax-toggle">
+        <label><input type="checkbox" id="tps-check" checked onchange="calcTotal()"> TPS 5%</label>
+        <label><input type="checkbox" id="tvq-check" checked onchange="calcTotal()"> TVQ 9,975%</label>
+      </div>
+      <div class="calc-row"><span class="calc-label">Sous-total HT</span><span class="calc-val" id="calc-ht">0,00 $</span></div>
+      <div class="calc-row" id="row-tps"><span class="calc-label">TPS 5%</span><span class="calc-val" id="calc-tps">0,00 $</span></div>
+      <div class="calc-row" id="row-tvq"><span class="calc-label">TVQ 9,975%</span><span class="calc-val" id="calc-tvq">0,00 $</span></div>
+      <div class="calc-total">
+        <span class="calc-total-label">Total TTC</span>
+        <span class="calc-total-val" id="calc-total">0,00 $</span>
+      </div>
+      <div class="calc-acompte">
+        <span class="calc-acompte-label">Acompte demandé à la signature</span>
+        <span class="calc-acompte-val" id="calc-acompte">0,00 $</span>
+      </div>
+      <div style="margin-top:10px;">
+        <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">% acompte</label>
+        <input type="range" id="acompte-pct" min="0" max="100" value="50" oninput="calcTotal()" style="width:100%;accent-color:#c0392b;">
+        <span style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.6);" id="acompte-pct-label">50%</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 05 — CONDITIONS -->
+<div class="sec">
+  <div class="sec-head"><span class="sec-num">05</span><span class="sec-title">Conditions de la soumission</span></div>
+  <div class="sec-body">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px;">
+      <div style="border:2px solid #e0e0e0;border-radius:10px;padding:14px;text-align:center;">
+        <div style="font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#aaa;margin-bottom:6px;">Validité</div>
+        <div style="font-size:20px;font-weight:900;color:#2d2d2d;">30 jours</div>
+        <div style="font-size:11px;color:#888;margin-top:4px;">à compter de la date d'émission</div>
+      </div>
+      <div style="border:2px solid #e0e0e0;border-radius:10px;padding:14px;text-align:center;">
+        <div style="font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#aaa;margin-bottom:6px;">Révisions</div>
+        <div style="font-size:20px;font-weight:900;color:#2d2d2d;">1 round</div>
+        <div style="font-size:11px;color:#888;margin-top:4px;">inclus dans le prix proposé</div>
+      </div>
+      <div style="border:2px solid #e0e0e0;border-radius:10px;padding:14px;text-align:center;">
+        <div style="font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#aaa;margin-bottom:6px;">Délai livraison</div>
+        <div style="font-size:20px;font-weight:900;color:#2d2d2d;">10 jours</div>
+        <div style="font-size:11px;color:#888;margin-top:4px;">ouvrables après réception acompte</div>
+      </div>
+    </div>
+    <div style="background:#f8f8f8;border:2px solid #e0e0e0;border-radius:10px;padding:14px 18px;">
+      <p style="font-size:13px;font-weight:500;color:#555;line-height:1.85;margin:0;">Cette soumission est valide <strong>30 jours</strong> à compter de la date d'émission. Les prix sont en dollars canadiens, taxes en sus. Le démarrage du projet est conditionnel à la réception de l'acompte convenu. Tout ajout de livrables non prévus fera l'objet d'un avenant.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 06 — APPROBATION -->
+<div class="sec">
+  <div class="sec-head"><span class="sec-num">06</span><span class="sec-title">Approbation</span></div>
+  <div class="sec-body">
+    <p style="font-size:13px;font-weight:500;color:#555;margin-bottom:20px;line-height:1.8;">En approuvant cette soumission, le client confirme avoir pris connaissance des conditions ci-dessus et autorise Média Mauricie Inc. à procéder selon les termes proposés.</p>
+    <div class="sigs">
+      <div class="sig">
+        <div class="sig-label">Proposé par</div>
+        <div class="sig-name">Média Mauricie Inc.</div>
+        <div class="sig-role">Victoria J. Polsoni, Présidente-fondatrice</div>
+        <div class="sig-line"></div>
+        <div class="sig-lbl">Signature</div>
+        <div class="sig-dates">
+          <div><div class="sig-field"></div><div class="sig-lbl">Date</div></div>
+          <div><div class="sig-field"></div><div class="sig-lbl">Lieu</div></div>
+        </div>
+      </div>
+      <div class="sig">
+        <div class="sig-label">Approuvé par le client</div>
+        <div class="field" style="margin-bottom:10px;"><label>Nom complet</label><input type="text" placeholder="Prénom Nom"></div>
+        <div class="field" style="margin-bottom:16px;"><label>Titre</label><input type="text" placeholder="Titre / Fonction"></div>
+        <div class="sig-line"></div>
+        <div class="sig-lbl">Signature</div>
+        <div class="sig-dates">
+          <div><div class="sig-field"></div><div class="sig-lbl">Date</div></div>
+          <div><div class="sig-field"></div><div class="sig-lbl">Lieu</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ZONE SOUMISSION -->
+    <div class="no-print" style="margin-top:28px;background:#f8f8f8;border:2px solid #e0e0e0;border-radius:12px;padding:24px 26px;">
+      <div style="margin-bottom:20px;padding-bottom:20px;border-bottom:2px solid #e8e8e8;">
+        <div style="font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#c0392b;margin-bottom:8px;">Soumettre &amp; archiver</div>
+        <div style="font-size:14px;font-weight:600;color:#555;line-height:1.75;">Les informations seront sauvegardées dans notre portail. Le PDF sera généré pour le client.</div>
+      </div>
+      <div class="field-row" style="margin-bottom:20px;">
+        <div class="submit-field">
+          <label>Notes internes</label>
+          <input type="text" id="notes-internes" placeholder="Notes pour le dossier...">
+        </div>
+        <div class="submit-field">
+          <label>Statut</label>
+          <select id="statut-som" style="width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:10px 14px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:#2d2d2d;outline:none;" onchange="updateHeader()">
+            <option value="preparation">En préparation</option>
+            <option value="envoyee">Envoyée au client</option>
+            <option value="acceptee">Acceptée ✓</option>
+            <option value="refusee">Refusée</option>
+            <option value="expiree">Expirée</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-submit" id="btn-soumettre" onclick="soumettreContrat()">
+        <span id="btn-text">⚡ Soumettre au portail + générer PDF</span>
+      </button>
+      <button class="btn-convert" id="btn-convert" onclick="convertirEnContrat()">
+        🔄 Convertir en contrat
+      </button>
+      <button class="btn-submit-secondary" onclick="imprimerPDF()">
+        🖨️ Imprimer / Sauvegarder PDF seulement
+      </button>
+      <div class="submit-confirm" id="submit-confirm">
+        <div class="submit-confirm-title">✅ Soumission sauvegardée!</div>
+        <div class="submit-confirm-text" id="confirm-details"></div>
+      </div>
+      <div class="submit-error" id="submit-error">
+        <div class="submit-error-text" id="submit-error-text"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_coul.png" alt="Média Mauricie" style="height:36px;width:auto;">
+  <div class="footer-legal">
+    <strong>Média Mauricie Inc.</strong> · 2750 Rang des Chutes, Sainte-Ursule, QC G0X 3B0<br>
+    (819) 852-0851 · info@mediamauricie.com · mediamauricie.com · NEQ 1180690985
+  </div>
+</div>
+
+</div><!-- /wrap -->
 
 <script>
-// ── CONFIG ──
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz3te2O_1GE6UWMY0yKUrXHaHKQMzZAyn2XYXCSAby09f7HgkOY22Buz2HFLzrM7g/exec';
-const TOKEN      = 'MauricieMau20@!';
-
-var D = {}; // données soumission
-var ligneCount = 0;
-
-// ── INIT ──
-(async function(){
-  var p      = new URLSearchParams(window.location.search);
-  var leadId = p.get('lead')   || '';
-  var projId = p.get('projet') || '';
-
-  // Dates
-  var now    = new Date();
-  var expiry = new Date(now.getTime() + 30*86400000);
-  D.date     = now.toISOString().split('T')[0];
-  D.expiry   = expiry.toISOString().split('T')[0];
-  D.leadId   = leadId;
-  D.projId   = projId;
-
-  document.getElementById('display-date').textContent = fmtDate(D.date);
-  document.getElementById('input-expiry').value       = D.expiry;
-  document.getElementById('display-validite').textContent = fmtDate(D.expiry);
-
-  // Référence affichée
-  var ref = projId || (leadId ? 'Lead ' + leadId : 'Nouvelle soumission');
-  document.getElementById('display-ref').textContent     = ref;
-  document.getElementById('toolbar-ref').textContent     = ref;
-  document.getElementById('display-ref-sub').textContent = leadId ? leadId : '';
-
-  // Charger données lead si disponible
-  if (leadId || projId) {
-    try {
-      var res  = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ action:'getDonneesLead', token:TOKEN, leadId:leadId, projId:projId })
-      });
-      var json = await res.json();
-      if (json.status === 'ok' && json.data) {
-        remplir(json.data);
-      } else {
-        ligneVide();
-      }
-    } catch(e) { ligneVide(); }
-  } else {
-    ligneVide();
+/* ═══════════════════════════════════
+   DONNÉES PAR SERVICE — préremplies
+   ═══════════════════════════════════ */
+var SERVICES = {
+  BH: {
+    nom: 'Banque d\'heures de montage',
+    contrat: 'MM-BH.html',
+    livrables: [
+      {desc:'Banque d\'heures de montage — Essentiel (15h)', qty:1, prix:1500},
+      {desc:'Colorisation incluse', qty:1, prix:0},
+      {desc:'Sous-titres (si applicable)', qty:1, prix:0}
+    ]
+  },
+  BIMG: {
+    nom: 'Banque d\'images mensuelle',
+    contrat: 'MM-BIMG.html',
+    livrables: [
+      {desc:'Shooting mensuel — photos HD', qty:1, prix:350},
+      {desc:'Photos HD livrées (Album Pixpa)', qty:30, prix:0},
+      {desc:'Shooting terrain (heures)', qty:2, prix:0},
+      {desc:'1 round de révisions mineures', qty:1, prix:0}
+    ]
+  },
+  EVT: {
+    nom: 'Couverture événementielle',
+    contrat: 'MM-EVT.html',
+    livrables: [
+      {desc:'Couverture photo événement (demi-journée)', qty:1, prix:650},
+      {desc:'Photos HD retouchées livrées', qty:50, prix:0},
+      {desc:'Vidéo récapitulative 30–60s (Reels)', qty:1, prix:450},
+      {desc:'Déplacement inclus zone de service', qty:1, prix:0}
+    ]
+  },
+  PHO: {
+    nom: 'Photographie corporate',
+    contrat: 'MM-PHO.html',
+    livrables: [
+      {desc:'Shooting corporate (demi-journée)', qty:1, prix:550},
+      {desc:'Photos HD retouchées livrées', qty:25, prix:0},
+      {desc:'Portraits individuels', qty:5, prix:75},
+      {desc:'1 round de révisions mineures', qty:1, prix:0}
+    ]
+  },
+  VID: {
+    nom: 'Production vidéo',
+    contrat: 'MM-VID.html',
+    livrables: [
+      {desc:'Tournage (demi-journée, 1 caméraman)', qty:1, prix:850},
+      {desc:'Montage — version finale', qty:1, prix:400},
+      {desc:'Colorisation + mixage audio', qty:1, prix:150},
+      {desc:'Sous-titres', qty:1, prix:75},
+      {desc:'1 round de révisions mineures', qty:1, prix:0}
+    ]
+  },
+  FCM: {
+    nom: 'Forfait contenu mensuel',
+    contrat: 'MM-FCM.html',
+    livrables: [
+      {desc:'Shooting mensuel photo + vidéo', qty:1, prix:500},
+      {desc:'Reels / voxpops (livrables)', qty:4, prix:150},
+      {desc:'Photos HD mensuelles', qty:20, prix:0},
+      {desc:'Gestion réseaux sociaux (optionnel)', qty:1, prix:300},
+      {desc:'1 round de révisions par livrable', qty:1, prix:0}
+    ]
   }
+};
 
-  document.getElementById('loading').style.display      = 'none';
-  document.getElementById('soumission-wrap').style.display = 'block';
-})();
+var serviceActif = null;
 
-// ── REMPLIR DEPUIS DONNÉES LEAD ──
-function remplir(d) {
-  D.cliId  = d.cliId    || '';
-  D.client = d.client   || '';
-  D.projId = d.projId   || D.projId;
+/* ─── FORMAT ─── */
+function fmt(n){return n.toLocaleString('fr-CA',{minimumFractionDigits:2,maximumFractionDigits:2})+' $';}
 
-  // Mettre à jour la ref si projet connu
-  if (d.projId) {
-    document.getElementById('display-ref').textContent  = d.projId;
-    document.getElementById('toolbar-ref').textContent  = d.projId;
-    document.getElementById('display-ref-sub').textContent = D.leadId || '';
-  }
-
-  // Client
-  setVal('cli-nom',   d.client   || '');
-  setVal('cli-email', d.cliEmail || '');
-  setVal('cli-tel',   d.cliTel   || '');
-  setVal('cli-id',    d.cliId    || '');
-
-  // Service
-  setVal('service-nom',    (d.service || '').split('—')[0].trim());
-  setVal('service-detail', buildDetail(d));
-
-  // Lignes
-  var desc = buildDesc(d);
-  ajouterLigne(desc, 0, false);
-  ajouterLigne('[CMD] Commandite / Rabais — description', 0, true);
+/* ─── DATE VALIDITÉ ─── */
+function calcValidite(){
+  var d = document.getElementById('date-som').value;
+  if(!d) return;
+  var dt = new Date(d);
+  dt.setDate(dt.getDate()+30);
+  var y=dt.getFullYear(), m=String(dt.getMonth()+1).padStart(2,'0'), day=String(dt.getDate()).padStart(2,'0');
+  document.getElementById('date-validite').value = y+'-'+m+'-'+day;
+  updateHeader();
 }
 
-function ligneVide() {
-  ajouterLigne('Services professionnels — Média Mauricie Inc.', 0, false);
-  ajouterLigne('[CMD] Commandite / Rabais', 0, true);
+/* ─── HEADER DYNAMIQUE ─── */
+function updateHeader(){
+  var statut = document.getElementById('statut-som').value;
+  var badge = document.getElementById('header-statut');
+  var labels = {
+    preparation:'En préparation',
+    envoyee:'Envoyée',
+    acceptee:'Acceptée ✓',
+    refusee:'Refusée',
+    expiree:'Expirée'
+  };
+  badge.textContent = labels[statut] || statut;
+  badge.className = statut === 'acceptee' ? 'badge-acceptee' : 'badge-som';
 }
 
-function buildDetail(d) {
-  var parts = [];
-  if (d.forfait)    parts.push(d.forfait);
-  if (d.dateProjet) parts.push('Date : ' + d.dateProjet);
-  if (d.lieu)       parts.push(d.lieu);
-  if (d.formatVideo)parts.push(d.formatVideo);
-  if (d.budget)     parts.push('Budget indiqué : ' + d.budget);
-  return parts.join(' · ');
+/* ─── SÉLECTION SERVICE ─── */
+function selectService(code){
+  document.querySelectorAll('.scard').forEach(function(c){c.classList.remove('selected');});
+  document.getElementById('scard-'+code).classList.add('selected');
+  serviceActif = code;
+  chargerLivrables(code);
 }
 
-function buildDesc(d) {
-  var label = (d.service || '').split('—')[0].trim();
-  var opts  = [];
-  try {
-    var pills = JSON.parse(d.pills || '{}');
-    ['svc_evt','duree_evt','type_vid','type_pho','type_doc','mont_bh','engagement','eng_fcm'].forEach(function(k){
-      if (pills[k] && pills[k].length) opts = opts.concat(pills[k]);
+/* ─── CHARGEMENT LIVRABLES ─── */
+function chargerLivrables(code){
+  var hint = document.getElementById('service-hint');
+  var wrap = document.getElementById('livrables-wrap');
+  hint.style.display = 'none';
+  wrap.style.display = 'block';
+
+  var tbody = document.getElementById('livrables-body');
+  tbody.innerHTML = '';
+
+  var data = SERVICES[code];
+  if(!data) return;
+
+  data.livrables.forEach(function(l){
+    ajouterLivrable(l.desc, l.qty, l.prix);
+  });
+  calcTotal();
+}
+
+/* ─── AJOUTER LIGNE ─── */
+function ajouterLivrable(desc, qty, prix){
+  var tbody = document.getElementById('livrables-body');
+  var tr = document.createElement('tr');
+  var idx = Date.now() + Math.random();
+  tr.setAttribute('data-idx', idx);
+  tr.innerHTML =
+    '<td><input type="text" value="'+desc+'" placeholder="Description du livrable..." oninput="calcTotal()"></td>'+
+    '<td style="text-align:center;"><input type="number" class="qty-input" min="0" step="0.5" value="'+qty+'" oninput="calcTotal()" style="width:55px;text-align:center;"></td>'+
+    '<td style="text-align:right;"><input type="number" class="unit-price" min="0" step="0.01" value="'+prix+'" oninput="calcTotal()" style="width:90px;"></td>'+
+    '<td class="row-total" style="text-align:right;padding-right:8px;" id="rt-'+idx+'">0,00 $</td>'+
+    '<td><button class="btn-remove" onclick="retirerLivrable(this)">×</button></td>';
+  tbody.appendChild(tr);
+  calcTotal();
+}
+
+function retirerLivrable(btn){
+  var rows = document.querySelectorAll('#livrables-body tr');
+  if(rows.length > 1){ btn.closest('tr').remove(); calcTotal(); }
+}
+
+/* ─── CALCUL ─── */
+function calcTotal(){
+  var ht = 0;
+  document.querySelectorAll('#livrables-body tr').forEach(function(tr){
+    var qty   = parseFloat(tr.querySelector('.qty-input').value)||0;
+    var prix  = parseFloat(tr.querySelector('.unit-price').value)||0;
+    var total = qty * prix;
+    ht += total;
+    var idx = tr.getAttribute('data-idx');
+    var rtEl = document.getElementById('rt-'+idx);
+    if(rtEl) rtEl.textContent = fmt(total);
+  });
+
+  var tpsOn = document.getElementById('tps-check').checked;
+  var tvqOn = document.getElementById('tvq-check').checked;
+  var tps   = tpsOn ? ht*0.05    : 0;
+  var tvq   = tvqOn ? ht*0.09975 : 0;
+  var total = ht+tps+tvq;
+  var pct   = parseInt(document.getElementById('acompte-pct').value)||50;
+  var acompte = total * pct / 100;
+
+  document.getElementById('calc-ht').textContent      = fmt(ht);
+  document.getElementById('calc-tps').textContent     = fmt(tps);
+  document.getElementById('calc-tvq').textContent     = fmt(tvq);
+  document.getElementById('calc-total').textContent   = fmt(total);
+  document.getElementById('calc-acompte').textContent = fmt(acompte);
+  document.getElementById('acompte-pct-label').textContent = pct+'%';
+  document.getElementById('row-tps').style.opacity = tpsOn?'1':'0.3';
+  document.getElementById('row-tvq').style.opacity = tvqOn?'1':'0.3';
+}
+
+/* ─── COLLECT ─── */
+function collecterDonnees(){
+  var livrables = [];
+  document.querySelectorAll('#livrables-body tr').forEach(function(tr){
+    livrables.push({
+      description: tr.querySelector('input[type=text]').value,
+      qty:   parseFloat(tr.querySelector('.qty-input').value)||0,
+      prix:  parseFloat(tr.querySelector('.unit-price').value)||0
     });
-  } catch(e){}
-  var desc = label;
-  if (d.forfait)    desc += ' — ' + d.forfait;
-  if (d.dateProjet) desc += ' · ' + d.dateProjet;
-  if (d.lieu)       desc += ' · ' + d.lieu;
-  return desc;
-}
-
-// ── LIGNES ──
-function ajouterLigne(desc, mnt, isCmd) {
-  desc   = desc   !== undefined ? desc   : '';
-  mnt    = mnt    !== undefined ? mnt    : 0;
-  isCmd  = isCmd  || false;
-  var id = ++ligneCount;
-  var c  = document.getElementById('lignes-container');
-  var el = document.createElement('div');
-  el.className = 'sh-ligne'; el.id = 'ligne-' + id;
-  el.innerHTML =
-    '<div class="ligne-desc-wrap">' +
-      '<input type="text" id="desc-'+id+'" class="ligne-desc" value="'+esc(desc)+'" placeholder="Description du service..." oninput="calcTotaux()">' +
-      '<input type="text" id="sub-'+id+'"  class="ligne-sub"  placeholder="Détail supplémentaire (optionnel)">' +
-    '</div>' +
-    '<div class="ligne-mnt' + (isCmd?' cmd':'') + '">' +
-      '<input type="number" id="mnt-'+id+'" value="'+mnt+'" min="0" step="0.01" placeholder="0.00" oninput="calcTotaux()">' +
-      '<span class="ligne-mnt-sym">$</span>' +
-      '<button class="btn-rm no-print" onclick="rmLigne('+id+')">×</button>' +
-    '</div>';
-  c.appendChild(el);
-  calcTotaux();
-}
-
-function rmLigne(id){ var el=document.getElementById('ligne-'+id); if(el)el.remove(); calcTotaux(); }
-
-function getLignes(){
-  var out=[];
-  document.querySelectorAll('#lignes-container .sh-ligne').forEach(function(row){
-    var id  = row.id.replace('ligne-','');
-    var desc= document.getElementById('desc-'+id);
-    var sub = document.getElementById('sub-'+id);
-    var mnt = document.getElementById('mnt-'+id);
-    if(!desc||!mnt) return;
-    var m   = parseFloat(mnt.value)||0;
-    var cmd = desc.value.indexOf('[CMD]')>=0;
-    out.push({ desc:desc.value, sub:sub?sub.value:'', montant:cmd?-Math.abs(m):m, isCmd:cmd });
   });
-  return out;
+  var tpsOn = document.getElementById('tps-check').checked;
+  var tvqOn = document.getElementById('tvq-check').checked;
+  var ht=0; livrables.forEach(function(l){ht+=l.qty*l.prix;});
+  var tps=tpsOn?ht*0.05:0, tvq=tvqOn?ht*0.09975:0, total=ht+tps+tvq;
+  var pct=parseInt(document.getElementById('acompte-pct').value)||50;
+
+  return {
+    type:          'MM-SOM',
+    noSoumission:  document.getElementById('no-som').value||'',
+    codeClient:    document.getElementById('code-client').value||'',
+    dateSom:       document.getElementById('date-som').value||'',
+    dateValidite:  document.getElementById('date-validite').value||'',
+    statut:        document.getElementById('statut-som').value||'preparation',
+    notesInternes: document.getElementById('notes-internes').value||'',
+    service:       serviceActif||'',
+    serviceNom:    serviceActif ? SERVICES[serviceActif].nom : '',
+    contratCible:  serviceActif ? SERVICES[serviceActif].contrat : '',
+    client: {
+      entreprise:   document.getElementById('cli-entreprise').value||'',
+      representant: document.getElementById('cli-rep').value||'',
+      courriel:     document.getElementById('cli-courriel').value||'',
+      telephone:    document.getElementById('cli-tel').value||'',
+      adresse:      document.getElementById('cli-adresse').value||'',
+      titre:        document.getElementById('cli-titre').value||''
+    },
+    mandat: {
+      description:    document.getElementById('description-mandat').value||'',
+      dateLivraison:  document.getElementById('date-livraison').value||'',
+      lieu:           document.getElementById('lieu-mandat').value||''
+    },
+    livrables: livrables,
+    facturation: {
+      sousTotal:      ht,
+      tps:            tps,
+      tvq:            tvq,
+      totalTTC:       total,
+      acomptePct:     pct,
+      acompte:        total*pct/100
+    },
+    notes: document.getElementById('notes-som').value||'',
+    soumisLe: new Date().toISOString()
+  };
 }
 
-// ── CALCUL ──
-function calcTotaux(){
-  var ht=0;
-  getLignes().forEach(function(l){ ht+=l.montant; });
-  var tps = document.getElementById('tps-on').checked ? Math.round(ht*0.05*100)/100 : 0;
-  var tvq = document.getElementById('tvq-on').checked ? Math.round(ht*0.09975*100)/100 : 0;
-  var ttc = Math.round((ht+tps+tvq)*100)/100;
-  var pct = parseFloat(document.getElementById('acompte-pct').value)||50;
-  var acc = Math.round(ttc*(pct/100)*100)/100;
-
-  document.getElementById('tot-ht').textContent     = fmt$(ht);
-  document.getElementById('tot-tps').textContent    = fmt$(tps);
-  document.getElementById('tot-tvq').textContent    = fmt$(tvq);
-  document.getElementById('tot-ttc').textContent    = fmt$(ttc);
-  document.getElementById('tot-acompte').textContent= fmt$(acc);
-  document.getElementById('acompte-pct-print').textContent = pct + '%';
-
-  D._ht=ht; D._tps=tps; D._tvq=tvq; D._ttc=ttc; D._acompte=acc; D._pct=pct;
+/* ─── PDF ─── */
+function imprimerPDF(){
+  var cli = document.getElementById('cli-entreprise').value||'client';
+  var no  = document.getElementById('no-som').value||'SOM';
+  html2pdf().set({
+    margin:0.4,
+    filename:'Soumission-'+no+'-'+cli.replace(/\s+/g,'_')+'.pdf',
+    image:{type:'jpeg',quality:0.98},
+    html2canvas:{scale:2,useCORS:true},
+    jsPDF:{unit:'in',format:'letter',orientation:'portrait'}
+  }).from(document.getElementById('som-wrap')).save();
 }
 
-function updateExpiry(){
-  D.expiry = document.getElementById('input-expiry').value;
-  document.getElementById('display-validite').textContent = fmtDate(D.expiry);
+/* ─── SOUMETTRE ─── */
+async function soumettreContrat(){
+  var btn=document.getElementById('btn-soumettre');
+  var txt=document.getElementById('btn-text');
+  btn.disabled=true; txt.textContent='Sauvegarde...';
+  var data=collecterDonnees();
+  try{
+    if(window._db && window._addDoc && window._collection){
+      data.creeLe=window._serverTimestamp?window._serverTimestamp():new Date().toISOString();
+      var ref=await window._addDoc(window._collection(window._db,'soumissions'),data);
+      console.log('Firebase OK',ref.id);
+    }
+  }catch(e){
+    document.getElementById('submit-error').style.display='block';
+    document.getElementById('submit-error-text').textContent='Erreur Firebase: '+e.message;
+  }
+  txt.textContent='Génération PDF...';
+  try{
+    var cli=data.client.entreprise||data.client.representant||'client';
+    await html2pdf().set({
+      margin:0.4,
+      filename:'Soumission-'+(data.noSoumission||'SOM')+'-'+cli.replace(/\s+/g,'_')+'.pdf',
+      image:{type:'jpeg',quality:0.98},
+      html2canvas:{scale:2,useCORS:true},
+      jsPDF:{unit:'in',format:'letter',orientation:'portrait'}
+    }).from(document.getElementById('som-wrap')).save();
+    document.getElementById('submit-confirm').style.display='block';
+    document.getElementById('confirm-details').innerHTML=
+      '<strong>Soumission :</strong> '+(data.noSoumission||'—')+'<br>'+
+      '<strong>Client :</strong> '+(data.client.entreprise||'—')+'<br>'+
+      '<strong>Service :</strong> '+(data.serviceNom||'—')+'<br>'+
+      '<strong>Total TTC :</strong> '+fmt(data.facturation.totalTTC)+'<br>'+
+      '<strong>Acompte :</strong> '+fmt(data.facturation.acompte)+'<br><br>'+
+      '→ Une fois acceptée, clique sur <strong>Convertir en contrat</strong>.';
+    txt.textContent='✅ Sauvegardé + PDF';
+  }catch(e){
+    document.getElementById('submit-error').style.display='block';
+    document.getElementById('submit-error-text').textContent='Erreur PDF: '+e.message;
+    btn.disabled=false; txt.textContent='⚡ Soumettre au portail + générer PDF';
+  }
 }
 
-// ── SAUVER ──
-async function sauverDansSheet(){
-  var btn = document.getElementById('btn-sauver');
-  btn.textContent = '⏳ Sauvegarde...';
-  btn.disabled = true;
-
-  await appsCall('enregistrerSoumission', {
-    leadId:    D.leadId   || '',
-    projId:    D.projId   || '',
-    cliId:     val('cli-id'),
-    client:    val('cli-nom'),
-    cliEmail:  val('cli-email'),
-    service:   val('service-nom'),
-    date:      D.date,
-    expiry:    D.expiry,
-    lignes:    getLignes(),
-    montantHT: D._ht   || 0,
-    tps:       D._tps  || 0,
-    tvq:       D._tvq  || 0,
-    totalTTC:  D._ttc  || 0,
-    acompte:   D._acompte || 0,
-    acomptePct:D._pct  || 50
+/* ─── CONVERTIR EN CONTRAT ─── */
+function convertirEnContrat(){
+  if(!serviceActif){
+    alert('Sélectionne un service avant de convertir.');
+    return;
+  }
+  var data=collecterDonnees();
+  var params=new URLSearchParams({
+    cli_entreprise: data.client.entreprise,
+    cli_rep:        data.client.representant,
+    cli_courriel:   data.client.courriel,
+    cli_tel:        data.client.telephone,
+    cli_adresse:    data.client.adresse,
+    cli_titre:      data.client.titre,
+    code_client:    data.codeClient,
+    no_som:         data.noSoumission,
+    total_ttc:      data.facturation.totalTTC,
+    acompte:        data.facturation.acompte,
+    notes:          data.notes,
+    lieu:           data.mandat.lieu,
+    date_livraison: data.mandat.dateLivraison
   });
-
-  btn.textContent = '✅ Sauvé!';
-  btn.disabled = false;
-  setTimeout(function(){ btn.textContent = '💾 Sauver dans Sheet'; }, 3000);
+  var url = SERVICES[serviceActif].contrat+'?'+params.toString();
+  window.open(url,'_blank');
 }
 
-// ── RÉPONSE CLIENT ──
-async function confirmerAcceptation(){
-  var btn = document.getElementById('btn-accept-txt');
-  btn.textContent = '⏳...';
-  await appsCall('repondresoumission', {
-    leadId: D.leadId, projId: D.projId,
-    reponse: 'accepte', note: ''
-  });
-  btn.textContent = '✅ Confirmer';
-  var c = document.getElementById('accept-confirm');
-  c.textContent = '✅ Merci! Notre équipe vous contactera sous peu pour le contrat.';
-  c.style.display = 'block';
-  document.getElementById('reponse-section').style.display = 'none';
-  setTimeout(function(){ fermerModal('modal-accept'); }, 3500);
-}
-
-async function confirmerRefus(){
-  var btn  = document.getElementById('btn-refus-txt');
-  var note = document.getElementById('refus-note').value;
-  btn.textContent = '⏳...';
-  await appsCall('repondresoumission', {
-    leadId: D.leadId, projId: D.projId,
-    reponse: 'refuse', note: note
-  });
-  btn.textContent = 'Envoyer';
-  var c = document.getElementById('refus-confirm');
-  c.textContent = 'Message reçu — notre équipe vous contactera.';
-  c.style.display = 'block';
-  document.getElementById('reponse-section').style.display = 'none';
-  setTimeout(function(){ fermerModal('modal-refus'); }, 3500);
-}
-
-// ── HELPERS ──
-async function appsCall(action, data){
-  data.action = action; data.token = TOKEN;
-  try {
-    await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
-  } catch(e){}
-}
-function fmt$(n){ return parseFloat(n||0).toLocaleString('fr-CA',{minimumFractionDigits:2,maximumFractionDigits:2})+' $'; }
-function fmtDate(d){
-  if(!d) return '—';
-  var p=d.split('-'), m=['jan','fév','mar','avr','mai','juin','juil','aoû','sep','oct','nov','déc'];
-  return parseInt(p[2])+' '+m[parseInt(p[1])-1]+' '+p[0];
-}
-function esc(s){ return String(s||'').replace(/"/g,'&quot;'); }
-function val(id){ var el=document.getElementById(id); return el?el.value.trim():''; }
-function setVal(id,v){ var el=document.getElementById(id); if(el)el.value=v||''; }
-function ouvrirModal(id){ document.getElementById(id).classList.add('open'); }
-function fermerModal(id){ document.getElementById(id).classList.remove('open'); }
-document.querySelectorAll('.modal-bg').forEach(function(m){
-  m.addEventListener('click',function(e){ if(e.target===m) m.classList.remove('open'); });
+/* ─── INIT ─── */
+window.addEventListener('load',function(){
+  var today=new Date();
+  var y=today.getFullYear(),m=String(today.getMonth()+1).padStart(2,'0'),d=String(today.getDate()).padStart(2,'0');
+  document.getElementById('date-som').value=y+'-'+m+'-'+d;
+  calcValidite();
+  calcTotal();
 });
 </script>
 </body>
