@@ -135,7 +135,7 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;font-s
         <div class="fr"><span class="fk">Représentante</span><span class="fv">Victoria J. Polsoni, Présidente</span></div>
         <div class="fr"><span class="fk">Adresse</span><span class="fv">2750 Rang des Chutes, Sainte-Ursule, QC G0X 3B0</span></div>
         <div class="fr"><span class="fk">Téléphone</span><span class="fv">(819) 852-0851</span></div>
-        <div class="fr"><span class="fk">Courriel</span><span class="fv">info@mediamauricie.com</span></div>
+        <div class="fr"><span class="fk">Courriel</span><span class="fv"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f891969e97b8959d9c919995998d8a919b919dd69b9795">[email&#160;protected]</a></span></div>
         <div class="fr"><span class="fk">TPS</span><span class="fv">71110 6229 RT 0001</span></div>
         <div class="fr"><span class="fk">TVQ</span><span class="fv">12 3255 2049 TQ 0001</span></div>
         <div class="fr"><span class="fk">NEQ</span><span class="fv">1180690985</span></div>
@@ -310,7 +310,7 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;font-s
       </div>
       <button class="btn-sub" id="btn-sub"><span id="btn-txt">⚡ Soumettre au portail + générer PDF</span></button>
       <button class="btn-conv" id="btn-conv">🔄 Convertir en contrat</button>
-      <button class="btn-sec" id="btn-pdf">🖨️ Imprimer / Sauvegarder PDF seulement</button>
+      <button class="btn-sec" id="btn-pdf">🖨️ Imprimer / PDF (Cmd+P)</button>
       <div class="confirm-box" id="confirm-box">
         <div class="confirm-title">✅ Soumission sauvegardée!</div>
         <div class="link-box">
@@ -327,11 +327,11 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;font-s
 
 <div class="footer">
   <img src="https://mediamauricie.com/wp-content/uploads/2026/03/Media-Mauricie_logo_coul.png" alt="Média Mauricie" style="height:36px;width:auto;" onerror="this.style.display='none'">
-  <div class="footer-legal"><strong>Média Mauricie Inc.</strong> · 2750 Rang des Chutes, Sainte-Ursule, QC G0X 3B0<br>(819) 852-0851 · info@mediamauricie.com · mediamauricie.com · NEQ 1180690985</div>
+  <div class="footer-legal"><strong>Média Mauricie Inc.</strong> · 2750 Rang des Chutes, Sainte-Ursule, QC G0X 3B0<br>(819) 852-0851 · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="aac3c4ccc5eac7cfcec3cbc7cbdfd8c3c9c3cf84c9c5c7">[email&#160;protected]</a> · mediamauricie.com · NEQ 1180690985</div>
 </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 (function(){
 /* ── CONFIG ── */
 var BASE = 'https://mediamauricie.github.io/master-cowork/soumissions/soumission-client.html';
@@ -656,23 +656,6 @@ document.addEventListener('DOMContentLoaded', function(){
   document.getElementById('btn-sub').addEventListener('click', soumettre);
   document.getElementById('btn-conv').addEventListener('click', convertir);
   document.getElementById('btn-pdf').addEventListener('click', function(){
-    var cli=document.getElementById('cli-entreprise').value||'client';
-    html2pdf().set(pdfOpt('Soumission-'+cli.replace(/\s+/g,'_')+'.pdf')).from(document.getElementById('som-wrap')).save();
+    window.print();
   });
-  document.getElementById('btn-copy').addEventListener('click', copierLien);
-
-  // Val preset
-  document.getElementById('val-preset').addEventListener('change', onPresetChange);
-  document.getElementById('val-custom').addEventListener('input', onDateChange);
-  document.getElementById('date-som').addEventListener('change', onDateChange);
-
-  calcTotal();
-  updateHdr();
-});
-
-})();
-</script>
-
-
-</body>
-</html>
+  document.getElementById('btn-copy').addEventListe
