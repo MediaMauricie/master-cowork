@@ -57,7 +57,7 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;font-s
 .field input:focus,.field select:focus,.field textarea:focus{border-color:#2d2d2d;}
 .field textarea{min-height:60px;resize:vertical;line-height:1.6;}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;width:100%;}
 .scard{border:2px solid #e0e0e0;border-radius:10px;padding:14px;cursor:pointer;transition:all 0.2s;text-align:center;}
 .scard:hover{border-color:#2d2d2d;}
 .scard.selected{border-color:#c0392b;background:#fdf9f9;}
@@ -173,18 +173,12 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;font-s
         <div class="fr"><span class="fk">Représentante</span><span class="fv">Victoria J. Polsoni, Présidente</span></div>
         <div class="fr"><span class="fk">Adresse</span><span class="fv">2750 Rang des Chutes, Sainte-Ursule, QC G0X 3B0</span></div>
         <div class="fr"><span class="fk">Téléphone</span><span class="fv">(819) 852-0851</span></div>
-        <div class="fr"><span class="fk">Courriel</span><span class="fv"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f0999e969fb09d959499919d91858299939995de939f9d">[email&#160;protected]</a></span></div>
+        <div class="fr"><span class="fk">Courriel</span><span class="fv">info@mediamauricie.com</span></div>
         <div class="fr"><span class="fk">TPS</span><span class="fv">71110 6229 RT 0001</span></div>
         <div class="fr"><span class="fk">TVQ</span><span class="fv">12 3255 2049 TQ 0001</span></div>
         <div class="fr"><span class="fk">NEQ</span><span class="fv">1180690985</span></div>
-        <div class="bank-strip">
-          <div class="bank-label">Virement bancaire — TD Canada Trust</div>
-          <div class="bank-row">
-            <div><div class="bank-item-label">Transit</div><div class="bank-item-val">49361</div></div>
-            <div><div class="bank-item-label">Institution</div><div class="bank-item-val">004</div></div>
-            <div><div class="bank-item-label">Compte</div><div class="bank-item-val">5213392</div></div>
-          </div>
-          <div style="font-size:11px;color:#aaa;font-weight:500;margin-top:8px;">Interac : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="543d3a323b143931303d35393521263d373d317a373b39">[email&#160;protected]</a> <em>(mot de passe transmis séparément)</em> · Chèque à l'ordre de Média Mauricie Inc.</div>
+      </div></div>
+          <div style="font-size:11px;color:#aaa;font-weight:500;margin-top:8px;">Interac : info@mediamauricie.com <em>(mot de passe transmis séparément)</em> · Chèque à l'ordre de Média Mauricie Inc.</div>
         
         </div>
       </div>
@@ -212,12 +206,12 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;font-s
     <div class="field-row">
       <div class="field" style="margin-bottom:0;">
         <label>Date de soumission</label>
-        <input type="date" id="date-som" onchange="calcValidite()">
+        <input type="date" id="date-som" onchange="calcValiditeFn()">
       </div>
       <div class="field" style="margin-bottom:0;">
         <label>Validité</label>
         <div class="validite-row">
-          <select id="validite-preset" onchange="applyValiditePreset()">
+          <select id="validite-preset" onchange="applyValiditePresetFn()">
             <option value="30">30 jours</option>
             <option value="15">15 jours</option>
             <option value="45">45 jours</option>
@@ -225,7 +219,7 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;font-s
             <option value="90">90 jours</option>
             <option value="custom">Autre...</option>
           </select>
-          <input type="number" id="validite-custom" min="1" max="365" value="30" oninput="calcValidite()" style="display:none;">
+          <input type="number" id="validite-custom" min="1" max="365" value="30" oninput="calcValiditeFn()" style="display:none;">
           <span style="font-size:12px;color:#aaa;font-weight:600;">→ <span id="validite-display">—</span></span>
         </div>
       </div>
@@ -274,15 +268,15 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;font-s
         </tr></thead>
         <tbody id="livrables-body"></tbody>
       </table>
-      <button class="btn-add" onclick="ajouterLivrable('',1,0)">+ Ajouter un livrable</button>
+      <button class="btn-add" onclick="ajouterLivrableFn('',1,0)">+ Ajouter un livrable</button>
     </div>
     <div class="sec-div">Notes &amp; conditions particulières</div>
     <div class="field"><textarea id="notes-som" placeholder="Conditions spéciales, exclusions..."></textarea></div>
     <div class="calc-block">
       <div class="calc-title">Calcul automatique</div>
       <div class="tax-toggle">
-        <label><input type="checkbox" id="tps-check" checked onchange="calcTotal()"> TPS 5%</label>
-        <label><input type="checkbox" id="tvq-check" checked onchange="calcTotal()"> TVQ 9,975%</label>
+        <label><input type="checkbox" id="tps-check" checked onchange="calcTotalFn()"> TPS 5%</label>
+        <label><input type="checkbox" id="tvq-check" checked onchange="calcTotalFn()"> TVQ 9,975%</label>
       </div>
       <div class="calc-row"><span class="calc-label">Sous-total HT</span><span class="calc-val" id="calc-ht">0,00 $</span></div>
       <div class="calc-row" id="row-tps"><span class="calc-label">TPS 5%</span><span class="calc-val" id="calc-tps">0,00 $</span></div>
@@ -295,7 +289,7 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;font-s
         <span style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.5);">Acompte (<span id="acompte-pct-label">50%</span>)</span>
         <span style="font-size:18px;font-weight:900;color:#e74c3c;" id="calc-acompte">0,00 $</span>
       </div>
-      <input type="range" id="acompte-pct" min="0" max="100" value="50" step="5" oninput="calcTotal()" style="width:100%;accent-color:#c0392b;margin-top:8px;">
+      <input type="range" id="acompte-pct" min="0" max="100" value="50" step="5" oninput="calcTotalFn()" style="width:100%;accent-color:#c0392b;margin-top:8px;">
     </div>
   </div>
 </div>
@@ -356,7 +350,7 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;font-s
         </div>
         <div class="submit-field">
           <label>Statut</label>
-          <select id="statut-som" onchange="updateHeader()">
+          <select id="statut-som" onchange="updateHeaderFn()">
             <option value="preparation">En préparation</option>
             <option value="envoyee">Envoyée au client</option>
             <option value="acceptee">Acceptée ✓</option>
@@ -365,13 +359,13 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;font-s
           </select>
         </div>
       </div>
-      <button class="btn-submit" id="btn-soumettre" onclick="soumettreContrat()">
+      <button class="btn-submit" id="btn-soumettre" onclick="soumettreContratFn()">
         <span id="btn-text">⚡ Soumettre au portail + générer PDF</span>
       </button>
-      <button class="btn-convert" onclick="convertirEnContrat()">
+      <button class="btn-convert" onclick="convertirEnContratFn()">
         🔄 Convertir en contrat
       </button>
-      <button class="btn-secondary" onclick="imprimerPDF()">
+      <button class="btn-secondary" onclick="imprimerPDFFn()">
         🖨️ Imprimer / Sauvegarder PDF seulement
       </button>
 
@@ -381,7 +375,7 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;font-s
         <div class="lien-client-box" id="lien-client-box">
           <div class="lien-client-label">🔗 Lien de la soumission</div>
           <div class="lien-client-url" id="lien-client-url">—</div>
-          <button class="btn-copy" onclick="copierLien()">📋 Copier le lien</button>
+          <button class="btn-copy" onclick="copierLienFn()">📋 Copier le lien</button>
         </div>
         <div class="submit-confirm-text" id="confirm-details"></div>
       </div>
@@ -397,14 +391,29 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;font-s
     alt="Média Mauricie" style="height:36px;width:auto;" onerror="this.style.display='none'">
   <div class="footer-legal">
     <strong>Média Mauricie Inc.</strong> · 2750 Rang des Chutes, Sainte-Ursule, QC G0X 3B0<br>
-    (819) 852-0851 · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="761f181019361b13121f171b1703041f151f135815191b">[email&#160;protected]</a> · mediamauricie.com · NEQ 1180690985
+    (819) 852-0851 · info@mediamauricie.com · mediamauricie.com · NEQ 1180690985
   </div>
 </div>
 
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 var BASE_URL = 'https://mediamauricie.github.io/master-cowork/soumissions/soumission-client.html';
+
+// Ensure selectService is globally available
+window.selectService  = function(code) { selectServiceFn(code); };
+window.calcTotal      = function()     { calcTotalFn(); };
+window.ajouterLivrable= function(d,q,p){ ajouterLivrableFn(d,q,p); };
+window.retirerLivrable= function(btn)  { retirerLivrableFn(btn); };
+window.ajouterSurplus = function()     { ajouterSurplusFn(); };
+window.retirerSurplus = function(btn)  { retirerSurplusFn(btn); };
+window.imprimerPDF    = function()     { imprimerPDFFn(); };
+window.convertirEnContrat = function() { convertirEnContratFn(); };
+window.soumettreContrat   = function() { soumettreContratFn(); };
+window.updateHeader   = function()     { updateHeaderFn(); };
+window.copierLien     = function()     { copierLienFn(); };
+window.calcValidite   = function()     { calcValiditeFn(); };
+window.applyValiditePreset = function(){ applyValiditePresetFn(); };
 
 var SERVICES={
   BIMG:{nom:"Banque d'images mensuelle",   contrat:"../contrats/MM-BIMG.html",livrables:[
@@ -442,12 +451,12 @@ function getValiditeJours(){
   if(preset==='custom') return parseInt(document.getElementById('validite-custom').value)||30;
   return parseInt(preset)||30;
 }
-function applyValiditePreset(){
+function applyValiditePresetFn(){
   var preset=document.getElementById('validite-preset').value;
   document.getElementById('validite-custom').style.display=preset==='custom'?'block':'none';
-  calcValidite();
+  calcValiditeFn();
 }
-function calcValidite(){
+function calcValiditeFn(){
   var d=document.getElementById('date-som').value;
   if(!d){document.getElementById('validite-display').textContent='—';return;}
   var dt=new Date(d);
@@ -455,44 +464,44 @@ function calcValidite(){
   var y=dt.getFullYear(),m=String(dt.getMonth()+1).padStart(2,'0'),day=String(dt.getDate()).padStart(2,'0');
   document.getElementById('validite-display').textContent=y+'-'+m+'-'+day;
   document.getElementById('header-validite').textContent=getValiditeJours()+' jours';
-  updateHeader();
+  updateHeaderFn();
 }
-function updateHeader(){
+function updateHeaderFn(){
   var statut=document.getElementById('statut-som').value;
   var labels={preparation:'En préparation',envoyee:'Envoyée',acceptee:'Acceptée ✓',refusee:'Refusée',expiree:'Expirée'};
   var badge=document.getElementById('header-statut');
   badge.textContent=labels[statut]||statut;
   badge.className=statut==='acceptee'?'badge-ok':'badge-som';
 }
-function selectService(code){
+function selectServiceFn(code){
   document.querySelectorAll('.scard').forEach(function(c){c.classList.remove('selected');});
   document.getElementById('scard-'+code).classList.add('selected');
   serviceActif=code;
   document.getElementById('service-hint').style.display='none';
   document.getElementById('livrables-wrap').style.display='block';
   document.getElementById('livrables-body').innerHTML='';
-  SERVICES[code].livrables.forEach(function(l){ajouterLivrable(l.desc,l.qty,l.prix);});
-  calcTotal();
+  SERVICES[code].livrables.forEach(function(l){ajouterLivrableFn(l.desc,l.qty,l.prix);});
+  calcTotalFn();
 }
 function esc(s){return(s||'').replace(/"/g,'&quot;');}
-function ajouterLivrable(desc,qty,prix){
+function ajouterLivrableFn(desc,qty,prix){
   var tbody=document.getElementById('livrables-body');
   var tr=document.createElement('tr');
   var idx='r'+Date.now()+Math.floor(Math.random()*9999);
   tr.setAttribute('data-idx',idx);
   tr.innerHTML=
-    '<td><input type="text" value="'+esc(desc)+'" placeholder="Description..." oninput="calcTotal()"></td>'+
-    '<td style="text-align:center;"><input type="number" class="qty-input" min="0" step="0.5" value="'+qty+'" oninput="calcTotal()"></td>'+
-    '<td style="text-align:right;"><input type="number" class="unit-input" min="0" step="0.01" value="'+prix+'" oninput="calcTotal()"></td>'+
+    '<td><input type="text" value="'+esc(desc)+'" placeholder="Description..." oninput="calcTotalFn()"></td>'+
+    '<td style="text-align:center;"><input type="number" class="qty-input" min="0" step="0.5" value="'+qty+'" oninput="calcTotalFn()"></td>'+
+    '<td style="text-align:right;"><input type="number" class="unit-input" min="0" step="0.01" value="'+prix+'" oninput="calcTotalFn()"></td>'+
     '<td class="row-total" id="rt-'+idx+'">'+fmt(qty*prix)+'</td>'+
-    '<td><button class="btn-remove" onclick="retirerLivrable(this)">×</button></td>';
+    '<td><button class="btn-remove" onclick="retirerLivrableFn(this)">×</button></td>';
   tbody.appendChild(tr);
-  calcTotal();
+  calcTotalFn();
 }
-function retirerLivrable(btn){
-  if(document.querySelectorAll('#livrables-body tr').length>1){btn.closest('tr').remove();calcTotal();}
+function retirerLivrableFn(btn){
+  if(document.querySelectorAll('#livrables-body tr').length>1){btn.closest('tr').remove();calcTotalFn();}
 }
-function calcTotal(){
+function calcTotalFn(){
   var ht=0;
   document.querySelectorAll('#livrables-body tr').forEach(function(tr){
     var qty=parseFloat(tr.querySelector('.qty-input').value)||0;
@@ -574,13 +583,13 @@ function getPdfOpt(filename){
     pagebreak:{mode:['avoid-all','css','legacy']}
   };
 }
-function imprimerPDF(){
+function imprimerPDFFn(){
   var cli=document.getElementById('cli-entreprise').value||'client';
   var no=document.getElementById('no-som').value||'SOM';
   html2pdf().set(getPdfOpt('Soumission-'+no+'-'+cli.replace(/\s+/g,'_')+'.pdf'))
     .from(document.getElementById('som-wrap')).save();
 }
-function copierLien(){
+function copierLienFn(){
   var url=document.getElementById('lien-client-url').textContent;
   if(navigator.clipboard){
     navigator.clipboard.writeText(url).then(function(){
@@ -595,7 +604,7 @@ function copierLien(){
     document.body.removeChild(ta);
   }
 }
-async function soumettreContrat(){
+async function soumettreContratFn(){
   var btn=document.getElementById('btn-soumettre');
   var txt=document.getElementById('btn-text');
   btn.disabled=true; txt.textContent='Sauvegarde...';
@@ -637,7 +646,7 @@ async function soumettreContrat(){
     btn.disabled=false; txt.textContent='⚡ Soumettre au portail + générer PDF';
   }
 }
-function convertirEnContrat(){
+function convertirEnContratFn(){
   if(!serviceActif){alert('Sélectionne un service avant de convertir.');return;}
   var data=collecterDonnees();
   var p=new URLSearchParams({
