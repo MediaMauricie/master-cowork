@@ -6,6 +6,29 @@
 <title>Contrat — Banque d'images mensuelle — Média Mauricie</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<!-- ═══════════════════════════════════════════════
+     FIREBASE CONFIG — remplacer par ta config
+     ═══════════════════════════════════════════════ -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+  const firebaseConfig = {
+    apiKey:            "VOTRE_API_KEY",
+    authDomain:        "VOTRE_PROJECT.firebaseapp.com",
+    projectId:         "VOTRE_PROJECT_ID",
+    storageBucket:     "VOTRE_PROJECT.appspot.com",
+    messagingSenderId: "VOTRE_SENDER_ID",
+    appId:             "VOTRE_APP_ID"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+  window._db              = db;
+  window._addDoc          = addDoc;
+  window._collection      = collection;
+  window._serverTimestamp = serverTimestamp;
+</script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;min-height:100vh;font-size:14px;}
@@ -51,12 +74,15 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;min-he
 .check-single input{width:16px;height:16px;margin-top:2px;flex-shrink:0;accent-color:#c0392b;}
 .check-single-text{font-size:13px;font-weight:700;color:#2d2d2d;line-height:1.4;}
 .check-single-sub{font-size:11px;font-weight:500;color:#888;margin-top:2px;line-height:1.5;}
+
+/* ── FORFAIT CARDS ── */
 .forfait-card{border:2px solid #e0e0e0;border-radius:10px;padding:14px 16px;cursor:pointer;transition:all 0.2s;}
 .forfait-card:hover{border-color:#2d2d2d;}
 .forfait-card.selected{border-color:#c0392b;background:#fdf9f9;}
 .forfait-card-name{font-size:14px;font-weight:800;color:#2d2d2d;margin-bottom:8px;}
-.forfait-card-check{width:18px;height:18px;border:2px solid #ddd;border-radius:50%;display:inline-block;margin-bottom:10px;transition:all 0.2s;}
-.forfait-card.selected .forfait-card-check{background:#c0392b;border-color:#c0392b;}
+.forfait-card-radio{width:18px;height:18px;border:2px solid #ddd;border-radius:50%;display:block;margin-bottom:10px;transition:all 0.2s;flex-shrink:0;}
+.forfait-card.selected .forfait-card-radio{background:#c0392b;border-color:#c0392b;}
+
 .surplus-row{display:grid;grid-template-columns:3fr 1fr auto;gap:10px;align-items:center;margin-bottom:10px;}
 .surplus-row input{border:2px solid #e0e0e0;border-radius:8px;padding:9px 12px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:#2d2d2d;width:100%;outline:none;}
 .surplus-row input:focus{border-color:#2d2d2d;}
@@ -114,26 +140,25 @@ body{font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#2d2d2d;min-he
 .footer-legal{font-size:11px;font-weight:500;color:#aaa;line-height:1.8;text-align:right;}
 .footer-legal strong{color:#888;}
 a.doc-link{color:#c0392b;font-weight:700;font-size:12px;text-decoration:none;}
-/* SUBMIT */
-.submit-field label{display:block;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:6px;}
-.submit-field input{width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:10px 14px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:#2d2d2d;outline:none;transition:border-color 0.2s;}
-.submit-field input:focus{border-color:#2d2d2d;}
 .btn-submit{background:#2d2d2d;color:#fff;border:none;border-radius:10px;padding:16px 32px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;width:100%;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;}
 .btn-submit:hover{background:#1a1a1a;}
 .btn-submit:disabled{background:#ccc;cursor:not-allowed;}
-.btn-submit-secondary{background:#fff;color:#2d2d2d;border:2px solid #2d2d2d;border-radius:10px;padding:14px 32px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;width:100%;transition:all 0.2s;}
+.btn-submit-secondary{background:#fff;color:#2d2d2d;border:2px solid #2d2d2d;border-radius:10px;padding:14px 32px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;width:100%;transition:all 0.2s;margin-bottom:10px;}
 .btn-submit-secondary:hover{background:#f5f5f5;}
+.submit-field{margin-bottom:14px;}
+.submit-field label{display:block;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:6px;}
+.submit-field input{width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:10px 14px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:#2d2d2d;outline:none;transition:border-color 0.2s;}
+.submit-field input:focus{border-color:#2d2d2d;}
 .submit-confirm{display:none;background:#f0faf4;border:2px solid #b7e4c7;border-radius:10px;padding:20px 22px;margin-top:16px;text-align:center;}
-.submit-confirm-icon{font-size:36px;margin-bottom:10px;}
 .submit-confirm-title{font-size:16px;font-weight:800;color:#27ae60;margin-bottom:6px;}
 .submit-confirm-text{font-size:13px;font-weight:500;color:#2d4a35;line-height:1.75;}
 .submit-error{display:none;background:#fdf4f4;border:2px solid #f0d0d0;border-radius:10px;padding:16px 20px;margin-top:14px;}
 .submit-error-text{font-size:13px;font-weight:600;color:#c0392b;line-height:1.6;}
-/* PRINT */
+.no-print{}
 @media print{
   body{background:#fff;}
   .wrap{padding:20px;}
-  .notice,.no-print{display:none !important;}
+  .notice,.no-print{display:none!important;}
   .btn-add,.btn-remove{display:none;}
   input,select,textarea{border:none;border-bottom:1px solid #ccc;border-radius:0;padding:2px 4px;}
 }
@@ -157,7 +182,7 @@ a.doc-link{color:#c0392b;font-weight:700;font-size:12px;text-decoration:none;}
 </div>
 
 <div class="notice no-print"><span style="font-size:18px;flex-shrink:0;">⚡</span>
-  <div class="notice-text"><strong>Signature électronique via Zoho Sign</strong> — Remplissez le contrat, puis cliquez sur "Soumettre pour signature" en bas. Vous recevrez le lien Zoho Sign par courriel.</div>
+  <div class="notice-text"><strong>Signature électronique via Zoho Sign</strong> — Remplissez le contrat, puis cliquez sur "Soumettre &amp; archiver" en bas. Le PDF sera généré et sauvegardé dans Firebase.</div>
 </div>
 
 <!-- 01 PARTIES -->
@@ -189,16 +214,16 @@ a.doc-link{color:#c0392b;font-weight:700;font-size:12px;text-decoration:none;}
       <div class="field"><label>Entreprise / Organisation</label><input type="text" id="cli-entreprise" placeholder="Nom de l'entreprise"></div>
       <div class="field"><label>Représentant</label><input type="text" id="cli-rep" placeholder="Prénom Nom"></div>
       <div class="field"><label>Titre</label><input type="text" id="cli-titre" placeholder="Directeur, coordonnateur, etc."></div>
-      <div class="field"><label>Adresse</label><input type="text" placeholder="Adresse complète"></div>
+      <div class="field"><label>Adresse</label><input type="text" id="cli-adresse" placeholder="Adresse complète"></div>
       <div class="field"><label>Courriel</label><input type="text" id="cli-courriel" placeholder="courriel@exemple.com"></div>
       <div class="field"><label>Téléphone</label><input type="text" id="cli-tel" placeholder="(819) 000-0000"></div>
       <div class="field"><label>Type d'organisation</label>
         <div class="check-group">
-          <label class="check-item"><input type="checkbox"><label>Corporatif</label></label>
-          <label class="check-item"><input type="checkbox"><label>OBNL</label></label>
-          <label class="check-item"><input type="checkbox"><label>Municipal</label></label>
-          <label class="check-item"><input type="checkbox"><label>Festival</label></label>
-          <label class="check-item"><input type="checkbox"><label>Autre</label></label>
+          <label class="check-item"><input type="checkbox" class="cli-type" value="Corporatif"> <label>Corporatif</label></label>
+          <label class="check-item"><input type="checkbox" class="cli-type" value="OBNL"> <label>OBNL</label></label>
+          <label class="check-item"><input type="checkbox" class="cli-type" value="Municipal"> <label>Municipal</label></label>
+          <label class="check-item"><input type="checkbox" class="cli-type" value="Festival"> <label>Festival</label></label>
+          <label class="check-item"><input type="checkbox" class="cli-type" value="Autre"> <label>Autre</label></label>
         </div>
       </div>
     </div>
@@ -211,34 +236,61 @@ a.doc-link{color:#c0392b;font-weight:700;font-size:12px;text-decoration:none;}
   <div class="sec-body">
     <div class="sec-div">Forfait sélectionné</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;">
-      <div class="forfait-card" data-group="bimg" onclick="selectForfait(this,'bimg')">
-        <div class="forfait-card-check"></div>
+
+      <div class="forfait-card" id="fcard-essentiel" onclick="selectForfait('fcard-essentiel')">
+        <span class="forfait-card-radio"></span>
         <div class="forfait-card-name">Essentiel</div>
         <div style="font-size:12px;color:#888;margin-bottom:8px;">Shooting mensuel · photos HD</div>
-        <div style="display:flex;align-items:baseline;gap:4px;"><input type="number" min="0" placeholder="0" onclick="event.stopPropagation()" oninput="syncTarif(this)" style="border:none;border-bottom:2px solid #e0e0e0;width:80px;font-size:16px;font-weight:800;color:#2d2d2d;font-family:Montserrat,sans-serif;outline:none;background:transparent;"><span style="font-size:13px;font-weight:700;color:#888;">$/mois</span></div>
+        <div style="display:flex;align-items:baseline;gap:4px;">
+          <input type="number" id="tarif-essentiel" min="0" placeholder="0"
+            onclick="event.stopPropagation()"
+            oninput="syncTarif('fcard-essentiel', this.value)"
+            style="border:none;border-bottom:2px solid #e0e0e0;width:80px;font-size:16px;font-weight:800;color:#2d2d2d;font-family:Montserrat,sans-serif;outline:none;background:transparent;">
+          <span style="font-size:13px;font-weight:700;color:#888;">$/mois</span>
+        </div>
       </div>
-      <div class="forfait-card" data-group="bimg" onclick="selectForfait(this,'bimg')">
-        <div class="forfait-card-check"></div>
+
+      <div class="forfait-card" id="fcard-pro" onclick="selectForfait('fcard-pro')">
+        <span class="forfait-card-radio"></span>
         <div class="forfait-card-name">Pro</div>
         <div style="font-size:12px;color:#888;margin-bottom:8px;">Shooting mensuel · photos HD · drone</div>
-        <div style="display:flex;align-items:baseline;gap:4px;"><input type="number" min="0" placeholder="0" onclick="event.stopPropagation()" oninput="syncTarif(this)" style="border:none;border-bottom:2px solid #e0e0e0;width:80px;font-size:16px;font-weight:800;color:#2d2d2d;font-family:Montserrat,sans-serif;outline:none;background:transparent;"><span style="font-size:13px;font-weight:700;color:#888;">$/mois</span></div>
+        <div style="display:flex;align-items:baseline;gap:4px;">
+          <input type="number" id="tarif-pro" min="0" placeholder="0"
+            onclick="event.stopPropagation()"
+            oninput="syncTarif('fcard-pro', this.value)"
+            style="border:none;border-bottom:2px solid #e0e0e0;width:80px;font-size:16px;font-weight:800;color:#2d2d2d;font-family:Montserrat,sans-serif;outline:none;background:transparent;">
+          <span style="font-size:13px;font-weight:700;color:#888;">$/mois</span>
+        </div>
       </div>
-      <div class="forfait-card" data-group="bimg" onclick="selectForfait(this,'bimg')" style="grid-column:span 1;">
-        <div class="forfait-card-check"></div>
+
+      <div class="forfait-card" id="fcard-mesure" onclick="selectForfait('fcard-mesure')">
+        <span class="forfait-card-radio"></span>
         <div class="forfait-card-name">Sur mesure</div>
-        <div style="margin-bottom:8px;"><textarea onclick="event.stopPropagation()" style="border:none;border-bottom:2px solid #e0e0e0;width:100%;font-size:12px;font-family:Montserrat,sans-serif;outline:none;background:transparent;resize:none;min-height:52px;line-height:1.6;font-weight:500;color:#2d2d2d;" placeholder="Décrire le forfait..."></textarea></div>
-        <div style="display:flex;align-items:baseline;gap:4px;"><input type="number" min="0" placeholder="0" onclick="event.stopPropagation()" oninput="syncTarif(this)" style="border:none;border-bottom:2px solid #e0e0e0;width:80px;font-size:16px;font-weight:800;color:#2d2d2d;font-family:Montserrat,sans-serif;outline:none;background:transparent;"><span style="font-size:13px;font-weight:700;color:#888;">$/mois</span></div>
+        <div style="margin-bottom:8px;">
+          <textarea onclick="event.stopPropagation()"
+            style="border:none;border-bottom:2px solid #e0e0e0;width:100%;font-size:12px;font-family:Montserrat,sans-serif;outline:none;background:transparent;resize:none;min-height:52px;line-height:1.6;font-weight:500;color:#2d2d2d;"
+            placeholder="Décrire le forfait..."></textarea>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:4px;">
+          <input type="number" id="tarif-mesure" min="0" placeholder="0"
+            onclick="event.stopPropagation()"
+            oninput="syncTarif('fcard-mesure', this.value)"
+            style="border:none;border-bottom:2px solid #e0e0e0;width:80px;font-size:16px;font-weight:800;color:#2d2d2d;font-family:Montserrat,sans-serif;outline:none;background:transparent;">
+          <span style="font-size:13px;font-weight:700;color:#888;">$/mois</span>
+        </div>
       </div>
+
     </div>
 
-    <div class="field"><label>Tarif mensuel HT confirmé</label>
+    <div class="field"><label>Tarif mensuel HT confirmé ($/mois)</label>
       <input type="number" min="0" placeholder="0" id="tarif-mensuel" oninput="calcTotal()" style="font-size:18px;font-weight:800;padding:12px 16px;">
     </div>
+
     <div class="field"><label>Durée d'engagement</label>
       <div class="check-group">
-        <label class="check-item"><input type="radio" name="engagement"><label>3 mois</label></label>
-        <label class="check-item"><input type="radio" name="engagement"><label>6 mois</label></label>
-        <label class="check-item"><input type="radio" name="engagement"><label>12 mois</label></label>
+        <label class="check-item"><input type="radio" name="engagement"> <label>3 mois</label></label>
+        <label class="check-item"><input type="radio" name="engagement"> <label>6 mois</label></label>
+        <label class="check-item"><input type="radio" name="engagement"> <label>12 mois</label></label>
       </div>
     </div>
     <div class="field-row">
@@ -247,12 +299,14 @@ a.doc-link{color:#c0392b;font-weight:700;font-size:12px;text-decoration:none;}
     </div>
     <div class="field"><label>Renouvellement</label>
       <div class="check-group">
-        <label class="check-item"><input type="radio" name="renouvellement"><label>Automatique</label></label>
-        <label class="check-item"><input type="radio" name="renouvellement"><label>Non — préavis écrit 30 jours avant échéance</label></label>
+        <label class="check-item"><input type="radio" name="renouvellement"> <label>Automatique</label></label>
+        <label class="check-item"><input type="radio" name="renouvellement"> <label>Non — préavis écrit 30 jours avant échéance</label></label>
       </div>
     </div>
-    <div class="field"><label>Style photographique convenu</label><input type="text" placeholder="ex: naturel, dynamique, lifestyle corporatif..."><span style="font-size:11px;color:#aaa;margin-top:4px;display:block;">Défini à la première réunion · référence pour toute la durée du contrat</span></div>
-    <div class="field"><label>Code de projet</label><input type="text" id="code-projet" placeholder="ex: MM-2026-042"></div>
+    <div class="field"><label>Style photographique convenu</label>
+      <input type="text" placeholder="ex: naturel, dynamique, lifestyle corporatif...">
+      <span style="font-size:11px;color:#aaa;margin-top:4px;display:block;">Défini à la première réunion · référence pour toute la durée du contrat</span>
+    </div>
   </div>
 </div>
 
@@ -308,21 +362,36 @@ a.doc-link{color:#c0392b;font-weight:700;font-size:12px;text-decoration:none;}
         </div>
       </div>
     </div>
+
     <div class="sec-div">Éléments additionnels</div>
     <div id="surplus-container">
-      <div class="surplus-row"><input type="text" placeholder="Description..."><input type="number" min="0" placeholder="0" oninput="calcTotal()"><button class="btn-remove" onclick="retirerSurplus(this)">×</button></div>
-      <div class="surplus-row"><input type="text" placeholder="Description..."><input type="number" min="0" placeholder="0" oninput="calcTotal()"><button class="btn-remove" onclick="retirerSurplus(this)">×</button></div>
+      <div class="surplus-row">
+        <input type="text" placeholder="Description...">
+        <input type="number" min="0" placeholder="0" step="0.01" oninput="calcTotal()">
+        <button class="btn-remove" onclick="retirerSurplus(this)">×</button>
+      </div>
+      <div class="surplus-row">
+        <input type="text" placeholder="Description...">
+        <input type="number" min="0" placeholder="0" step="0.01" oninput="calcTotal()">
+        <button class="btn-remove" onclick="retirerSurplus(this)">×</button>
+      </div>
     </div>
     <button class="btn-add no-print" onclick="ajouterSurplus()" style="margin-bottom:14px;">+ Ajouter un élément</button>
-    <div class="field"><label>Notes de facturation</label><textarea style="width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:10px 14px;font-family:'Montserrat',sans-serif;font-size:13px;min-height:60px;outline:none;resize:vertical;" placeholder="Notes, conditions particulières..."></textarea></div>
+
+    <div class="field"><label>Notes de facturation</label>
+      <textarea id="notes-facturation" style="width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:10px 14px;font-family:'Montserrat',sans-serif;font-size:13px;min-height:60px;outline:none;resize:vertical;" placeholder="Notes, conditions particulières..."></textarea>
+    </div>
+
     <div class="calc-block">
       <div class="calc-title">Calcul automatique</div>
       <div class="tax-toggle">
         <label><input type="checkbox" id="tps-check" checked onchange="calcTotal()"> TPS 5% applicable</label>
         <label><input type="checkbox" id="tvq-check" checked onchange="calcTotal()"> TVQ 9,975% applicable</label>
       </div>
-      <div class="calc-row"><span class="calc-label">Sous-total HT / mois</span><span class="calc-val" id="calc-ht">0,00 $</span></div>
+      <div class="calc-row"><span class="calc-label">Tarif mensuel HT</span><span class="calc-val" id="calc-tarif">0,00 $</span></div>
+      <div class="calc-row"><span class="calc-label">Éléments additionnels</span><span class="calc-val" id="calc-surplus-val">0,00 $</span></div>
       <div class="calc-row" id="row-mel" style="display:none;"><span class="calc-label">Rabais Mauricie en lumière</span><span class="calc-val" style="color:#27ae60;" id="calc-mel">-50,00 $</span></div>
+      <div class="calc-row"><span class="calc-label">Sous-total HT / mois</span><span class="calc-val" id="calc-ht">0,00 $</span></div>
       <div class="calc-row" id="row-tps"><span class="calc-label">TPS 5%</span><span class="calc-val" id="calc-tps">0,00 $</span></div>
       <div class="calc-row" id="row-tvq"><span class="calc-label">TVQ 9,975%</span><span class="calc-val" id="calc-tvq">0,00 $</span></div>
       <div class="calc-total"><span class="calc-total-label">Mensualité TTC</span><span class="calc-total-val" id="calc-total">0,00 $</span></div>
@@ -399,26 +468,42 @@ a.doc-link{color:#c0392b;font-weight:700;font-size:12px;text-decoration:none;}
       </div>
     </div>
 
-    <!-- SOUMISSION -->
+    <div style="margin-top:16px;background:#f8f8f8;border:2px solid #e8e8e8;border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:12px;">
+      <span style="font-size:18px;flex-shrink:0;">⚡</span>
+      <div style="font-size:14px;font-weight:600;color:#555;line-height:1.7;">Signature via <strong style="color:#2d2d2d;">Zoho Sign</strong> — La version signée constitue l'original légal.</div>
+    </div>
+
+    <!-- ── ZONE SOUMISSION ── -->
     <div class="no-print" style="margin-top:28px;background:#f8f8f8;border:2px solid #e0e0e0;border-radius:12px;padding:24px 26px;">
-      <div style="margin-bottom:24px;padding-bottom:22px;border-bottom:2px solid #e8e8e8;">
-        <div style="font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#c0392b;margin-bottom:10px;">Merci!</div>
-        <div style="font-size:15px;font-weight:700;color:#2d2d2d;line-height:1.75;margin-bottom:8px;">Merci d'avoir complété ce contrat. Nous allons le réviser et vous faire parvenir une copie PDF à signer via <strong>Zoho Sign</strong>. La réservation de votre projet sera confirmée à la réception du premier versement.</div>
-        <div style="font-size:14px;font-weight:600;color:#555;">Questions? info@mediamauricie.com — Au plaisir!</div>
+      <div style="margin-bottom:20px;padding-bottom:20px;border-bottom:2px solid #e8e8e8;">
+        <div style="font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#c0392b;margin-bottom:8px;">Soumettre &amp; archiver</div>
+        <div style="font-size:14px;font-weight:600;color:#555;line-height:1.75;">Les informations seront sauvegardées dans notre portail. Le PDF rempli sera généré pour envoi via <strong style="color:#2d2d2d;">Zoho Sign</strong>.</div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
-        <div class="submit-field"><label>Courriel du client</label><input type="email" id="submit-email" placeholder="client@entreprise.com"></div>
-        <div class="submit-field"><label>Code client (CLI-XXX)</label><input type="text" id="submit-cli" placeholder="CLI-001"></div>
+      <div class="field-row" style="margin-bottom:14px;">
+        <div class="submit-field">
+          <label>No. client (CLI-XXX)</label>
+          <input type="text" id="code-client" placeholder="CLI-001">
+        </div>
+        <div class="submit-field">
+          <label>Notes internes</label>
+          <input type="text" id="submit-notes" placeholder="Notes pour le dossier...">
+        </div>
       </div>
-      <div class="submit-field" style="margin-bottom:20px;"><label>Notes internes</label><input type="text" id="submit-notes" placeholder="Notes pour le dossier..."></div>
-      <button class="btn-submit" id="btn-soumettre" onclick="soumettreContrat()"><span id="btn-text">⚡ Soumettre le contrat</span></button>
-      <button class="btn-submit-secondary" onclick="window.print()">🖨️ Sauvegarder en PDF pour signature Zoho</button>
+      <button class="btn-submit" id="btn-soumettre" onclick="soumettreContrat()">
+        <span id="btn-text">⚡ Soumettre au portail + générer PDF</span>
+      </button>
+      <button class="btn-submit-secondary" onclick="imprimerPDF()">
+        🖨️ Imprimer / Sauvegarder PDF seulement
+      </button>
       <div class="submit-confirm" id="submit-confirm">
-        <div class="submit-confirm-icon">✅</div>
-        <div class="submit-confirm-title">Contrat soumis — merci!</div>
-        <div class="submit-confirm-text">Le PDF a été généré et sauvegardé. Notre équipe le révisera et vous enverra le lien Zoho Sign pour signature.<br><br><span id="confirm-details" style="color:#27ae60;font-weight:700;"></span></div>
+        <div class="submit-confirm-title">✅ Contrat sauvegardé!</div>
+        <div class="submit-confirm-text" id="confirm-details">
+          Le dossier a été créé dans Firebase. Le PDF a été généré — préparer le lien Zoho Sign et l'envoyer au client.
+        </div>
       </div>
-      <div class="submit-error" id="submit-error"><div class="submit-error-text" id="submit-error-text"></div></div>
+      <div class="submit-error" id="submit-error">
+        <div class="submit-error-text" id="submit-error-text"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -429,62 +514,212 @@ a.doc-link{color:#c0392b;font-weight:700;font-size:12px;text-decoration:none;}
 </div>
 
 </div><!-- /wrap -->
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNEsJISqbsHr3rASQEQDB9Ve2Snw241LaopIXV5GliCIPlWY30_CyrOuzWjyWwfw/exec';
 
-function fmt(n){return n.toLocaleString('fr-CA',{minimumFractionDigits:2,maximumFractionDigits:2})+' $';}
-function getSurplus(){var s=0;document.querySelectorAll('.surplus-row input[type=number]').forEach(function(i){s+=parseFloat(i.value)||0;});return s;}
-function ajouterSurplus(){var c=document.getElementById('surplus-container');var d=document.createElement('div');d.className='surplus-row';d.innerHTML='<input type="text" placeholder="Description..."><input type="number" min="0" placeholder="0" oninput="calcTotal()"><button class="btn-remove" onclick="retirerSurplus(this)">×</button>';c.appendChild(d);}
-function retirerSurplus(btn){var rows=document.querySelectorAll('#surplus-container .surplus-row');if(rows.length>1){btn.parentElement.remove();calcTotal();}}
-function selectForfait(card,name){document.querySelectorAll('.forfait-card[data-group="'+name+'"]').forEach(function(c){c.classList.remove('selected');});card.classList.add('selected');}
-function syncTarif(input){document.getElementById('tarif-mensuel').value=input.value;calcTotal();}
-
-function calcTotal(){
-  var tarif=parseFloat(document.getElementById('tarif-mensuel').value)||0;
-  var melActif = document.getElementById('mel-check') && document.getElementById('mel-check').checked
-              && document.getElementById('mel-decharge') && document.getElementById('mel-decharge').checked;
-  var mel = melActif ? 50 : 0;
-  var surplus=getSurplus();
-  var ht=tarif-mel+surplus;
-  var tps=document.getElementById('tps-check').checked?ht*0.05:0;
-  var tvq=document.getElementById('tvq-check').checked?ht*0.09975:0;
-  var mensuel=ht+tps+tvq;
-  document.getElementById('calc-ht').textContent=fmt(ht);
-  document.getElementById('calc-tps').textContent=fmt(tps);
-  document.getElementById('calc-tvq').textContent=fmt(tvq);
-  document.getElementById('calc-total').textContent=fmt(mensuel);
-  document.getElementById('calc-versement').textContent=fmt(mensuel*2);
-  document.getElementById('calc-solde').textContent=fmt(mensuel);
-  document.getElementById('row-tps').style.opacity=document.getElementById('tps-check').checked?'1':'0.3';
-  document.getElementById('row-tvq').style.opacity=document.getElementById('tvq-check').checked?'1':'0.3';
-  if(document.getElementById('row-mel')) document.getElementById('row-mel').style.display=mel>0?'flex':'none';
+<script>
+/* ─── FORMAT ─── */
+function fmt(n) {
+  return n.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' $';
 }
-calcTotal();
 
-async function soumettreContrat(){
-  var email=document.getElementById('submit-email').value.trim();
-  var cli=document.getElementById('submit-cli').value.trim();
-  document.getElementById('submit-error').style.display='none';
-  document.getElementById('submit-confirm').style.display='none';
-  if(!email){afficherErreur('Veuillez entrer le courriel du client.');return;}
-  if(!cli){afficherErreur('Veuillez entrer le code client (CLI-XXX).');return;}
-  var btn=document.getElementById('btn-soumettre');
-  var txt=document.getElementById('btn-text');
-  btn.disabled=true;txt.textContent='⏳ Génération du PDF...';
-  try{
-    var donneesContrat={action:'soumettreContrat',type:'MM-BIMG',noContrat:document.getElementById('no-contrat').value||'MM-BIMG-'+Date.now(),client:{entreprise:document.getElementById('cli-entreprise').value,rep:document.getElementById('cli-rep').value,courriel:email,tel:document.getElementById('cli-tel').value},codeProjet:document.getElementById('code-projet').value,total:document.getElementById('calc-total').textContent,versement:document.getElementById('calc-versement').textContent,codeClient:cli,notes:document.getElementById('submit-notes').value,dateSoumission:new Date().toLocaleDateString('fr-CA')};
-    var element=document.getElementById('contrat-wrap');
-    var nomFichier=donneesContrat.noContrat+'_'+(donneesContrat.client.entreprise||'Client').replace(/\s+/g,'_')+'_'+new Date().toISOString().slice(0,10)+'.pdf';
-    var opt={margin:[10,10,10,10],filename:nomFichier,image:{type:'jpeg',quality:0.95},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'letter',orientation:'portrait'},pagebreak:{mode:['avoid-all','css','legacy']}};
-    var pdfBlob=await html2pdf().set(opt).from(element).outputPdf('blob');
-    txt.textContent='⏳ Envoi...';
-    var reader=new FileReader();
-    reader.readAsDataURL(pdfBlob);
-    reader.onloadend=async function(){
-      var base64=reader.result.split(',')[1];
-      donneesContrat.pdfBase64=base64;donneesContrat.nomFichier=nomFichier;
-      try{
-        await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(donneesContrat)});
-        btn.disabled=false;txt.textContent='⚡ Soumettre le contrat';
-        document.getElementById('confirm-details').textContent=donneesContrat.noContrat+' · '+donneesContrat.client.entreprise+' · '+donneesContrat.total;
-        document.getElementById('submit-confirm').style.display='block';
+/* ─── FORFAIT SELECTION ─── */
+var activeForfait = null;
+
+function selectForfait(cardId) {
+  document.querySelectorAll('.forfait-card').forEach(function(c){ c.classList.remove('selected'); });
+  document.getElementById(cardId).classList.add('selected');
+  activeForfait = cardId;
+  // Pull the tarif from the selected card's input
+  var tarifMap = {
+    'fcard-essentiel': 'tarif-essentiel',
+    'fcard-pro':       'tarif-pro',
+    'fcard-mesure':    'tarif-mesure'
+  };
+  var inputId = tarifMap[cardId];
+  if (inputId) {
+    var val = parseFloat(document.getElementById(inputId).value) || 0;
+    document.getElementById('tarif-mensuel').value = val || '';
+    calcTotal();
+  }
+}
+
+/* ─── SYNC TARIF FROM CARD INPUT → tarif-mensuel ─── */
+function syncTarif(cardId, val) {
+  // Auto-select this card when user types in it
+  document.querySelectorAll('.forfait-card').forEach(function(c){ c.classList.remove('selected'); });
+  document.getElementById(cardId).classList.add('selected');
+  activeForfait = cardId;
+  document.getElementById('tarif-mensuel').value = parseFloat(val) || '';
+  calcTotal();
+}
+
+/* ─── SURPLUS ─── */
+function getSurplus() {
+  var s = 0;
+  document.querySelectorAll('#surplus-container .surplus-row input[type=number]').forEach(function(i){
+    s += parseFloat(i.value) || 0;
+  });
+  return s;
+}
+function ajouterSurplus() {
+  var c = document.getElementById('surplus-container');
+  var d = document.createElement('div');
+  d.className = 'surplus-row';
+  d.innerHTML = '<input type="text" placeholder="Description..."><input type="number" min="0" placeholder="0" step="0.01" oninput="calcTotal()"><button class="btn-remove" onclick="retirerSurplus(this)">×</button>';
+  c.appendChild(d);
+}
+function retirerSurplus(btn) {
+  var rows = document.querySelectorAll('#surplus-container .surplus-row');
+  if (rows.length > 1) { btn.parentElement.remove(); calcTotal(); }
+}
+
+/* ─── CALCUL PRINCIPAL ─── */
+function calcTotal() {
+  var tarif   = parseFloat(document.getElementById('tarif-mensuel').value) || 0;
+  var surplus = getSurplus();
+  var melActif = document.getElementById('mel-check').checked
+              && document.getElementById('mel-decharge').checked;
+  var mel     = melActif ? 50 : 0;
+  var ht      = tarif + surplus - mel;
+  var tpsOn   = document.getElementById('tps-check').checked;
+  var tvqOn   = document.getElementById('tvq-check').checked;
+  var tps     = tpsOn ? ht * 0.05    : 0;
+  var tvq     = tvqOn ? ht * 0.09975 : 0;
+  var mensuel = ht + tps + tvq;
+
+  document.getElementById('calc-tarif').textContent      = fmt(tarif);
+  document.getElementById('calc-surplus-val').textContent = fmt(surplus);
+  document.getElementById('calc-ht').textContent          = fmt(ht);
+  document.getElementById('calc-tps').textContent         = fmt(tps);
+  document.getElementById('calc-tvq').textContent         = fmt(tvq);
+  document.getElementById('calc-total').textContent       = fmt(mensuel);
+  document.getElementById('calc-versement').textContent   = fmt(mensuel * 2);
+  document.getElementById('calc-solde').textContent       = fmt(mensuel);
+  document.getElementById('row-tps').style.opacity = tpsOn ? '1' : '0.3';
+  document.getElementById('row-tvq').style.opacity = tvqOn ? '1' : '0.3';
+  document.getElementById('row-mel').style.display  = mel > 0 ? 'flex' : 'none';
+}
+
+/* ─── COLLECT DATA ─── */
+function collecterDonnees() {
+  var types = [];
+  document.querySelectorAll('.cli-type:checked').forEach(function(cb){ types.push(cb.value); });
+  var tarif   = parseFloat(document.getElementById('tarif-mensuel').value) || 0;
+  var surplus = getSurplus();
+  var melActif = document.getElementById('mel-check').checked && document.getElementById('mel-decharge').checked;
+  var mel     = melActif ? 50 : 0;
+  var ht      = tarif + surplus - mel;
+  var tpsOn   = document.getElementById('tps-check').checked;
+  var tvqOn   = document.getElementById('tvq-check').checked;
+  var tps     = tpsOn ? ht * 0.05    : 0;
+  var tvq     = tvqOn ? ht * 0.09975 : 0;
+  var mensuel = ht + tps + tvq;
+
+  var forfaitNom = activeForfait
+    ? document.getElementById(activeForfait).querySelector('.forfait-card-name').textContent
+    : '';
+
+  return {
+    type:          'MM-BIMG',
+    codeClient:    document.getElementById('code-client').value || '',
+    codeProjet:    document.getElementById('code-projet').value || '',
+    notesInternes: document.getElementById('submit-notes').value || '',
+    client: {
+      entreprise:   document.getElementById('cli-entreprise').value || '',
+      representant: document.getElementById('cli-rep').value || '',
+      titre:        document.getElementById('cli-titre').value || '',
+      adresse:      document.getElementById('cli-adresse').value || '',
+      courriel:     document.getElementById('cli-courriel').value || '',
+      telephone:    document.getElementById('cli-tel').value || '',
+      typeOrg:      types.join(', ')
+    },
+    forfait: {
+      nom:          forfaitNom,
+      tarifMensuel: tarif
+    },
+    facturation: {
+      surplus:       surplus,
+      melActif:      melActif,
+      rabaisMel:     mel,
+      sousTotal:     ht,
+      tps:           tps,
+      tvq:           tvq,
+      mensualiteTTC: mensuel,
+      premierVers:   mensuel * 2,
+      notes:         document.getElementById('notes-facturation').value || ''
+    },
+    statut:    'nouveau',
+    soumisLe:  new Date().toISOString()
+  };
+}
+
+/* ─── PDF SEULEMENT ─── */
+function imprimerPDF() {
+  var cli = document.getElementById('cli-entreprise').value || 'client';
+  var opt = {
+    margin:     0.4,
+    filename:   'Contrat-BIMG-' + cli.replace(/\s+/g,'_') + '.pdf',
+    image:      {type:'jpeg', quality:0.98},
+    html2canvas:{scale:2, useCORS:true},
+    jsPDF:      {unit:'in', format:'letter', orientation:'portrait'}
+  };
+  html2pdf().set(opt).from(document.getElementById('contrat-wrap')).save();
+}
+
+/* ─── SOUMETTRE (Firebase + PDF) ─── */
+async function soumettreContrat() {
+  var btn     = document.getElementById('btn-soumettre');
+  var btnText = document.getElementById('btn-text');
+  btn.disabled = true;
+  btnText.textContent = 'Sauvegarde en cours...';
+
+  var data = collecterDonnees();
+
+  // ── 1. Firebase ──
+  try {
+    if (window._db && window._addDoc && window._collection) {
+      data.creeLe = window._serverTimestamp ? window._serverTimestamp() : new Date().toISOString();
+      var docRef = await window._addDoc(window._collection(window._db, 'contrats_bimg'), data);
+      console.log('Firebase OK — ID:', docRef.id);
+    } else {
+      console.warn('Firebase non configuré.');
+    }
+  } catch(e) {
+    console.error('Firebase error:', e);
+    document.getElementById('submit-error').style.display = 'block';
+    document.getElementById('submit-error-text').textContent = 'Erreur Firebase : ' + e.message + ' — Le PDF sera quand même généré.';
+  }
+
+  // ── 2. PDF ──
+  btnText.textContent = 'Génération du PDF...';
+  try {
+    var cli = data.client.entreprise || data.client.representant || 'client';
+    var opt = {
+      margin:     0.4,
+      filename:   'Contrat-BIMG-' + cli.replace(/\s+/g,'_') + '.pdf',
+      image:      {type:'jpeg', quality:0.98},
+      html2canvas:{scale:2, useCORS:true},
+      jsPDF:      {unit:'in', format:'letter', orientation:'portrait'}
+    };
+    await html2pdf().set(opt).from(document.getElementById('contrat-wrap')).save();
+
+    document.getElementById('submit-confirm').style.display = 'block';
+    document.getElementById('confirm-details').innerHTML =
+      '<strong>Client :</strong> ' + (data.client.entreprise || data.client.representant || '—') + '<br>' +
+      '<strong>Forfait :</strong> ' + (data.forfait.nom || '—') + ' · ' + fmt(data.facturation.mensualiteTTC) + '/mois<br>' +
+      '<strong>No. client :</strong> ' + (data.codeClient || '—') + '<br><br>' +
+      '→ Préparer le lien <strong>Zoho Sign</strong> et l\'envoyer à <strong>' + (data.client.courriel || '—') + '</strong>';
+
+    btnText.textContent = '✅ Sauvegardé + PDF généré';
+  } catch(e) {
+    document.getElementById('submit-error').style.display = 'block';
+    document.getElementById('submit-error-text').textContent = 'Erreur PDF : ' + e.message;
+    btn.disabled = false;
+    btnText.textContent = '⚡ Soumettre au portail + générer PDF';
+  }
+}
+
+/* ─── INIT ─── */
+window.addEventListener('load', function(){ calcTotal(); });
+</script>
+</body>
+</html>
